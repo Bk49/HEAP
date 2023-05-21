@@ -1,7 +1,7 @@
-import logo from "./logo.svg";
-import "./App.css";
+import logo from "../logo.svg";
+import "../css/Home.css";
 
-const App = () => {
+const Home = () => {
     return (
         <div className="App">
             <header className="App-header">
@@ -23,4 +23,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default Home;
