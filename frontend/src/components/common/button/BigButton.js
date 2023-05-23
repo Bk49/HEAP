@@ -1,20 +1,25 @@
 import { Button } from "@mui/material";
+import { bigButtonStyles as style } from "../../../constants/buttonStyles";
 
 const BigButton = ({ isPrimary = true, children = "Button Text" }) => {
     return (
         <Button
             sx={{
-                backgroundColor: isPrimary ? "#163172" : "#43ACD9",
+                backgroundColor:
+                    style[isPrimary ? "primary" : "secondary"].backgroundColor,
                 color: "white",
                 width: "20rem",
                 boxShadow: "2",
                 "&:hover": {
-                    backgroundColor: isPrimary ? "#0E1E43" : "#398DB0",
+                    backgroundColor:
+                        style[isPrimary ? "primary" : "secondary"].hoverColor,
                 },
             }}
             variant="contain"
             size="large"
-        >{children}</Button>
+        >
+            {children}
+        </Button>
     );
 };
 
