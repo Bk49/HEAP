@@ -1,7 +1,12 @@
 import MUITextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 
-const TextField = ({ icon, label = "Label Text", type = "text" }) => {
+const TextField = ({
+    icon,
+    label = "Label Text",
+    type = "text",
+    size = "small",
+}) => {
     return (
         <MUITextField
             label={label}
@@ -13,7 +18,7 @@ const TextField = ({ icon, label = "Label Text", type = "text" }) => {
                     ),
                 }
             }
-            sx={{ width: "20rem" }}
+            sx={{ width: size === "small" ? "20rem" : "40rem" }}
             variant="filled"
         />
     );
