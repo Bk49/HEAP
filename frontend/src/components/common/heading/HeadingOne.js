@@ -13,7 +13,7 @@ const HeadingOne = ({ divider = false, children = "Heading One" }) => {
             >
                 {children}
             </span>
-            {divider && <Divider />}
+            {divider && <Divider sx={{ margin: "1rem 0" }} />}
         </Fragment>
     );
 };
