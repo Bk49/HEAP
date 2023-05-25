@@ -1,12 +1,12 @@
-import { Fragment } from "react";
 import NavBar from "../../components/common/navigations/NavBar";
+import BaseRoute from "./BaseRoute";
 
 const PublicRoute = ({ children }) => {
     return (
-        <Fragment>
+        <BaseRoute>
             <NavBar authenticated={false} />
             <div style={{ margin: "1.5rem" }}>{children}</div>
-        </Fragment>
+        </BaseRoute>
     );
 };
 
