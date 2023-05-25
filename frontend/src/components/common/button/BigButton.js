@@ -1,7 +1,13 @@
 import { Button } from "@mui/material";
 import { bigButtonStyles as style } from "../../../constants/buttonStyles";
 
-const BigButton = ({ isPrimary = true, children = "Button Text" }) => {
+const BigButton = ({
+    isPrimary = true,
+    children = "Button Text",
+    onClick = () => {
+        console.log("Button pressed");
+    },
+}) => {
     return (
         <Button
             sx={{
@@ -17,6 +23,7 @@ const BigButton = ({ isPrimary = true, children = "Button Text" }) => {
             }}
             variant="contain"
             size="large"
+            onClick={onClick}
         >
             {children}
         </Button>
