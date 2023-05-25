@@ -1,7 +1,13 @@
 import Button from "@mui/material/Button";
 import { smallButtonStyles as style } from "../../../constants/buttonStyles";
 
-const SmallButton = ({ children = "Button Text", type = "default" }) => {
+const SmallButton = ({
+    children = "Button Text",
+    type = "default",
+    onClick = () => {
+        console.log("Button pressed");
+    },
+}) => {
     return (
         <Button
             sx={{
@@ -13,6 +19,7 @@ const SmallButton = ({ children = "Button Text", type = "default" }) => {
                 },
             }}
             variant="contain"
+            onClick={onClick}
         >
             {children}
         </Button>
