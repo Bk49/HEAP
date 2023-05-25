@@ -1,0 +1,1 @@
+export const onScreenDuration = 5000;
