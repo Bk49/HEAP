@@ -73,7 +73,7 @@ const RegistrationTwo = () => {
                                 size="large"
                                 choices={cuisineType}
                             />
-                            <Checkbox label="Fusion Cuisine?" />
+                            <Checkbox name="isFusion" label="Fusion Cuisine?" />
                         </FieldsColumn>
                     </Grid>
                     <Grid xs={6}>
