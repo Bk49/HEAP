@@ -13,66 +13,114 @@ import TextArea from "../../components/common/form/TextArea";
 import SingleItemDropdown from "../../components/common/form/SingleItemDropdown";
 import { businessType, cuisineType } from "../../constants/dropdown-choices";
 import Checkbox from "../../components/common/form/Checkbox";
+import { FormProvider, useForm } from "react-hook-form";
+import MultiItemDropdown from "../../components/common/form/MultiItemDropdown";
 
 const Profile = () => {
+    const formMethods = useForm();
+    const { setError } = formMethods;
+
     return (
         <Fragment>
             <HeadingOne divider={true}>My Profile</HeadingOne>
-            <Grid container spacing={2}>
-                <Grid xs={6}>
-                    <HeadingTwo>User Profile</HeadingTwo>
-                    <FieldsColumn>
-                        <TextField icon={<PersonIcon />} label="Email" />
-                        <FieldsRow>
+            <FormProvider {...formMethods}>
+                <Grid container spacing={2}>
+                    <Grid xs={6}>
+                        <HeadingTwo>User Profile</HeadingTwo>
+                        <FieldsColumn>
                             <TextField
-                                icon={<VpnKeyIcon />}
-                                label="Password"
-                                type="password"
+                                rules={{
+                                    required: true,
+                                    pattern:
+                                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                                }}
+                                name="email"
+                                label="Email"
+                                icon={<PersonIcon />}
+                            />{" "}
+                            <FieldsRow>
+                                <TextField
+                                    rules={{ required: true, minLength: 8 }}
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    icon={<VpnKeyIcon />}
+                                />
+                                <TextField
+                                    rules={{ required: true, minLength: 8 }}
+                                    name="confirmPassword"
+                                    label="Confirm Password"
+                                    type="password"
+                                    icon={<VpnKeyIcon />}
+                                />
+                            </FieldsRow>
+                        </FieldsColumn>
+
+                        <HeadingTwo>Business Details</HeadingTwo>
+                        <FieldsColumn>
+                            <TextField
+                                rules={{ required: true }}
+                                name="businessName"
+                                label="Name of F&B Business"
+                                size="large"
+                            />
+                            <TextArea
+                                rules={{ required: true }}
+                                name="storeAddress"
+                                label="Store Address"
                             />
                             <TextField
-                                icon={<VpnKeyIcon />}
-                                label="Confirm Password"
-                                type="password"
+                                rules={{ require: true }}
+                                name="postalCode"
+                                label="Postal Code"
+                                type="number"
+                                size="large"
                             />
-                        </FieldsRow>
-                    </FieldsColumn>
+                        </FieldsColumn>
 
-                    <HeadingTwo>Business Details</HeadingTwo>
-                    <FieldsColumn>
-                        <TextField label="Name of F&B Business" size="large" />
-                        <TextArea label="Store Address" />
-                        <TextField label="Postal Code" size="large" />
-                    </FieldsColumn>
-
-                    <HeadingTwo>Cuisine Choices</HeadingTwo>
-                    <FieldsColumn>
-                        <SingleItemDropdown
-                            label="Type of F&B Business"
-                            size="large"
-                            choices={businessType}
+                        <HeadingTwo>Cuisine Choices</HeadingTwo>
+                        <FieldsColumn>
+                            <SingleItemDropdown
+                                name="businessType"
+                                rules={{ require: true }}
+                                label="Type of F&B Business"
+                                size="large"
+                                choices={businessType}
+                            />
+                            <MultiItemDropdown
+                                name="cusineType"
+                                rules={{ require: true }}
+                                label="Type of Cuisine"
+                                size="large"
+                                choices={cuisineType}
+                            />
+                            <Checkbox name="isFusion" label="Fusion Cuisine?" />
+                        </FieldsColumn>
+                    </Grid>
+                    <Grid xs={6}>
+                        <img
+                            style={{ width: "100%" }}
+                            src={ProfileIllustration}
+                            alt="Profile Illustration"
                         />
-                        {/* <FormControl variant="filled" sx={{ width: "40rem" }}>
-                        <InputLabel>Type of Cuisine</InputLabel>
-                        <Select multiple>
-                            {cuisineType.map(({ text, value }) => (
-                                <MenuItem key={text} value={value}>
-                                    {text}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl> */}
-                        <Checkbox label="Fusion Cuisine?" />
-                    </FieldsColumn>
+                    </Grid>
                 </Grid>
-                <Grid xs={6}>
-                    <img
-                        style={{ width: "100%" }}
-                        src={ProfileIllustration}
-                        alt="Profile Illustration"
-                    />
-                </Grid>
-            </Grid>
-            <SubmitFormGroup submitText="Update Profile" />
+                <SubmitFormGroup
+                    submitErrorText="Profile update unsuccessful, please check your input"
+                    submitText="Update Profile"
+                    onSubmit={(data) => {
+                        const { password, confirmPassword } = data;
+                        if (password !== confirmPassword) {
+                            return setError("confirmPassword", {
+                                type: "400",
+                                message:
+                                    "Confirm password does not match Password",
+                            });
+                        }
+                        console.log(data);
+                    }}
+                />
+            </FormProvider>
         </Fragment>
     );
 };
