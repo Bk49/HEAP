@@ -15,7 +15,11 @@ export default createBrowserRouter([
                 <Home />
             </PublicRoute>
         ),
-        errorElement: <Error />,
+        errorElement: (
+            <PublicRoute>
+                <Error />
+            </PublicRoute>
+        ),
     },
     {
         path: "login",
