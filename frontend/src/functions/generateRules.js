@@ -7,24 +7,25 @@ export const generateRules = ({
     maxLength,
     pattern,
     patternMsg = `${name} pattern is incorrect`,
+    customRules,
 }) => {
-    const rule = {};
+    const rule = { ...customRules };
     if (required) {
         rule.required = `${name} is required`;
     }
-    if (min) {
+    if (min !== undefined) {
         rule.min = { value: min, message: `${name} has to be at least ${min}` };
     }
-    if (max) {
+    if (max !== undefined) {
         rule.max = { value: max, message: `${name} has to be at most ${max}` };
     }
-    if (minLength) {
+    if (minLength !== undefined) {
         rule.minLength = {
             value: minLength,
             message: `${name}'s minimum length is ${minLength} characters`,
         };
     }
-    if (maxLength) {
+    if (maxLength !== undefined) {
         rule.maxLength = {
             value: maxLength,
             message: `${name}'s maximum length is ${maxLength} characters`,

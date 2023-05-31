@@ -17,7 +17,7 @@ const Login = () => {
     const formMethods = useForm();
     const {
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isValid },
     } = formMethods;
     const { enqueueSnackbar } = useSnackbar();
 
@@ -86,17 +86,16 @@ const Login = () => {
                         <div style={{ height: "1rem" }} />
                         <BigButton
                             onClick={() => {
-                                if (errors && Object.keys(errors).length > 0) {
+                                handleSubmit((data) => {
+                                    console.log(data);
+                                })();
+                                if (!isValid) {
                                     enqueueSnackbar(
                                         "Login unsuccessful, please check your input\n",
                                         {
                                             variant: "customError",
                                         }
                                     );
-                                } else {
-                                    handleSubmit((data) => {
-                                        console.log(data);
-                                    })();
                                 }
                             }}
                         >

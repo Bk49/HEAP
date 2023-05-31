@@ -11,18 +11,16 @@ import BigButton from "../../components/common/button/BigButton";
 import { useForm, FormProvider } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { enqueueError, queueError } from "../../functions/formHandling";
+import { useEffect } from "react";
+import { queueError } from "../../functions/formHandling";
 
 const RegistrationOne = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const formMethods = useForm();
-    const [update, setUpdate] = useState(0);
     const {
         handleSubmit,
-        setError,
-        formState: { errors },
+        formState: { isValid },
     } = formMethods;
     const { enqueueSnackbar } = useSnackbar();
 
@@ -30,7 +28,6 @@ const RegistrationOne = () => {
         if (location && location.state) {
             const { error } = location.state;
             if (error && error === "No state") {
-                console.log("Hello, here is the error => ", error);
                 queueError(
                     "You have yet to fill your email and password for registration!",
                     enqueueSnackbar
@@ -38,14 +35,6 @@ const RegistrationOne = () => {
             }
         }
     }, [location, enqueueSnackbar]);
-
-    useEffect(() => {
-        enqueueError(
-            "Registration unsuccessful, please check your input",
-            errors,
-            enqueueSnackbar
-        );
-    }, [enqueueSnackbar, errors, update]);
 
     return (
         <div
@@ -121,7 +110,15 @@ const RegistrationOne = () => {
                                 icon={<VpnKeyIcon />}
                             />
                             <TextField
-                                rules={{ required: true, minLength: 8 }}
+                                rules={{
+                                    required: true,
+                                    minLength: 8,
+                                    customRules: {
+                                        validate: (value, { password }) =>
+                                            password === value ||
+                                            "Confirm password does not match Password",
+                                    },
+                                }}
                                 name="confirmPassword"
                                 label="Confirm Password"
                                 type="password"
@@ -129,17 +126,9 @@ const RegistrationOne = () => {
                             />
                         </div>
                         <BigButton
-                            onClick={() => {
-                                handleSubmit((data) => {
-                                    const { password, confirmPassword, email } =
-                                        data;
-                                    if (password !== confirmPassword) {
-                                        return setError("confirmPassword", {
-                                            type: "400",
-                                            message:
-                                                "Confirm password does not match Password",
-                                        });
-                                    }
+                            onClick={async () => {
+                                handleSubmit(async (data) => {
+                                    const { email, password } = data;
                                     navigate("/register-2", {
                                         state: {
                                             password: password,
@@ -147,7 +136,13 @@ const RegistrationOne = () => {
                                         },
                                     });
                                 })();
-                                setUpdate((prev) => prev + 1);
+
+                                if (!isValid) {
+                                    queueError(
+                                        "Registration unsuccessful, please check your input",
+                                        enqueueSnackbar
+                                    );
+                                }
                             }}
                         >
                             Next: Business Details
