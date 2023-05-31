@@ -7,6 +7,7 @@ import RegistrationOne from "../pages/user/RegistrationOne";
 import RegistrationTwo from "../pages/user/RegistrationTwo";
 import Profile from "../pages/user/Profile";
 import CreateRecipe from "../pages/recipe/CreateRecipe";
+import EditRecipe from "../pages/recipe/EditRecipe";
 
 export default createBrowserRouter([
     {
@@ -59,6 +60,14 @@ export default createBrowserRouter([
         element: (
             <PublicRoute>
                 <CreateRecipe />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "edit-recipe",
+        element: (
+            <PublicRoute>
+                <EditRecipe />
             </PublicRoute>
         ),
     },

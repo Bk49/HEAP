@@ -17,7 +17,7 @@ const Login = () => {
     const formMethods = useForm();
     const {
         handleSubmit,
-        formState: { errors, isValid },
+        formState: { isValid },
     } = formMethods;
     const { enqueueSnackbar } = useSnackbar();
 
