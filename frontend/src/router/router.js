@@ -6,6 +6,7 @@ import Login from "../pages/user/Login";
 import RegistrationOne from "../pages/user/RegistrationOne";
 import RegistrationTwo from "../pages/user/RegistrationTwo";
 import Profile from "../pages/user/Profile";
+import CreateRecipe from "../pages/recipe/CreateRecipe";
 
 export default createBrowserRouter([
     {
@@ -50,6 +51,14 @@ export default createBrowserRouter([
         element: (
             <PublicRoute>
                 <Profile />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "create-recipe",
+        element: (
+            <PublicRoute>
+                <CreateRecipe />
             </PublicRoute>
         ),
     },
