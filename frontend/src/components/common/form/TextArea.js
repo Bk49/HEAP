@@ -2,12 +2,17 @@ import TextField from "@mui/material/TextField";
 import { useFormContext, Controller } from "react-hook-form";
 import { generateRules } from "../../../functions/generateRules";
 
-const TextArea = ({ rules = {}, name = "textarea", label = "Text Area" }) => {
+const TextArea = ({
+    rules = {},
+    name = "textarea",
+    label = "Text Area",
+    nestedError = null,
+}) => {
     const {
         control,
         formState: { errors },
     } = useFormContext();
-    const error = errors[name];
+    const error = nestedError ? nestedError : errors[name];
 
     return (
         <Controller
@@ -17,8 +22,8 @@ const TextArea = ({ rules = {}, name = "textarea", label = "Text Area" }) => {
             render={({ field }) => (
                 <TextField
                     {...field}
-                    error={error}
-                    helperText={error ? error.message : ""}
+                    error={nestedError ? nestedError : error}
+                    helperText={nestedError ? nestedError.message : error ? error.message : ""}
                     label={label}
                     sx={{ width: "40rem" }}
                     rows={7}

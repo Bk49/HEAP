@@ -10,12 +10,13 @@ const TextField = ({
     label = "Label Text",
     type = "text",
     size = "small",
+    nestedError = null
 }) => {
     const {
         control,
         formState: { errors },
     } = useFormContext();
-    const error = errors[name];
+    const error = nestedError ? nestedError : errors[name];
 
     return (
         <Controller
@@ -25,8 +26,8 @@ const TextField = ({
             render={({ field }) => (
                 <MUITextField
                     {...field}
-                    error={error}
-                    helperText={error ? error.message : ""}
+                    error={nestedError ? nestedError : error}
+                    helperText={nestedError ? nestedError.message : error ? error.message : ""}
                     label={label}
                     type={type}
                     InputProps={
@@ -38,7 +39,14 @@ const TextField = ({
                             ),
                         }
                     }
-                    sx={{ width: size === "small" ? "20rem" : "40rem" }}
+                    sx={{
+                        width:
+                            size === "small"
+                                ? "20rem"
+                                : size === "tiny"
+                                ? "10rem"
+                                : "40rem",
+                    }}
                     variant="filled"
                 />
             )}
