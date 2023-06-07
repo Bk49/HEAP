@@ -8,6 +8,7 @@ import RegistrationTwo from "../pages/user/RegistrationTwo";
 import Profile from "../pages/user/Profile";
 import CreateRecipe from "../pages/recipe/CreateRecipe";
 import EditRecipe from "../pages/recipe/EditRecipe";
+import MyRecipes from "../pages/recipe/MyRecipes";
 
 export default createBrowserRouter([
     {
@@ -68,6 +69,14 @@ export default createBrowserRouter([
         element: (
             <PublicRoute>
                 <EditRecipe />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "my-recipes",
+        element: (
+            <PublicRoute>
+                <MyRecipes />
             </PublicRoute>
         ),
     },
