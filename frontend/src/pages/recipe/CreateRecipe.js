@@ -6,7 +6,7 @@ const CreateRecipe = () => {
     return (
         <Fragment>
             <HeadingOne divider={true}>Create Recipe</HeadingOne>
-            <CommonRecipeForm />
+            <CommonRecipeForm isCreate={true}/>
         </Fragment>
     );
 };
