@@ -4,7 +4,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useFormContext, Controller } from "react-hook-form";
 import { generateRules } from "../../../functions/generateRules";
-import { FormHelperText } from "@mui/material";
+import FormHelperText from "@mui/material/FormHelperText";
 
 const SingleItemDropdown = ({
     rules = {},
@@ -12,12 +12,13 @@ const SingleItemDropdown = ({
     label = "Single Dropdown",
     size = "small",
     choices = [{ text: "No Choices", value: "" }],
+    nestedError=null
 }) => {
     const {
         control,
         formState: { errors },
     } = useFormContext();
-    const error = errors[name];
+    const error = nestedError ? nestedError : errors[name];
 
     return (
         <Controller
@@ -26,7 +27,7 @@ const SingleItemDropdown = ({
             rules={generateRules({ name: label, ...rules })}
             render={({ field }) => (
                 <FormControl
-                    error={error}
+                    error={nestedError ? nestedError:error}
                     variant="filled"
                     sx={{ width: size === "small" ? "20rem" : "40rem" }}
                 >
