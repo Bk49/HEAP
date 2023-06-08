@@ -9,6 +9,8 @@ import Profile from "../pages/user/Profile";
 import CreateRecipe from "../pages/recipe/CreateRecipe";
 import EditRecipe from "../pages/recipe/EditRecipe";
 import MyRecipes from "../pages/recipe/MyRecipes";
+import CreateMenu from "../pages/menu/CreateMenu";
+import EditMenu from "../pages/menu/EditMenu";
 
 export default createBrowserRouter([
     {
@@ -77,6 +79,22 @@ export default createBrowserRouter([
         element: (
             <PublicRoute>
                 <MyRecipes />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "create-menu",
+        element: (
+            <PublicRoute>
+                <CreateMenu />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "edit-menu",
+        element: (
+            <PublicRoute>
+                <EditMenu />
             </PublicRoute>
         ),
     },

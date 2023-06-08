@@ -14,7 +14,7 @@ import ImagePlaceHolder from "../../assets/image-placeholder.png";
 import RecipeIngredientsFieldArray from "../../components/recipe/datarow/RecipeIngredientsFieldArray";
 import PreparationStepsFieldArray from "../../components/recipe/datarow/PreparationStepsFieldArray";
 
-const CommonRecipeForm = () => {
+const CommonRecipeForm = ({ isCreate = false }) => {
     const formMethods = useForm();
     const { watch } = formMethods;
     const imageFile = watch("image");
@@ -33,7 +33,6 @@ const CommonRecipeForm = () => {
 
     return (
         <Fragment>
-            {/* <HeadingOne divider={true}>Create Recipe</HeadingOne> */}
             <FormProvider {...formMethods}>
                 <HeadingTwo>Recipe Information</HeadingTwo>
                 <FieldsColumn>
@@ -110,7 +109,9 @@ const CommonRecipeForm = () => {
                 <br />
                 <PreparationStepsFieldArray />
                 <SubmitFormGroup
-                    submitErrorText="Creation of recipe is unsuccessful, please check your input"
+                    submitErrorText={`${
+                        isCreate ? "Creation" : "Update"
+                    } of recipe is unsuccessful, please check your input`}
                     onSubmit={(data) => {
                         console.log(data);
                     }}
