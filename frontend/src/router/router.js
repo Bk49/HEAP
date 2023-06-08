@@ -11,6 +11,7 @@ import EditRecipe from "../pages/recipe/EditRecipe";
 import MyRecipes from "../pages/recipe/MyRecipes";
 import CreateMenu from "../pages/menu/CreateMenu";
 import EditMenu from "../pages/menu/EditMenu";
+import MyMenus from "../pages/menu/MyMenus";
 
 export default createBrowserRouter([
     {
@@ -95,6 +96,14 @@ export default createBrowserRouter([
         element: (
             <PublicRoute>
                 <EditMenu />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "my-menus",
+        element: (
+            <PublicRoute>
+                <MyMenus />
             </PublicRoute>
         ),
     },
