@@ -34,3 +34,4 @@ build/
 
 ### ENV Files ###
 .env
+/.apt_generated_tests/
