@@ -17,15 +17,15 @@ import com.amazonaws.services.cognitoidp.model.*;
 public class CognitoClient {
 
     private final AWSCognitoIdentityProvider client ;
-    private final String clientId = "CLIENT_ID";
-    private final String userPool = "USER_POOL_ID";
+    private final String clientId = "40788bim1l3vnff3bbnn5vlkir";
+    private final String userPool = "ap-southeast-1_cwezXWacy";
 
     public CognitoClient() {
         client = createCognitoClient();
     }
 
     private AWSCognitoIdentityProvider createCognitoClient() {
-        AWSCredentials cred = new BasicAWSCredentials("ACCESS_KEY", "SECRET_ACCESS_KEY");
+        AWSCredentials cred = new BasicAWSCredentials("AKIA2VI2VRVWTFUXQRGJ", "rUjj3mcHgzDFXQn1E2Se0kRgYCVHBxZAE9Ej68hc");
         AWSCredentialsProvider credProvider = new AWSStaticCredentialsProvider(cred);
         return AWSCognitoIdentityProviderClientBuilder.standard()
                 .withCredentials(credProvider)
