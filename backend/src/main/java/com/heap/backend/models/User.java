@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Document(collection = "users")
+@Document("user")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
