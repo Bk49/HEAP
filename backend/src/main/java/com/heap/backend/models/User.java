@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    private Business business;
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
