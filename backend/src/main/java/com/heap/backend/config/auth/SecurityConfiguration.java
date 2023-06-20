@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
+        //Line 34 will be run before anything that the REST controller will run
         return http.build();
     }
 }

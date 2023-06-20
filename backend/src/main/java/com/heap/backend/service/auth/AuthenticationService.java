@@ -34,7 +34,14 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .business(business)
                 .build();
-        repository.save(user);
+        //Error handling is user fail to be saved to repository
+//        try {
+            repository.save(user);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+
+        //Error handling required if token generation fails, should return error (If-else)
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

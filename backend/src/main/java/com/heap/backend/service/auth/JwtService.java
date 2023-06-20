@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${heap.backend.app.jwtSecretKey}")
-    private String SECRET_KEY;
+    private /* static final */ String SECRET_KEY;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
