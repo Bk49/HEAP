@@ -12,6 +12,8 @@ import MyRecipes from "../pages/recipe/MyRecipes";
 import CreateMenu from "../pages/menu/CreateMenu";
 import EditMenu from "../pages/menu/EditMenu";
 import MyMenus from "../pages/menu/MyMenus";
+import CreateBusinessGrowthPlan from "../pages/business/CreateBusinessGrowthPlan";
+import EditBusinessGrowthPlan from "../pages/business/EditBusinessGrowthPlan";
 
 export default createBrowserRouter([
     {
@@ -104,6 +106,22 @@ export default createBrowserRouter([
         element: (
             <PublicRoute>
                 <MyMenus />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "create-plan",
+        element: (
+            <PublicRoute>
+                <CreateBusinessGrowthPlan />
+            </PublicRoute>
+        ),
+    },
+    {
+        path: "edit-plan",
+        element: (
+            <PublicRoute>
+                <EditBusinessGrowthPlan />
             </PublicRoute>
         ),
     },

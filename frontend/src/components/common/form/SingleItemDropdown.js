@@ -12,7 +12,9 @@ const SingleItemDropdown = ({
     label = "Single Dropdown",
     size = "small",
     choices = [{ text: "No Choices", value: "" }],
-    nestedError=null
+    nestedError = null,
+    defaultValue = "",
+    disabled = false,
 }) => {
     const {
         control,
@@ -25,14 +27,15 @@ const SingleItemDropdown = ({
             control={control}
             name={name}
             rules={generateRules({ name: label, ...rules })}
+            defaultValue={defaultValue}
             render={({ field }) => (
                 <FormControl
-                    error={nestedError ? nestedError:error}
+                    error={nestedError ? nestedError : error}
                     variant="filled"
                     sx={{ width: size === "small" ? "20rem" : "40rem" }}
                 >
                     <InputLabel>{label}</InputLabel>
-                    <Select {...field} value={field.value || ""}>
+                    <Select {...field} value={field.value || ""} disabled={disabled}>
                         {choices.map(({ text, value }) => (
                             <MenuItem key={text} value={value}>
                                 {value === "" ? <em>{text}</em> : text}

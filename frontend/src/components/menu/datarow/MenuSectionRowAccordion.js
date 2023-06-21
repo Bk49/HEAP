@@ -25,7 +25,7 @@ const MenuSectionRowAccordion = ({ index = -1 }) => {
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <TextField
-                        rules={{ require: true }}
+                        rules={{ required: true }}
                         name={`sections.${index}.name`}
                         label="Section Name"
                         nestedError={errors.sections?.[index]?.name}
