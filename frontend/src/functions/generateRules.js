@@ -1,6 +1,6 @@
 export const generateRules = ({
     name,
-    required = true,
+    required = false,
     min,
     max,
     minLength,
