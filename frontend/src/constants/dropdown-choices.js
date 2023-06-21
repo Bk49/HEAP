@@ -136,5 +136,21 @@ export const menuTypes = [
     { value: "vegan", text: "Vegan Menu" },
     { value: "lowcalorie", text: "Low-Calorie Menu" },
     { value: "allergenfree", text: "Allergen-Free Menu" },
-    { value: "customizable", text: "Customizable Menu" }
-  ]; 
+    { value: "customizable", text: "Customizable Menu" },
+];
+
+export const priorityChoices = [
+    { value: "", text: "Please Select level of Priority" },
+    { value: "1", text: "Very Low" },
+    { value: "2", text: "Low" },
+    { value: "3", text: "Medium" },
+    { value: "4", text: "High" },
+    { value: "5", text: "Very High" },
+];
+
+export const planType = [
+    { value: "", text: "Please Select Business Growth Plan Type" },
+    { value: "FD", text: "Food Delivery Marketplace Strategy" },
+    { value: "OE", text: "Outlet Expansion Strategy" },
+    { value: "MK", text: "Marketing Strategy" },
+]
