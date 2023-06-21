@@ -70,7 +70,7 @@ const Profile = () => {
                                 label="Store Address"
                             />
                             <TextField
-                                rules={{ require: true }}
+                                rules={{ required: true }}
                                 name="postalCode"
                                 label="Postal Code"
                                 type="number"
@@ -82,14 +82,14 @@ const Profile = () => {
                         <FieldsColumn>
                             <SingleItemDropdown
                                 name="businessType"
-                                rules={{ require: true }}
+                                rules={{ required: true }}
                                 label="Type of F&B Business"
                                 size="large"
                                 choices={businessType}
                             />
                             <MultiItemDropdown
                                 name="cusineType"
-                                rules={{ require: true }}
+                                rules={{ required: true }}
                                 label="Type of Cuisine"
                                 size="large"
                                 choices={cuisineType}

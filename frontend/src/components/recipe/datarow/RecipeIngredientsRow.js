@@ -21,20 +21,20 @@ const RecipeIngredientsRow = ({ index = -1, removeFn = () => {} }) => {
                 <RemoveIcon />
             </IconButton>
             <TextField
-                rules={{ require: true }}
+                rules={{ required: true }}
                 name={`ingredients.${index}.name`}
                 label="Ingredient Name"
                 nestedError={errors.ingredients?.[index]?.name}
             />
             <TextField
-                rules={{ require: true }}
+                rules={{ required: true }}
                 name={`ingredients.${index}.unit`}
                 label="Measurement Unit"
                 size="tiny"
                 nestedError={errors.ingredients?.[index]?.unit}
             />
             <TextField
-                rules={{ require: true, min: 0 }}
+                rules={{ required: true, min: 0 }}
                 name={`ingredients.${index}.quantity`}
                 label="Quantity"
                 size="tiny"
