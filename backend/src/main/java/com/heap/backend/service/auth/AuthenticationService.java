@@ -23,26 +23,51 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        Business business = Business.builder().businessName(request.getBusinessName())
-                .businessType(request.getBusinessType())
-                .cuisineType(request.getCuisineType())
-                .isFusion(request.isFusion())
-                .storeAddress(request.getStoreAddress())
-                .build();
+
+        Business business = null;
+
+        try {
+            business = Business.builder().businessName(request.getBusinessName())
+                    .businessType(request.getBusinessType())
+                    .cuisineType(request.getCuisineType())
+                    .isFusion(request.isFusion())
+                    .storeAddress(request.getStoreAddress())
+                    .build();
+
+        } catch (Exception e) {
+
+            //Take away once debugging is over
+            System.out.println("One/All Business Fields are Empty");
+        }
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .business(business)
                 .build();
-        //Error handling is user fail to be saved to repository
-//        try {
-            repository.save(user);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
 
-        //Error handling required if token generation fails, should return error (If-else)
+        //Error handling is user fail to be saved to repository
         var jwtToken = jwtService.generateToken(user);
+
+        //If Business is null, throw Internal Server Error in controller
+        if (business == null) {
+            jwtToken = null;
+            return AuthenticationResponse.builder()
+                    .build();
+        }
+
+        //If repository does not find a user of the same email in the repository, handle as usual
+        try {
+
+            //If user cannot be found in the repository, save user
+            repository.save(user);
+
+        } catch (Exception e) {
+
+            //Else, change the token to null which is to be handled by controller
+            jwtToken = null;
+        }
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

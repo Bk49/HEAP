@@ -21,7 +21,15 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> register (
             @RequestBody RegisterRequest request
     ){
-        return ResponseEntity.ok(service.register(request));
+        AuthenticationResponse response = service.register(request);
+
+        //If token is null, it means that duplicate username so return internal server error instead of ok
+        if (response.getToken() == null) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        //Else, return ok response
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/authenticate")
