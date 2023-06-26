@@ -1,5 +1,6 @@
 package com.heap.backend.filter;
 
+import com.heap.backend.config.auth.SecurityConfiguration;
 import com.heap.backend.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -30,15 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if(request.getServletPath().contains("/api/v1/auth")){
-            System.out.println("Match!");
-            filterChain.doFilter(request, response);
-            return;
-        }
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String email;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (Arrays.asList(SecurityConfiguration.whiteListedRoutes).contains(request.getServletPath()) ||
+                authHeader == null ||
+                !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
