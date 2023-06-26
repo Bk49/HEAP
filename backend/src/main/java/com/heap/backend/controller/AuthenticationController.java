@@ -23,7 +23,7 @@ public class AuthenticationController {
 
         //If token is null, it means that duplicate username so return internal server error instead of ok
         if (response.getToken() == null) {
-            return ResponseEntity.badRequest().body(new CustomErrorResponse(response, "Duplicated user email"));
+            return ResponseEntity.badRequest().body(new CustomErrorResponse("Bad Request", "Duplicated user email"));
         }
 
         //Else, return ok response
