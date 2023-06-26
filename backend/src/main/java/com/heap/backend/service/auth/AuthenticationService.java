@@ -1,8 +1,10 @@
 package com.heap.backend.service.auth;
 
 import com.heap.backend.data.request.AuthenticationRequest;
+import com.heap.backend.data.response.AuthenticationErrorResponse;
 import com.heap.backend.data.response.AuthenticationResponse;
 import com.heap.backend.data.request.RegisterRequest;
+import com.heap.backend.data.response.Response;
 import com.heap.backend.models.Business;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
@@ -20,39 +22,34 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public Response register(RegisterRequest request) {
 
-        Business business = null;
+        //If parts of the request is empty/not filled, return AuthenticationErrorResponse for Internal Server Error
+        if (request.getEmail() == null || request.getPassword() == null) {
+            return AuthenticationErrorResponse.builder()
+                    .error("Internal Server Error")
+                    .message("User Fields are empty")
+                    .build();
+        } else if (request.getBusinessType() == null || request.getCuisineType() == null || request.getStoreAddress() == null) {
+            return AuthenticationErrorResponse.builder()
+                    .error("Internal Server Error")
+                    .message("Business Fields are empty")
+                    .build();
+        }
 
-        try {
-            business = Business.builder().businessName(request.getBusinessName())
+        //If all fields have been filled, create the business class and user classes using builder() and build()
+        Business business = Business.builder().businessName(request.getBusinessName())
                     .businessType(request.getBusinessType())
                     .cuisineType(request.getCuisineType())
                     .isFusion(request.isFusion())
                     .storeAddress(request.getStoreAddress())
                     .build();
 
-        } catch (Exception e) {
-
-            //Take away once debugging is over
-            System.out.println("One/All Business Fields are Empty");
-        }
-
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .business(business)
                 .build();
-
-        //Error handling is user fail to be saved to repository
-        var jwtToken = jwtService.generateToken(user);
-
-        //If Business is null, throw Internal Server Error in controller
-        if (business == null) {
-            jwtToken = null;
-            return AuthenticationResponse.builder()
-                    .build();
-        }
 
         //If repository does not find a user of the same email in the repository, handle as usual
         try {
@@ -62,10 +59,15 @@ public class AuthenticationService {
 
         } catch (Exception e) {
 
-            //Else, change the token to null which is to be handled by controller
-            jwtToken = null;
+            //Else, return a AuthenticationErrorResponse for Bad Request
+            return AuthenticationErrorResponse.builder()
+                    .error("Bad Request")
+                    .message("Duplicated user email")
+                    .build();
         }
 
+        //If Everything goes smoothly, response will be created using AuthenticationResponse with token
+        var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
