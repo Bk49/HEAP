@@ -2,6 +2,7 @@ package com.heap.backend.controller;
 
 import com.heap.backend.data.request.AuthenticationRequest;
 import com.heap.backend.data.response.AuthenticationResponse;
+import com.heap.backend.data.response.CustomErrorResponse;
 import com.heap.backend.service.auth.AuthenticationService;
 import com.heap.backend.data.request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class AuthenticationController {
 
         //If token is null, it means that duplicate username so return internal server error instead of ok
         if (response.getToken() == null) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.badRequest().body(new CustomErrorResponse(response, "Duplicated user email"));
         }
 
         //Else, return ok response
