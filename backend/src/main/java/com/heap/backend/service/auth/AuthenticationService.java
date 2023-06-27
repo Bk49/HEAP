@@ -10,6 +10,7 @@ import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,12 +58,19 @@ public class AuthenticationService {
             //If user cannot be found in the repository, save user
             repository.save(user);
 
-        } catch (Exception e) {
+        } catch (Error e) {
 
             //Else, return a AuthenticationErrorResponse for Bad Request
             return AuthenticationErrorResponse.builder()
                     .error("Bad Request: Duplicated user email")
                     .message("The email is already found in the database, please proceed to login instead!")
+                    .build();
+
+        } catch (Exception e) {
+
+            return AuthenticationErrorResponse.builder()
+                    .error("Unknown Error")
+                    .message("An unknown error has occurred! Do try again!")
                     .build();
         }
 
@@ -89,13 +97,22 @@ public class AuthenticationService {
                             request.getPassword()
                     )
             );
-        } catch (Exception e) {
+
+        } catch (BadCredentialsException e) {
 
             //Handles Exception if username/Password is incorrect, returns an AuthenticationErrorResponse
             return AuthenticationErrorResponse.builder()
                     .error("Invalid Credentials")
                     .message("Email/Password is incorrect")
                     .build();
+
+        } catch (Exception e) {
+
+            return AuthenticationErrorResponse.builder()
+                    .error("Unknown Error")
+                    .message("An unknown error has occurred! Do try again!")
+                    .build();
+
         }
 
         //If authenticated, create jwt token and return an AuthenticationResponse
