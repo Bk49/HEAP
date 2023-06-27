@@ -9,6 +9,7 @@ import com.heap.backend.models.Business;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,11 +59,12 @@ public class AuthenticationService {
             //If user cannot be found in the repository, save user
             repository.save(user);
 
-        } catch (Error e) {
+        } catch (DuplicateKeyException e) {
 
             //Else, return a AuthenticationErrorResponse for Bad Request
             return AuthenticationErrorResponse.builder()
                     .error("Bad Request: Duplicated user email")
+                    //.message(e.getClass().getName())
                     .message("The email is already found in the database, please proceed to login instead!")
                     .build();
 
