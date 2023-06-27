@@ -28,12 +28,13 @@ public class AuthenticationController {
 
             AuthenticationErrorResponse errorResponse = (AuthenticationErrorResponse)response;
 
-            if ("Internal Server Error".equals(errorResponse.getError())) {
-                return ResponseEntity.internalServerError().body(errorResponse);
-
-            } else if ("Bad Request".equals(errorResponse.getError())) {
+            if ("Bad Request".equals(errorResponse.getError())) {
 
                 return ResponseEntity.badRequest().body(errorResponse);
+            } else {
+
+                return ResponseEntity.internalServerError().body(errorResponse);
+
             }
 
         }
@@ -47,6 +48,23 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
     ){
 
-        return ResponseEntity.ok(service.authenticate(request));
+        Response response = service.authenticate(request);
+
+        //If AuthenticationErrorResponse found, handle as respective errors
+        if (response instanceof AuthenticationErrorResponse) {
+            AuthenticationErrorResponse authenticationErrorResponse = (AuthenticationErrorResponse) response;
+
+            if ("Invalid Credentials".equals(authenticationErrorResponse.getError())) {
+                return ResponseEntity.badRequest().body(authenticationErrorResponse);
+
+            } else {
+
+                return ResponseEntity.internalServerError().body(authenticationErrorResponse);
+            }
+
+        }
+
+        //Else, return token to user
+        return ResponseEntity.ok(response);
     }
 }
