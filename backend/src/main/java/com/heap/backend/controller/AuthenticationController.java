@@ -28,9 +28,10 @@ public class AuthenticationController {
 
             AuthenticationErrorResponse errorResponse = (AuthenticationErrorResponse)response;
 
-            if ("Bad Request".equals(errorResponse.getError())) {
+            if ("Bad Request: Duplicated user email".equals(errorResponse.getError())) {
 
                 return ResponseEntity.badRequest().body(errorResponse);
+
             } else {
 
                 return ResponseEntity.internalServerError().body(errorResponse);

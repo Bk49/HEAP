@@ -61,8 +61,8 @@ public class AuthenticationService {
 
             //Else, return a AuthenticationErrorResponse for Bad Request
             return AuthenticationErrorResponse.builder()
-                    .error("Bad Request")
-                    .message("Duplicated user email")
+                    .error("Bad Request: Duplicated user email")
+                    .message("The email is already found in the database, please proceed to login instead!")
                     .build();
         }
 
