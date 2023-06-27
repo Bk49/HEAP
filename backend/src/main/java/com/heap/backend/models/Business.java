@@ -35,4 +35,15 @@ public class Business {
     @Size(max = 6)
     @NotBlank
     private String postalCode;
+
+    public Business duplicate() {
+        return Business.builder()
+                .businessName(this.getBusinessName())
+                .businessType(this.getBusinessType())
+                .cuisineType(this.getCuisineType())
+                .isFusion(this.isFusion())
+                .storeAddress(this.getStoreAddress())
+                .postalCode(this.getPostalCode())
+                .build();
+    }
 }

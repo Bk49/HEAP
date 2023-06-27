@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class User implements UserDetails {
+public class User implements UserDetails{
     @Id
     private String id;
 
@@ -72,5 +72,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User duplicate() {
+        return new User(this.id, this.email, this.password, this.business.duplicate());
     }
 }
