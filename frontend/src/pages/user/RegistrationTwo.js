@@ -28,11 +28,11 @@ const RegistrationTwo = () => {
 
     useEffect(() => {
         if (location.state) {
-        const { email, password } = location.state;
+            const { email, password } = location.state;
 
             if (email && password) {
-        setValue("email", email);
-        setValue("password", password);
+                setValue("email", email);
+                setValue("password", password);
             }
         } else if (watchEmail === "" && watchPassword === "") {
             return navigate("/register", { state: { info: "You have yet to fill your email and password for registration!" } });
@@ -95,7 +95,15 @@ const RegistrationTwo = () => {
                 </Grid>
                 <SubmitFormGroup
                     submitErrorText="Registration unsuccessful, please check your input"
-                    onSubmit={(data) => console.log(data)}
+                    onSubmit={async (data) => {
+                        try {
+                            const token = await register(data);
+                            Cookies.set("token", token);
+                            navigate("/my-summary");
+                        } catch (e) {
+                            queueError(e, enqueueSnackbar);
+                        }
+                    }}
                     submitText="Register Now"
                 />
             </FormProvider>
