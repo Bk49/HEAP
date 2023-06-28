@@ -10,31 +10,14 @@ import TextField from "../../components/common/form/TextField";
 import BigButton from "../../components/common/button/BigButton";
 import { useForm, FormProvider } from "react-hook-form";
 import { useSnackbar } from "notistack";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { queueError } from "../../functions/formHandling";
 
 const RegistrationOne = () => {
     const navigate = useNavigate();
-    const location = useLocation();
     const formMethods = useForm();
-    const {
-        handleSubmit,
-        formState: { isValid },
-    } = formMethods;
+    const { handleSubmit } = formMethods;
     const { enqueueSnackbar } = useSnackbar();
-
-    useEffect(() => {
-        if (location && location.state) {
-            const { error } = location.state;
-            if (error && error === "No state") {
-                queueError(
-                    "You have yet to fill your email and password for registration!",
-                    enqueueSnackbar
-                );
-            }
-        }
-    }, [location, enqueueSnackbar]);
 
     return (
         <div
@@ -127,22 +110,23 @@ const RegistrationOne = () => {
                         </div>
                         <BigButton
                             onClick={async () => {
-                                handleSubmit(async (data) => {
-                                    const { email, password } = data;
-                                    navigate("/register-2", {
-                                        state: {
-                                            password: password,
-                                            email: email,
-                                        },
-                                    });
-                                })();
-
-                                if (!isValid) {
-                                    queueError(
-                                        "Registration unsuccessful, please check your input",
-                                        enqueueSnackbar
-                                    );
-                                }
+                                handleSubmit(
+                                    async (data) => {
+                                        const { email, password } = data;
+                                        navigate("/register-2", {
+                                            state: {
+                                                password: password,
+                                                email: email,
+                                            },
+                                        });
+                                    },
+                                    () => {
+                                        queueError(
+                                            "Registration unsuccessful, please check your input",
+                                            enqueueSnackbar
+                                        );
+                                    }
+                                )();
                             }}
                         >
                             Next: Business Details

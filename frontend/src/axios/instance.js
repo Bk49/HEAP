@@ -1,17 +1,19 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
-const generalConfig = {
-    baseURL: "http://localhost:8080/",
-    timeout: 1000,
-};
-
-const publicInstance = axios.create(...generalConfig);
-
-const protectedInstance = axios.create({
-    ...generalConfig,
-    headers: {
-        "Authorization":"token here"
-    }
+const authInstance = axios.create({
+    baseURL: "http://localhost:8080/api/v1/auth",
+    timeout: 10000,
+    withCredentials: true,
 });
 
-export { publicInstance, protectedInstance };
+const protectedInstance = axios.create({
+    baseURL: "http://localhost:8080/api/v1/",
+    timeout: 10000,
+    withCredentials: true,
+    headers: {
+        Authorization: Cookies.set("token"),
+    },
+});
+
+export { authInstance, protectedInstance};

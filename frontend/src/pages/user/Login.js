@@ -11,13 +11,15 @@ import BigButton from "../../components/common/button/BigButton";
 import { useForm, FormProvider } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import login from "../../axios/auth/loginAPI";
+import { queueError } from "../../functions/formHandling";
+import Cookies from "js-cookie";
 
 const Login = () => {
     const navigate = useNavigate();
     const formMethods = useForm();
     const {
         handleSubmit,
-        formState: { isValid },
     } = formMethods;
     const { enqueueSnackbar } = useSnackbar();
 
@@ -86,17 +88,22 @@ const Login = () => {
                         <div style={{ height: "1rem" }} />
                         <BigButton
                             onClick={() => {
-                                handleSubmit((data) => {
-                                    console.log(data);
-                                })();
-                                if (!isValid) {
-                                    enqueueSnackbar(
-                                        "Login unsuccessful, please check your input\n",
-                                        {
-                                            variant: "customError",
+                                handleSubmit(
+                                    async (data) => {
+                                        try {
+                                            const token = await login(data);
+                                            Cookies.set("token", token)
+                                            navigate("/my-summary")
+                                        } catch (e) {
+                                            queueError(e, enqueueSnackbar);
                                         }
-                                    );
-                                }
+                                    },
+                                    async () =>
+                                        queueError(
+                                            "Login unsuccessful, please check your input",
+                                            enqueueSnackbar
+                                        )
+                                )();
                             }}
                         >
                             Login
