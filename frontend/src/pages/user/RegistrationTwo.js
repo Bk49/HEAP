@@ -13,22 +13,31 @@ import SubmitFormGroup from "../../components/common/form/SubmitFormGroup";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import MultiItemDropdown from "../../components/common/form/MultiItemDropdown";
+import register from "../../axios/auth/registerAPI";
+import { queueError } from "../../functions/formHandling";
+import { enqueueSnackbar } from "notistack";
+import Cookies from "js-cookie";
 
 const RegistrationTwo = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const formMethods = useForm();
-    const { setValue } = formMethods;
+    const formMethods = useForm({ defaultValues: { email: "", password: "" } });
+    const { setValue, watch } = formMethods;
+    const watchEmail = watch("email");
+    const watchPassword = watch("password");
 
     useEffect(() => {
-        if (!location.state) {
-            return navigate("register", { state: { error: "No state" } });
-        }
+        if (location.state) {
         const { email, password } = location.state;
-        console.log(email, password);
+
+            if (email && password) {
         setValue("email", email);
         setValue("password", password);
-    }, [location.state, setValue, navigate]);
+            }
+        } else if (watchEmail === "" && watchPassword === "") {
+            return navigate("/register", { state: { info: "You have yet to fill your email and password for registration!" } });
+        }
+    }, [location.state, setValue, navigate, watchPassword, watchEmail]);
 
     return (
         <Fragment>
