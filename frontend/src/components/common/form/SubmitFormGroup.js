@@ -2,19 +2,16 @@ import Divider from "@mui/material/Divider";
 import { Fragment } from "react";
 import SmallButton from "../button/SmallButton";
 import { useFormContext } from "react-hook-form";
-import { useSnackbar } from "notistack";
 import { queueError } from "../../../functions/formHandling";
+import { useSnackbar } from "notistack";
 
 const SubmitFormGroup = ({
     onSubmit = (data) => console.log(data),
     submitErrorText = "Form submission unsuccessful",
     submitText = "Confirm Changes",
+    onAfterSubmit = () => {},
 }) => {
-    const {
-        handleSubmit,
-        getValues,
-        formState: { isValid },
-    } = useFormContext();
+    const { handleSubmit } = useFormContext();
     const { enqueueSnackbar } = useSnackbar();
 
     return (
@@ -32,11 +29,10 @@ const SubmitFormGroup = ({
                 <SmallButton type="default">Return</SmallButton>
                 <SmallButton
                     onClick={() => {
-                        handleSubmit(onSubmit, (e) => console.error(e))();
-                        console.log(getValues())
-                        if (!isValid) {
-                            queueError(submitErrorText, enqueueSnackbar);
-                        }
+                        handleSubmit(onSubmit, () =>
+                            queueError(submitErrorText, enqueueSnackbar)
+                        )();
+                        onAfterSubmit();
                     }}
                     type="primary"
                 >
