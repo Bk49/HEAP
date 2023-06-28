@@ -25,7 +25,7 @@ const BaseMessage = forwardRef(({ message, id, icon, type }, ref) => {
         <Box ref={ref} sx={{ width: "100%", maxWidth: "500px", boxShadow: 5 }}>
             <Alert
                 icon={icon}
-                sx={{ borderRadius: "4px 4px 0 0" }}
+                sx={{ borderRadius: "4px 4px 0 0", whiteSpace: "pre-wrap" }}
                 severity={type}
                 onClose={() => closeSnackbar(id)}
             >
