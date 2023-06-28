@@ -14,6 +14,8 @@ import EditMenu from "../pages/menu/EditMenu";
 import MyMenus from "../pages/menu/MyMenus";
 import CreateBusinessGrowthPlan from "../pages/business/CreateBusinessGrowthPlan";
 import EditBusinessGrowthPlan from "../pages/business/EditBusinessGrowthPlan";
+import MySummary from "../pages/business/MySummary";
+import ProtectedRoute from "./routes/ProtectedRoute"
 
 export default createBrowserRouter([
     {
@@ -56,73 +58,81 @@ export default createBrowserRouter([
     {
         path: "profile",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <Profile />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "create-recipe",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <CreateRecipe />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "edit-recipe",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <EditRecipe />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "my-recipes",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <MyRecipes />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "create-menu",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <CreateMenu />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "edit-menu",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <EditMenu />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "my-menus",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <MyMenus />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "create-plan",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <CreateBusinessGrowthPlan />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
     {
         path: "edit-plan",
         element: (
-            <PublicRoute>
+            <ProtectedRoute>
                 <EditBusinessGrowthPlan />
-            </PublicRoute>
+            </ProtectedRoute>
         ),
     },
+    {
+        path:"my-summary",
+        element: (
+            <ProtectedRoute>
+                <MySummary />
+            </ProtectedRoute>
+        )
+    }
 ]);
