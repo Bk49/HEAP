@@ -18,7 +18,6 @@ import MultiItemDropdown from "../../components/common/form/MultiItemDropdown";
 
 const Profile = () => {
     const formMethods = useForm();
-    const { setError } = formMethods;
 
     return (
         <Fragment>
@@ -47,7 +46,15 @@ const Profile = () => {
                                     icon={<VpnKeyIcon />}
                                 />
                                 <TextField
-                                    rules={{ required: true, minLength: 8 }}
+                                    rules={{
+                                        required: true,
+                                        minLength: 8,
+                                        customRules: {
+                                            validate: (value, { password }) =>
+                                                password === value ||
+                                                "Confirm password does not match Password",
+                                        },
+                                    }}
                                     name="confirmPassword"
                                     label="Confirm Password"
                                     type="password"
@@ -106,19 +113,8 @@ const Profile = () => {
                     </Grid>
                 </Grid>
                 <SubmitFormGroup
-                    submitErrorText="Profile update unsuccessful, please check your input"
                     submitText="Update Profile"
-                    onSubmit={(data) => {
-                        const { password, confirmPassword } = data;
-                        if (password !== confirmPassword) {
-                            return setError("confirmPassword", {
-                                type: "400",
-                                message:
-                                    "Confirm password does not match Password",
-                            });
-                        }
-                        console.log(data);
-                    }}
+                    submitErrorText="Update of profile is unsuccessful, please check your input"
                 />
             </FormProvider>
         </Fragment>
