@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateRequest {
-    private String oldEmail;
     private String email;
     private String password;
+    private String confirmPassword;
 
     private String businessName;
     private String businessType;

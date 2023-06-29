@@ -1,72 +1,56 @@
 package com.heap.backend.service.auth;
 
-import com.heap.backend.data.request.AuthenticationRequest;
 import com.heap.backend.data.request.RegisterRequest;
 import com.heap.backend.data.request.UpdateRequest;
 import com.heap.backend.data.response.*;
-import com.heap.backend.models.Business;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateService {
     private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
-    public Response update(UpdateRequest request) {
+    public Response update(UpdateRequest request, String token) {
 
-        //If request has no new email, update fields accordingly
-        boolean changeEmail = request.getEmail() != null;
-
-        //Obtains user/business from repository based on old Email
-        User origUser = repository.findByEmail(request.getOldEmail())
-                .orElseThrow();
-        User user = origUser.duplicate();
-        Business business = user.getBusiness();
-
-        //Updates all fields accordingly based on UpdateRequest if the fields are not empty
-        if (request.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-        }
-        if (request.getEmail() != null) {
-            user.setEmail(request.getEmail());
-        }
-        if (request.getBusinessName() != null) {
-            business.setBusinessName(request.getBusinessName());
-        }
-        if (request.getBusinessType() != null) {
-            business.setBusinessType(request.getBusinessType());
-        }
-        if (request.getCuisineType() != null) {
-            business.setCuisineType(request.getCuisineType());
-        }
-        if (request.isFusion() != business.isFusion()) {
-            business.setFusion(request.isFusion());
-        }
-        if (request.getStoreAddress() != null) {
-            business.setStoreAddress(request.getStoreAddress());
+        //Check if Password and ConfirmPassword are the same
+        //If not the same, return UpdateErrorResponse based on bad request
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            return UpdateErrorResponse.builder()
+                    .error("Bad Request: Password is not the same as Confirm Password")
+                    .message("Please check your Password Fields")
+                    .build();
         }
 
-        //Recreates User class using new business class
-        user.setBusiness(business);
+        //Obtain old email to be used to access old user details
+        String oldEmail = jwtService.extractEmail(token);
+        User origUser = repository.findByEmail(oldEmail).orElseThrow();
+
+        //Creates new registerRequest based on updateRequest
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .businessName(request.getBusinessName())
+                .businessType(request.getBusinessType())
+                .cuisineType(request.getCuisineType())
+                .isFusion(request.isFusion())
+                .storeAddress(request.getStoreAddress())
+                .build();
 
 
+        //Tries to delete old details of user and create new entry
+        Response response;
         try {
 
             //Deletes previous entity of user
-            repository.delete(repository.findByEmail(request.getOldEmail()).orElseThrow());
-            //Attempts to save new entity of user
-            repository.save(user);
+            repository.delete(repository.findByEmail(oldEmail).orElseThrow());
+            //Attempts to save new entity of user using register
+            response = authenticationService.register(registerRequest);
+
 
         } catch (IllegalArgumentException e) {
 
@@ -74,15 +58,6 @@ public class UpdateService {
             return UpdateErrorResponse.builder()
                     .error("Bad Request: No such user found")
                     .message("Please check your old Email")
-                    .build();
-        }  catch (DuplicateKeyException e) {
-
-            //If unsuccessful to save new user due to duplicate email
-            //Add in previous user to revert to original state
-            repository.save(origUser);
-            return UpdateErrorResponse.builder()
-                    .error("Bad Request: Duplicated user email")
-                    .message("Please provide another new user email")
                     .build();
 
         } catch (Exception e) {
@@ -100,10 +75,22 @@ public class UpdateService {
                     .build();
         }
 
-        //If Everything goes smoothly, response will be created using UpdateResponse with token
-        var jwtToken = jwtService.generateToken(user);
+        //Checks if the response from register is an Error
+        if (response instanceof AuthenticationErrorResponse){
+
+            //If unsuccessful to save new user due to duplicate email
+            //Add in previous user to revert to original state
+            repository.save(origUser);
+            return UpdateErrorResponse.builder()
+                    .error("Bad Request: Duplicated user email")
+                    .message("Please provide another new user email")
+                    .build();
+
+        }
+
+        //If Everything goes smoothly, response will be created using UpdateResponse with message
         return UpdateResponse.builder()
-                .token(jwtToken)
+                .response("Item updated successfully")
                 .build();
     }
 }

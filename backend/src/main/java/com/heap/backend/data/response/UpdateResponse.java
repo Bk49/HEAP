@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateResponse implements Response{
-    protected String token;
+    protected String response;
 }

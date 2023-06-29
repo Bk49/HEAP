@@ -1,33 +1,30 @@
 package com.heap.backend.controller;
 
-import com.heap.backend.data.request.AuthenticationRequest;
-import com.heap.backend.data.request.RegisterRequest;
 import com.heap.backend.data.request.UpdateRequest;
-import com.heap.backend.data.response.AuthenticationErrorResponse;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.data.response.UpdateErrorResponse;
-import com.heap.backend.service.auth.AuthenticationService;
 import com.heap.backend.service.auth.UpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/updateProfile")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UpdateProfileController {
-    private final UpdateService service;
 
-    @PostMapping("/update")
-    public ResponseEntity<Response> update (@RequestBody UpdateRequest request){
+    private final UpdateService updateService;
 
-        Response response = service.update(request);
+    @PutMapping("/update")
+    public ResponseEntity<Response> update (@RequestBody UpdateRequest request, @RequestParam String token){
+
+        //Current error faced is the token is being cut off in the RequestParam, need to fix
+        Response response = updateService.update(request, token);
 
         //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        if (response instanceof UpdateErrorResponse) {
+        if (response instanceof UpdateErrorResponse errorResponse) {
 
             //Add in variations of error if devised
-            UpdateErrorResponse errorResponse = (UpdateErrorResponse)response;
 
             if (errorResponse.getMessage().contains("Bad Request")) {
 
