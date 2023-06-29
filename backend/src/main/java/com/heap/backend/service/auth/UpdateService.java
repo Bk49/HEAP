@@ -27,7 +27,9 @@ public class UpdateService {
         }
 
         //Obtain old email to be used to access old user details
-        String oldEmail = jwtService.extractEmail(token);
+//      Debugging line! Hardcode
+        String oldEmail = "John3@gmail.com";
+//        String oldEmail = jwtService.extractEmail(token);
         User origUser = repository.findByEmail(oldEmail).orElseThrow();
 
         //Creates new registerRequest based on updateRequest
