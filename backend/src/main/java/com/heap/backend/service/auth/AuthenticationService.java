@@ -93,7 +93,7 @@ public class AuthenticationService {
             return AuthenticationErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more User fields are empty")
-                    .build();
+                    .build              ();
         }
 
         try {
