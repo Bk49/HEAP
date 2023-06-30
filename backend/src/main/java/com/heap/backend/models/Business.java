@@ -48,6 +48,7 @@ public class Business {
                 .isFusion(this.isFusion())
                 .storeAddress(this.getStoreAddress())
                 .postalCode(this.getPostalCode())
+                .menu(this.menu.clone())
                 .build();
     }
 }

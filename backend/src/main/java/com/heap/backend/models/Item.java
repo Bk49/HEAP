@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class Item {
     
-    private String name;
+    private String item;
     private double price;
 }

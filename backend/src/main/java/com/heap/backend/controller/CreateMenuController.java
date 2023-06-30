@@ -1,11 +1,9 @@
 package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateMenuRequest;
-import com.heap.backend.data.request.UpdateRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.data.response.UpdateErrorResponse;
 import com.heap.backend.service.auth.MenuService;
-import com.heap.backend.service.auth.UpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

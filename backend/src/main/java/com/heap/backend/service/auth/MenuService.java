@@ -1,17 +1,12 @@
 package com.heap.backend.service.auth;
 
 import com.heap.backend.data.request.CreateMenuRequest;
-import com.heap.backend.data.request.RegisterRequest;
-import com.heap.backend.data.request.UpdateRequest;
 import com.heap.backend.data.response.*;
 import com.heap.backend.models.Menu;
-import com.heap.backend.models.MenuSection;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +15,7 @@ public class MenuService {
 
     public Response create(CreateMenuRequest request) {
 
-        String oldEmail = "John3@gmail.com";    //Debugging line! Hardcode
+        String oldEmail = "John2@gmail.com";    //Debugging line! Hardcode
 
         Menu menu = Menu.builder()
                 .name(request.getName())
