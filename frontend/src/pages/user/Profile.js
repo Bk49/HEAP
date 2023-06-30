@@ -95,7 +95,7 @@ const Profile = () => {
                                 choices={businessType}
                             />
                             <MultiItemDropdown
-                                name="cusineType"
+                                name="cuisineType"
                                 rules={{ required: true }}
                                 label="Type of Cuisine"
                                 size="large"
