@@ -49,6 +49,7 @@ public class Business {
                 .storeAddress(this.getStoreAddress())
                 .postalCode(this.getPostalCode())
                 .menu(this.menu.clone())
+                .menuItems(this.menuItems)
                 .build();
     }
 }
