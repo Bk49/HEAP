@@ -18,4 +18,5 @@ public class RegisterRequest {
     private String[] cuisineType;
     private boolean isFusion;
     private String storeAddress;
+    private String postalCode;
 }

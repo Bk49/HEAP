@@ -32,7 +32,8 @@ public class AuthenticationService {
                     .error("Internal Server Error")
                     .message("One or more User fields are empty")
                     .build();
-        } else if (request.getBusinessType() == null || request.getCuisineType() == null || request.getStoreAddress() == null) {
+        } else if (request.getBusinessType() == null || request.getCuisineType() == null ||
+                   request.getStoreAddress() == null || request.getPostalCode() == null) {
             return AuthenticationErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more Business fields are empty")
@@ -45,6 +46,7 @@ public class AuthenticationService {
                     .cuisineType(request.getCuisineType())
                     .isFusion(request.isFusion())
                     .storeAddress(request.getStoreAddress())
+                    .postalCode(request.getPostalCode())
                     .build();
 
         User user = User.builder()
@@ -64,7 +66,6 @@ public class AuthenticationService {
             //Else, return a AuthenticationErrorResponse for Bad Request
             return AuthenticationErrorResponse.builder()
                     .error("Bad Request: Duplicated user email")
-                    //.message(e.getClass().getName())
                     .message("The email is already found in the database, please proceed to login instead!")
                     .build();
 

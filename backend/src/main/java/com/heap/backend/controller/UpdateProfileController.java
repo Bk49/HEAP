@@ -18,7 +18,6 @@ public class UpdateProfileController {
     @PutMapping("/update")
     public ResponseEntity<Response> update (@RequestBody UpdateRequest request, @RequestParam String token){
 
-        System.out.println(token);
         //Current error faced is the token is being cut off in the RequestParam, need to fix
         Response response = updateService.update(request, token);
 
