@@ -1,15 +1,14 @@
-package com.heap.backend.models;
+package com.heap.backend.data.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Data
-public class MenuSection {
-    private String name;
-    private Item[] items;
+public class CreateMenuResponse implements Response{
+    protected String response;
 }

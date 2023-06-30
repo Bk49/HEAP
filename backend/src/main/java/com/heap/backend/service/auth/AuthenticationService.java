@@ -6,6 +6,7 @@ import com.heap.backend.data.response.AuthenticationResponse;
 import com.heap.backend.data.request.RegisterRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.models.Business;
+import com.heap.backend.models.Menu;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,8 @@ public class AuthenticationService {
                     .isFusion(request.isFusion())
                     .storeAddress(request.getStoreAddress())
                     .postalCode(request.getPostalCode())
+                    .menu(new Menu[10])
+                    .menuItems(0)
                     .build();
 
         User user = User.builder()

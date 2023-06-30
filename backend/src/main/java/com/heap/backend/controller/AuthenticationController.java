@@ -2,7 +2,6 @@ package com.heap.backend.controller;
 
 import com.heap.backend.data.request.AuthenticationRequest;
 import com.heap.backend.data.response.AuthenticationErrorResponse;
-import com.heap.backend.data.response.AuthenticationResponse;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.service.auth.AuthenticationService;
 import com.heap.backend.data.request.RegisterRequest;

@@ -36,6 +36,10 @@ public class Business {
     @NotBlank
     private String postalCode;
 
+    private Menu[] menu;
+
+    private int menuItems;
+
     public Business duplicate() {
         return Business.builder()
                 .businessName(this.getBusinessName())
