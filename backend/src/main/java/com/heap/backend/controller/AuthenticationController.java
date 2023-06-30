@@ -2,6 +2,8 @@ package com.heap.backend.controller;
 
 import com.heap.backend.data.request.AuthenticationRequest;
 import com.heap.backend.data.response.AuthenticationErrorResponse;
+import com.heap.backend.data.response.RegistrationErrorResponse;
+import com.heap.backend.data.response.RegistrationResponse;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.service.auth.AuthenticationService;
 import com.heap.backend.data.request.RegisterRequest;
@@ -23,9 +25,9 @@ public class AuthenticationController {
         Response response = service.register(request);
 
         //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        if (response instanceof AuthenticationErrorResponse) {
+        if (response instanceof RegistrationErrorResponse) {
 
-            AuthenticationErrorResponse errorResponse = (AuthenticationErrorResponse)response;
+            RegistrationErrorResponse errorResponse = (RegistrationErrorResponse)response;
 
             if ("Bad Request: Duplicated user email".equals(errorResponse.getError())) {
 

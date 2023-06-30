@@ -1,10 +1,8 @@
 package com.heap.backend.service.auth;
 
 import com.heap.backend.data.request.AuthenticationRequest;
-import com.heap.backend.data.response.AuthenticationErrorResponse;
-import com.heap.backend.data.response.AuthenticationResponse;
+import com.heap.backend.data.response.*;
 import com.heap.backend.data.request.RegisterRequest;
-import com.heap.backend.data.response.Response;
 import com.heap.backend.models.Business;
 import com.heap.backend.models.Menu;
 import com.heap.backend.models.User;
@@ -29,13 +27,13 @@ public class AuthenticationService {
 
         //If parts of the request is empty/not filled, return AuthenticationErrorResponse for Internal Server Error
         if (request.getEmail() == null || request.getPassword() == null) {
-            return AuthenticationErrorResponse.builder()
+            return RegistrationErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more User fields are empty")
                     .build();
         } else if (request.getBusinessType() == null || request.getCuisineType() == null ||
                    request.getStoreAddress() == null || request.getPostalCode() == null) {
-            return AuthenticationErrorResponse.builder()
+            return RegistrationErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more Business fields are empty")
                     .build();
@@ -67,23 +65,22 @@ public class AuthenticationService {
         } catch (DuplicateKeyException e) {
 
             //Else, return a AuthenticationErrorResponse for Bad Request
-            return AuthenticationErrorResponse.builder()
+            return RegistrationErrorResponse.builder()
                     .error("Bad Request: Duplicated user email")
                     .message("The email is already found in the database, please proceed to login instead!")
                     .build();
 
         } catch (Exception e) {
 
-            return AuthenticationErrorResponse.builder()
+            return RegistrationErrorResponse.builder()
                     .error("Unknown Error")
                     .message("An unknown error has occurred! Do try again!")
                     .build();
         }
 
         //If Everything goes smoothly, response will be created using AuthenticationResponse with token
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
+        return RegistrationResponse.builder()
+                .message("User has been created successfully")
                 .build();
     }
 
