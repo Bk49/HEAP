@@ -1,9 +1,9 @@
 package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateRecipeRequest;
+import com.heap.backend.data.request.DeleteRecipeRequest;
 import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.data.response.Response;
-import com.heap.backend.data.response.SuccessResponse;
 import com.heap.backend.service.auth.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,6 @@ public class RecipeController {
             } else {
 
                 return ResponseEntity.internalServerError().body(errorResponse);
-
             }
         }
 
@@ -48,8 +47,24 @@ public class RecipeController {
     }
 
     @PostMapping("/deleteRecipe")
-    public ResponseEntity<Response> delete (@RequestBody CreateRecipeRequest request) {
-        Response response = recipeService.create(request);
+    public ResponseEntity<Response> delete (@RequestBody DeleteRecipeRequest request) {
+        Response response = recipeService.delete(request);
+
+        if (response instanceof ErrorResponse) {
+
+            ErrorResponse errorResponse = (ErrorResponse) response;
+
+            if (errorResponse.getMessage().contains("Bad Request")) {
+
+                return ResponseEntity.badRequest().body(errorResponse);
+
+            } else {
+
+                return ResponseEntity.internalServerError().body(errorResponse);
+            }
+
+        }
+
         return ResponseEntity.ok(response);
     }
 }

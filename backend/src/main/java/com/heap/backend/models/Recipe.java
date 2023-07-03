@@ -43,4 +43,18 @@ public class Recipe {
 
     @NotBlank
     private String[] steps;
+
+    public Recipe duplicate() {
+        return Recipe.builder()
+                .id(this.id)
+                .userId(this.userId)
+                .name(this.name)
+                .category(this.category)
+                .cost(this.cost)
+                //.image(this.image)
+                .description(this.description)
+                .ingredients(this.ingredients.clone())
+                .steps(this.steps.clone())
+                .build();
+    }
 }
