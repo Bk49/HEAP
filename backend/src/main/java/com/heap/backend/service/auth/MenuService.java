@@ -35,13 +35,13 @@ public class MenuService {
 
         } catch (Exception e) {
 
-            return CreateMenuErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("Unknown Error")
                     .build();
         }
 
-        return CreateMenuResponse.builder()
+        return SuccessResponse.builder()
                 .response("Menu updated successfully")
                 .build();
 

@@ -2,7 +2,7 @@ package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateMenuRequest;
 import com.heap.backend.data.response.Response;
-import com.heap.backend.data.response.UpdateErrorResponse;
+import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.service.auth.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class CreateMenuController {
         Response response = menuService.create(request);
 
         //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        if (response instanceof UpdateErrorResponse errorResponse) {
+        if (response instanceof ErrorResponse errorResponse) {
 
             //Add in variations of error if devised
 

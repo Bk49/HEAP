@@ -1,10 +1,8 @@
 package com.heap.backend.service.auth;
 
-import com.heap.backend.data.request.RegisterRequest;
 import com.heap.backend.data.request.UpdateRequest;
 import com.heap.backend.data.response.*;
 import com.heap.backend.models.Business;
-import com.heap.backend.models.Menu;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,7 @@ public class UpdateService {
         //Check if Password and ConfirmPassword are the same
         //If not the same, return UpdateErrorResponse based on bad request
         if (!request.getPassword().equals(request.getConfirmPassword())) {
-            return UpdateErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Bad Request: Password is not the same as Confirm Password")
                     .message("Please check your Password Fields")
                     .build();
@@ -64,7 +62,7 @@ public class UpdateService {
         } catch (IllegalArgumentException e) {
 
             //If unsuccessful to delete previous entity
-            return UpdateErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Bad Request: No such user found")
                     .message("Please check your old Email")
                     .build();
@@ -73,7 +71,7 @@ public class UpdateService {
 
             //If email has already been found, return error
             repository.save(origUser);
-            return UpdateErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Bad Request: Duplicated user email")
                     .message("Please choose an email that has not been used")
                     .build();
@@ -87,14 +85,14 @@ public class UpdateService {
              */
 
             //Catches any other form of exception as unknown error
-            return UpdateErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Unknown Error")
                     .message("An unknown error has occurred! Do try again!")
                     .build();
         }
 
         //If Everything goes smoothly, response will be created using UpdateResponse with message
-        return UpdateResponse.builder()
+        return SuccessResponse.builder()
                 .response("Item updated successfully")
                 .build();
     }

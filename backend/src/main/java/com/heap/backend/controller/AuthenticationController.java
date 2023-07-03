@@ -1,9 +1,7 @@
 package com.heap.backend.controller;
 
 import com.heap.backend.data.request.AuthenticationRequest;
-import com.heap.backend.data.response.AuthenticationErrorResponse;
-import com.heap.backend.data.response.RegistrationErrorResponse;
-import com.heap.backend.data.response.RegistrationResponse;
+import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.service.auth.AuthenticationService;
 import com.heap.backend.data.request.RegisterRequest;
@@ -25,9 +23,9 @@ public class AuthenticationController {
         Response response = service.register(request);
 
         //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        if (response instanceof RegistrationErrorResponse) {
+        if (response instanceof ErrorResponse) {
 
-            RegistrationErrorResponse errorResponse = (RegistrationErrorResponse)response;
+            ErrorResponse errorResponse = (ErrorResponse)response;
 
             if ("Bad Request: Duplicated user email".equals(errorResponse.getError())) {
 
@@ -53,15 +51,15 @@ public class AuthenticationController {
         Response response = service.authenticate(request);
 
         //If AuthenticationErrorResponse found, handle as respective errors
-        if (response instanceof AuthenticationErrorResponse) {
-            AuthenticationErrorResponse authenticationErrorResponse = (AuthenticationErrorResponse) response;
+        if (response instanceof ErrorResponse) {
+            ErrorResponse errorResponse = (ErrorResponse) response;
 
-            if ("Invalid Credentials".equals(authenticationErrorResponse.getError())) {
-                return ResponseEntity.badRequest().body(authenticationErrorResponse);
+            if ("Invalid Credentials".equals(errorResponse.getError())) {
+                return ResponseEntity.badRequest().body(errorResponse);
 
             } else {
 
-                return ResponseEntity.internalServerError().body(authenticationErrorResponse);
+                return ResponseEntity.internalServerError().body(errorResponse);
             }
 
         }

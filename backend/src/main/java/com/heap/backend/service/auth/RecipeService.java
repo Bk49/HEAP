@@ -1,9 +1,7 @@
 package com.heap.backend.service.auth;
 
-import com.heap.backend.data.request.CreateMenuRequest;
 import com.heap.backend.data.request.CreateRecipeRequest;
 import com.heap.backend.data.response.*;
-import com.heap.backend.models.Menu;
 import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.RecipeRepository;
@@ -39,13 +37,13 @@ public class RecipeService {
             recipeRepository.save(recipe);
 
         } catch (Exception e) {
-            return CreateRecipeErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("Unknown Error")
                     .build();
         }
 
-        return CreateRecipeResponse.builder()
+        return SuccessResponse.builder()
                 .response("Recipe updated successfully")
                 .build();
 

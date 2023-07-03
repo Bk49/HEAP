@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateMenuResponse implements Response{
+public class SuccessResponse implements Response{
     protected String response;
 }

@@ -30,13 +30,13 @@ public class AuthenticationService {
 
         //If parts of the request is empty/not filled, return AuthenticationErrorResponse for Internal Server Error
         if (request.getEmail() == null || request.getPassword() == null) {
-            return RegistrationErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more User fields are empty")
                     .build();
         } else if (request.getBusinessType() == null || request.getCuisineType() == null ||
                    request.getStoreAddress() == null || request.getPostalCode() == null) {
-            return RegistrationErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more Business fields are empty")
                     .build();
@@ -68,29 +68,29 @@ public class AuthenticationService {
         } catch (DuplicateKeyException e) {
 
             //Else, return a AuthenticationErrorResponse for Bad Request
-            return RegistrationErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Bad Request: Duplicated user email")
                     .message("The email is already found in the database, please proceed to login instead!")
                     .build();
 
         } catch (Exception e) {
 
-            return RegistrationErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Unknown Error")
                     .message("An unknown error has occurred! Do try again!")
                     .build();
         }
 
         //If Everything goes smoothly, response will be created using AuthenticationResponse with token
-        return RegistrationResponse.builder()
-                .message("User has been created successfully")
+        return SuccessResponse.builder()
+                .response("User has been created successfully")
                 .build();
     }
 
     public Response authenticate(AuthenticationRequest request) {
 
         if (request.getEmail() == null || request.getPassword() == null) {
-            return AuthenticationErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more User fields are empty")
                     .build              ();
@@ -107,14 +107,14 @@ public class AuthenticationService {
         } catch (BadCredentialsException e) {
 
             //Handles Exception if username/Password is incorrect, returns an AuthenticationErrorResponse
-            return AuthenticationErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Invalid Credentials")
                     .message("Email/Password is incorrect")
                     .build();
 
         } catch (Exception e) {
 
-            return AuthenticationErrorResponse.builder()
+            return ErrorResponse.builder()
                     .error("Unknown Error")
                     .message("An unknown error has occurred! Do try again!")
                     .build();

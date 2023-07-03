@@ -1,13 +1,9 @@
 package com.heap.backend.controller;
 
-import com.heap.backend.data.request.CreateMenuRequest;
 import com.heap.backend.data.request.CreateRecipeRequest;
-import com.heap.backend.data.response.CreateRecipeErrorResponse;
-import com.heap.backend.data.response.CreateRecipeResponse;
+import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.data.response.Response;
-import com.heap.backend.data.response.UpdateErrorResponse;
-import com.heap.backend.models.Recipe;
-import com.heap.backend.service.auth.MenuService;
+import com.heap.backend.data.response.SuccessResponse;
 import com.heap.backend.service.auth.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class CreateRecipeController {
+public class RecipeController {
 
     private final RecipeService recipeService;
 
@@ -30,9 +26,9 @@ public class CreateRecipeController {
         Response response = recipeService.create(request);
 
         //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        if (response instanceof CreateRecipeErrorResponse) {
+        if (response instanceof ErrorResponse) {
 
-            CreateRecipeErrorResponse errorResponse = (CreateRecipeErrorResponse) response;
+            ErrorResponse errorResponse = (ErrorResponse) response;
 
             //Add in variations of error if devised
 
@@ -48,6 +44,12 @@ public class CreateRecipeController {
         }
 
         //Else, return ok response
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/deleteRecipe")
+    public ResponseEntity<Response> delete (@RequestBody CreateRecipeRequest request) {
+        Response response = recipeService.create(request);
         return ResponseEntity.ok(response);
     }
 }
