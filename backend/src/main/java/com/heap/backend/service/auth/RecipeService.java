@@ -27,7 +27,7 @@ public class RecipeService {
                 .category(request.getCategory())
                 .cost(request.getCost())
                 .description(request.getDescription())
-                .image(request.getImage())
+//                .image(request.getImage())                //To be fixed when everything has been settled
                 .ingredients(request.getIngredients())
                 .steps(request.getSteps())
                 .build();

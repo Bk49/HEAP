@@ -27,9 +27,7 @@ public class MenuService {
         User user = origUser.duplicate();           //Need fine tune the duplicate class
 
         //Update new Menu into business fields
-        //Consider try catching ArrayOutOfBoundException
-        user.getBusiness().getMenu()[origUser.getBusiness().getMenuItems()] = menu;
-        user.getBusiness().setMenuItems(origUser.getBusiness().getMenuItems() + 1);
+        user.getBusiness().getMenuList().add(menu);
 
         try {
             repository.delete(origUser);

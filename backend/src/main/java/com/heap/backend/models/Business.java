@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -36,11 +39,12 @@ public class Business {
     @NotBlank
     private String postalCode;
 
-    private Menu[] menu;
-
-    private int menuItems;
+    private ArrayList<Menu> menuList;
 
     public Business duplicate() {
+        ArrayList<Menu> newMenuList = new ArrayList<>();
+        newMenuList.addAll(this.menuList);
+
         return Business.builder()
                 .businessName(this.getBusinessName())
                 .businessType(this.getBusinessType())
@@ -48,8 +52,7 @@ public class Business {
                 .isFusion(this.isFusion())
                 .storeAddress(this.getStoreAddress())
                 .postalCode(this.getPostalCode())
-                .menu(this.menu.clone())
-                .menuItems(this.menuItems)
+                .menuList(newMenuList)
                 .build();
     }
 }

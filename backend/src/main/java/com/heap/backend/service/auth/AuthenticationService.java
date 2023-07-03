@@ -5,6 +5,7 @@ import com.heap.backend.data.response.*;
 import com.heap.backend.data.request.RegisterRequest;
 import com.heap.backend.models.Business;
 import com.heap.backend.models.Menu;
+import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +50,7 @@ public class AuthenticationService {
                     .isFusion(request.isFusion())
                     .storeAddress(request.getStoreAddress())
                     .postalCode(request.getPostalCode())
-                    .menu(new Menu[10])
-                    .menuItems(0)
+                    .menuList(new ArrayList<Menu>())
                     .build();
 
         User user = User.builder()

@@ -38,19 +38,14 @@ public class UpdateService {
         String id = origUser.getId();
 
         //Creates new business class based on updateRequest
-        Business business = Business.builder().businessName(request.getBusinessName())
-                .businessType(request.getBusinessType())
-                .cuisineType(request.getCuisineType())
-                .isFusion(request.isFusion())
-                .storeAddress(request.getStoreAddress())
-                .postalCode(request.getPostalCode())
-                //Need to figure out how to copy menu over
-                .menu(new Menu[10])
-                .menuItems(0)
-                .build();
+        Business business = origUser.getBusiness().duplicate();
+        business.setBusinessType(request.getBusinessType());
+        business.setCuisineType(request.getCuisineType());
+        business.setFusion(request.isFusion());
+        business.setStoreAddress(request.getStoreAddress());
+        business.setPostalCode(request.getPostalCode());
 
         //Creates new user based on updateRequest
-
         User user = User.builder()
                 .id(id)
                 .email(request.getEmail())
