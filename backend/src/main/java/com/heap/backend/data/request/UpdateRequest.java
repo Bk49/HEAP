@@ -18,5 +18,6 @@ public class UpdateRequest {
     private String businessType;
     private String[] cuisineType;
     private boolean isFusion;
+    private String postalCode;
     private String storeAddress;
 }

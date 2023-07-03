@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class Ingredient {
+public class RecipeIngredient {
 
     private String name;
     private String unit;

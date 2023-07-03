@@ -40,7 +40,8 @@ public class AuthenticationService {
         }
 
         //If all fields have been filled, create the business class and user classes using builder() and build()
-        Business business = Business.builder().businessName(request.getBusinessName())
+        Business business = Business.builder()
+                    .businessName(request.getBusinessName())
                     .businessType(request.getBusinessType())
                     .cuisineType(request.getCuisineType())
                     .isFusion(request.isFusion())

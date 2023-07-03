@@ -1,16 +1,14 @@
-package com.heap.backend.models;
-
+package com.heap.backend.data.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Data
-public class Step {
-
-    private String text;
+public class CreateRecipeResponse implements Response{
+    protected String response;
 }
