@@ -2,6 +2,7 @@ package com.heap.backend.service.auth;
 
 import com.heap.backend.data.request.CreateRecipeRequest;
 import com.heap.backend.data.request.DeleteRecipeRequest;
+import com.heap.backend.data.request.UpdateRecipeRequest;
 import com.heap.backend.data.response.*;
 import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
@@ -84,6 +85,37 @@ public class RecipeService {
 
         return SuccessResponse.builder()
                 .response("Recipe has been deleted successfully")
+                .build();
+    }
+
+    public Response update(String recipeName, UpdateRecipeRequest request) {
+
+        String oldEmail = "John2@gmail.com";    //Debugging line! Hardcode
+        User origUser = userRepository.findByEmail(oldEmail).orElseThrow();
+        String userId = origUser.getId();
+
+        //Assuming all are filled
+        Recipe recipe = recipeRepository.findByUserIdAndName(userId, recipeName).orElseThrow();
+        recipe.setUserId(userId);
+        recipe.setName(request.getName());
+        recipe.setCategory(request.getCategory());
+        recipe.setCost(request.getCost());
+        //recipe.setImage(request.setImage());
+        recipe.setDescription(request.getDescription());
+        recipe.setIngredients(request.getIngredients());
+        recipe.setSteps(request.getSteps());
+
+        try {
+            recipeRepository.save(recipe);
+        } catch (Exception e) {
+            return ErrorResponse.builder()
+                    .error("Internal Server Error")
+                    .message("Unknown Error")
+                    .build();
+        }
+
+        return SuccessResponse.builder()
+                .response("Recipe has been updated successfully")
                 .build();
     }
 }

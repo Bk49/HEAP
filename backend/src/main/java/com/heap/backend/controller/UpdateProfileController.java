@@ -1,6 +1,6 @@
 package com.heap.backend.controller;
 
-import com.heap.backend.data.request.UpdateRequest;
+import com.heap.backend.data.request.UpdateProfileRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.service.auth.UpdateService;
@@ -16,7 +16,7 @@ public class UpdateProfileController {
     private final UpdateService updateService;
 
     @PutMapping("/update")
-    public ResponseEntity<Response> update (@RequestBody UpdateRequest request, @RequestParam String token){
+    public ResponseEntity<Response> update (@RequestBody UpdateProfileRequest request, @RequestParam String token){
 
         //Current error faced is the token is being cut off in the RequestParam, need to fix
         Response response = updateService.update(request, token);

@@ -1,6 +1,6 @@
 package com.heap.backend.service.auth;
 
-import com.heap.backend.data.request.UpdateRequest;
+import com.heap.backend.data.request.UpdateProfileRequest;
 import com.heap.backend.data.response.*;
 import com.heap.backend.models.Business;
 import com.heap.backend.models.User;
@@ -17,7 +17,7 @@ public class UpdateService {
     private final AuthenticationService authenticationService;
     private final PasswordEncoder passwordEncoder;
 
-    public Response update(UpdateRequest request, String token) {
+    public Response update(UpdateProfileRequest request, String token) {
 
         //Check if Password and ConfirmPassword are the same
         //If not the same, return UpdateErrorResponse based on bad request
