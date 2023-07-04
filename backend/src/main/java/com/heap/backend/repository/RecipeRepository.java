@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface RecipeRepository extends MongoRepository<Recipe, String> {
-  Optional<Recipe> findByUserId(String userId);
+  Optional<Recipe> findByNameAndUserId(String name, String userId);
   Optional<Recipe> findByUserIdAndName(String userId, String name);
 
   Optional<Recipe> findByUserIdAndId(String userId, String Id);

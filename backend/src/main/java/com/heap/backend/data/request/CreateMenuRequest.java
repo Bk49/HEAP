@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateMenuRequest {
+
     private String name;
     private MenuSection[] sections;
     private String type;
+
 }

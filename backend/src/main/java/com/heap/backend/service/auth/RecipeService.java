@@ -8,6 +8,7 @@ import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.RecipeRepository;
 import com.heap.backend.repository.UserRepository;
+import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class RecipeService {
     public Response create(CreateRecipeRequest request, String oldEmail) {
 
         try {
-            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException());
+            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
             //Creating Recipe
@@ -35,16 +36,34 @@ public class RecipeService {
                     .steps(request.getSteps())
                     .build();
 
+            //If Recipe of the same name and user exists, throws IllegalArgumentException
+            if (!recipeRepository.findByNameAndUserId(request.getName(), id).isEmpty()) {
+
+                throw new IllegalArgumentException("Duplicate Recipe");
+
+            }
+
             //Try saving recipe into repository
             recipeRepository.save(recipe);
 
         } catch (IllegalArgumentException e) {
 
             //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-            return ErrorResponse.builder()
-                    .error("Bad Request: Invalid Token")
-                    .message("User not found")
-                    .build();
+            if ("Invalid Token".equals(e.getMessage())) {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            } else {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Duplicate Recipe")
+                        .message("Please try another name for the recipe")
+                        .build();
+
+            }
 
         } catch (Exception e) {
 
@@ -71,7 +90,6 @@ public class RecipeService {
             if (recipeRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
 
                 //If Recipe cannot be found
-
                 return ErrorResponse.builder()
                         .error("Bad Request: User has no such recipe")
                         .message("Please check the spelling of the recipe name")
@@ -126,7 +144,6 @@ public class RecipeService {
 
         } catch (IllegalArgumentException e) {
 
-
             if (e.getMessage().equals("Invalid Token")) {
 
                 //If user cannot be found in the repository based on token obtained info, return ErrorResponse
@@ -157,5 +174,4 @@ public class RecipeService {
                 .response("Recipe has been updated successfully")
                 .build();
     }
-
 }

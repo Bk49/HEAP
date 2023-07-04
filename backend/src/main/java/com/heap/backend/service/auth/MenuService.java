@@ -3,38 +3,73 @@ package com.heap.backend.service.auth;
 import com.heap.backend.data.request.CreateMenuRequest;
 import com.heap.backend.data.response.*;
 import com.heap.backend.models.Menu;
+import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
+import com.heap.backend.repository.RecipeRepository;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MenuService {
-    private final UserRepository repository;
 
-    public Response create(CreateMenuRequest request) {
+    private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
 
-        String oldEmail = "John2@gmail.com";    //Debugging line! Hardcode
-
-        Menu menu = Menu.builder()
-                .name(request.getName())
-                .type(request.getType())
-                .sections(request.getSections())
-                .build();
-
-        User origUser = repository.findByEmail(oldEmail).orElseThrow();
-        User user = origUser.duplicate();           //Need fine tune the duplicate class
-
-        //Update new Menu into business fields
-        user.getBusiness().getMenuList().add(menu);
+    public Response create(CreateMenuRequest request, String oldEmail) {
 
         try {
-            repository.delete(origUser);
-            repository.save(user);
+            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+
+            Menu menu = Menu.builder()
+                    .name(request.getName())
+                    .type(request.getType())
+                    .sections(request.getSections())
+                    .build();
+
+            //Search through the menu ArrayList of Specific user and checks if a similar menu is present
+            List<Menu> menuList = origUser.getBusiness().getMenuList();
+            for (int i = 0 ; i < menuList.size() ; i++) {
+
+                if (menu.equals(menuList.get(i))) {
+
+                    throw new IllegalArgumentException("Repeat Menu");
+
+                }
+
+            }
+
+            //If all goes well, add in new menu into business details
+            origUser.getBusiness().getMenuList().add(menu);
+
+            //Try saving
+            userRepository.save(origUser);
+
+        } catch (IllegalArgumentException e) {
+
+            //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+            if ("Invalid Token".equals(e.getMessage())) {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            } else {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Duplicate Menu")
+                        .message("Please try another name for the recipe")
+                        .build();
+
+            }
 
         } catch (Exception e) {
 
+            //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("Unknown Error")
@@ -44,82 +79,6 @@ public class MenuService {
         return SuccessResponse.builder()
                 .response("Menu updated successfully")
                 .build();
-
-//        //Check if Password and ConfirmPassword are the same
-//        //If not the same, return UpdateErrorResponse based on bad request
-//        if (!request.getPassword().equals(request.getConfirmPassword())) {
-//            return UpdateErrorResponse.builder()
-//                    .error("Bad Request: Password is not the same as Confirm Password")
-//                    .message("Please check your Password Fields")
-//                    .build();
-//        }
-//
-//        //Obtain old email to be used to access old user details
-//        String oldEmail = "John3@gmail.com";    //Debugging line! Hardcode
-////        String oldEmail = jwtService.extractEmail(token);
-//        User origUser = repository.findByEmail(oldEmail).orElseThrow();
-//
-//        //Creates new registerRequest based on updateRequest
-//        RegisterRequest registerRequest = RegisterRequest.builder()
-//                .email(request.getEmail())
-//                .password(request.getPassword())
-//                .businessName(request.getBusinessName())
-//                .businessType(request.getBusinessType())
-//                .cuisineType(request.getCuisineType())
-//                .isFusion(request.isFusion())
-//                .storeAddress(request.getStoreAddress())
-//                .build();
-//
-//
-//        //Tries to delete old details of user and create new entry
-//        Response response;
-//        try {
-//
-//            //Deletes previous entity of user
-//            repository.delete(repository.findByEmail(oldEmail).orElseThrow());
-//            //Attempts to save new entity of user using register
-//            response = authenticationService.register(registerRequest);
-//
-//
-//        } catch (IllegalArgumentException e) {
-//
-//            //If unsuccessful to delete previous entity
-//            return UpdateErrorResponse.builder()
-//                    .error("Bad Request: No such user found")
-//                    .message("Please check your old Email")
-//                    .build();
-//
-//        } catch (Exception e) {
-//
-//            /*
-//             * Note to future developer:
-//             * This portion might cause issues as cause of error is unknown which may cause the user to be completely
-//             * deleted without being added back as a new account. Might require fixing in future
-//             */
-//
-//            //Catches any other form of exception as unknown error
-//            return UpdateErrorResponse.builder()
-//                    .error("Unknown Error")
-//                    .message("An unknown error has occurred! Do try again!")
-//                    .build();
-//        }
-//
-//        //Checks if the response from register is an Error
-//        if (response instanceof AuthenticationErrorResponse){
-//
-//            //If unsuccessful to save new user due to duplicate email
-//            //Add in previous user to revert to original state
-//            repository.save(origUser);
-//            return UpdateErrorResponse.builder()
-//                    .error("Bad Request: Duplicated user email")
-//                    .message("Please provide another new user email")
-//                    .build();
-//
-//        }
-//
-//        //If Everything goes smoothly, response will be created using UpdateResponse with message
-//        return UpdateResponse.builder()
-//                .response("Item updated successfully")
-//                .build();
     }
+
 }

@@ -23,38 +23,32 @@ public class RecipeController {
     public ResponseEntity<Response> create (@RequestBody CreateRecipeRequest request, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
-        String jwt = token.substring(7);
-        String oldEmail = jwtService.extractEmail(jwt);
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(recipeService.create(request, oldEmail));
 
-        //Current error faced is the token is being cut off in the RequestParam, need to fix
-        Response response = recipeService.create(request, oldEmail);
-
-        //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        return checkResponse(response);
     }
 
     @PostMapping("/deleteRecipe")
     public ResponseEntity<Response> delete (@RequestBody DeleteRecipeRequest request, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
-        String jwt = token.substring(7);
-        String oldEmail = jwtService.extractEmail(jwt);
-
-        Response response = recipeService.delete(request, oldEmail);
-
-        return checkResponse(response);
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(recipeService.delete(request, oldEmail));
     }
 
     @PutMapping("/updateRecipe/{recipeId}")
     public ResponseEntity<Response> update (@PathVariable String recipeId, @RequestBody UpdateRecipeRequest request, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(recipeService.update(recipeId, request, oldEmail));
+    }
+
+    public String returnOldEmail(String token) {
+
         String jwt = token.substring(7);
-        String oldEmail = jwtService.extractEmail(jwt);
+        return jwtService.extractEmail(jwt);
 
-        Response response = recipeService.update(recipeId, request, oldEmail);
-
-        return checkResponse(response);
     }
 
     public ResponseEntity<Response> checkResponse(Response response) {
