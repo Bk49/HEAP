@@ -7,7 +7,6 @@ import com.heap.backend.service.auth.JwtService;
 import com.heap.backend.service.auth.UpdateProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

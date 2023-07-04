@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UpdateProfileService {
     private final UserRepository repository;
-    private final AuthenticationService authenticationService;
     private final PasswordEncoder passwordEncoder;
 
     public Response update(UpdateProfileRequest request, String oldEmail) {

@@ -4,8 +4,6 @@ import com.heap.backend.data.request.AuthenticationRequest;
 import com.heap.backend.data.response.*;
 import com.heap.backend.data.request.RegisterRequest;
 import com.heap.backend.models.Business;
-import com.heap.backend.models.Menu;
-import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

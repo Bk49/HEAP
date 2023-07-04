@@ -8,7 +8,6 @@ import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.RecipeRepository;
 import com.heap.backend.repository.UserRepository;
-import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,7 @@ public class RecipeService {
                     .build();
 
             //If Recipe of the same name and user exists, throws IllegalArgumentException
-            if (!recipeRepository.findByNameAndUserId(request.getName(), id).isEmpty()) {
+            if (recipeRepository.findByNameAndUserId(request.getName(), id).isPresent()) {
 
                 throw new IllegalArgumentException("Duplicate Recipe");
 
@@ -84,7 +83,7 @@ public class RecipeService {
     public Response delete(DeleteRecipeRequest request, String oldEmail) {
 
         try {
-            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException());
+            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
             if (recipeRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
