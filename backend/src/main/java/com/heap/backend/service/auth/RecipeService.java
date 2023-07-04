@@ -17,72 +17,85 @@ public class RecipeService {
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
 
-    public Response create(CreateRecipeRequest request) {
+    public Response create(CreateRecipeRequest request, String oldEmail) {
 
-        String oldEmail = "John2@gmail.com";    //Debugging line! Hardcode
-        User origUser = userRepository.findByEmail(oldEmail).orElseThrow();
-        String id = origUser.getId();
-
-        Recipe recipe = Recipe.builder()
-                .userId(id)
-                .name(request.getName())
-                .category(request.getCategory())
-                .cost(request.getCost())
-                .description(request.getDescription())
-//                .image(request.getImage())                //To be fixed when everything has been settled
-                .ingredients(request.getIngredients())
-                .steps(request.getSteps())
-                .build();
-
-        //To work on additional logic in accessing known errors
         try {
+            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException());
+            String id = origUser.getId();
+
+            //Creating Recipe
+            Recipe recipe = Recipe.builder()
+                    .userId(id)
+                    .name(request.getName())
+                    .category(request.getCategory())
+                    .cost(request.getCost())
+                    .description(request.getDescription())
+//                .image(request.getImage())                //To be fixed when everything has been settled
+                    .ingredients(request.getIngredients())
+                    .steps(request.getSteps())
+                    .build();
+
+            //Try saving recipe into repository
             recipeRepository.save(recipe);
 
+        } catch (IllegalArgumentException e) {
+
+            //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+            return ErrorResponse.builder()
+                    .error("Bad Request: Invalid Token")
+                    .message("User not found")
+                    .build();
+
         } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("Unknown Error")
                     .build();
+
         }
 
         return SuccessResponse.builder()
-                .response("Recipe updated successfully")
+                .response("Recipe has been created successfully")
                 .build();
-
 
     }
 
-    public Response delete(DeleteRecipeRequest request) {
-
-        String oldEmail = "John2@gmail.com";    //Debugging line! Hardcode
-        User origUser = userRepository.findByEmail(oldEmail).orElseThrow();
-        String id = origUser.getId();
-
-        if (id == null) {
-
-            return ErrorResponse.builder()
-                    .error("Bad Request: User has no recipe")
-                    .message("Please try again when user has recipe")
-                    .build();
-
-        } else if (recipeRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
-
-            return ErrorResponse.builder()
-                    .error("Bad Request: User has no such recipe")
-                    .message("Please check the spelling of the recipe name")
-                    .build();
-        }
+    public Response delete(DeleteRecipeRequest request, String oldEmail) {
 
         try {
+            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException());
+            String id = origUser.getId();
+
+            if (recipeRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
+
+                //If Recipe cannot be found
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: User has no such recipe")
+                        .message("Please check the spelling of the recipe name")
+                        .build();
+            }
 
             recipeRepository.deleteByUserIdAndName(id, request.getName());
 
+        } catch (IllegalArgumentException e) {
+
+            //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+            return ErrorResponse.builder()
+                    .error("Bad Request: Invalid Token")
+                    .message("User not found")
+                    .build();
+
         } catch (Exception e) {
 
+            //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
-                    .error("Internal Server Error")
-                    .message("Unknown Error")
+                    .error("Internal Server Error: Unknown Error")
+                    .message("An unknown error has occurred! Do try again!")
                     .build();
+
         }
 
         return SuccessResponse.builder()
@@ -90,34 +103,59 @@ public class RecipeService {
                 .build();
     }
 
-    public Response update(String recipeId, UpdateRecipeRequest request) {
-
-        String oldEmail = "John2@gmail.com";    //Debugging line! Hardcode
-        User origUser = userRepository.findByEmail(oldEmail).orElseThrow();
-        String userId = origUser.getId();
-
-        //Assuming all are filled
-        Recipe recipe = recipeRepository.findByUserIdAndId(userId, recipeId).orElseThrow();
-        recipe.setUserId(userId);
-        recipe.setName(request.getName());
-        recipe.setCategory(request.getCategory());
-        recipe.setCost(request.getCost());
-        //recipe.setImage(request.setImage());
-        recipe.setDescription(request.getDescription());
-        recipe.setIngredients(request.getIngredients());
-        recipe.setSteps(request.getSteps());
+    public Response update(String recipeId, UpdateRecipeRequest request, String oldEmail) {
 
         try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            Recipe recipe = recipeRepository.findByUserIdAndId(id, recipeId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Recipe"));
+            recipe.setUserId(id);
+            recipe.setName(request.getName());
+            recipe.setCategory(request.getCategory());
+            recipe.setCost(request.getCost());
+            //recipe.setImage(request.setImage());
+            recipe.setDescription(request.getDescription());
+            recipe.setIngredients(request.getIngredients());
+            recipe.setSteps(request.getSteps());
+
             recipeRepository.save(recipe);
-        } catch (Exception e) {
-            return ErrorResponse.builder()
-                    .error("Internal Server Error")
-                    .message("Unknown Error")
+
+        } catch (IllegalArgumentException e) {
+
+
+            if (e.getMessage().equals("Invalid Token")) {
+
+                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            }
+
+            return  ErrorResponse.builder()
+                    .error("Bad Request: Invalid Recipe")
+                    .message("Recipe not found")
                     .build();
+
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error: Unknown Error")
+                    .message("An unknown error has occurred! Do try again!")
+                    .build();
+
         }
 
         return SuccessResponse.builder()
                 .response("Recipe has been updated successfully")
                 .build();
     }
+
 }

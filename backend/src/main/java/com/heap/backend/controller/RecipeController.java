@@ -5,9 +5,9 @@ import com.heap.backend.data.request.DeleteRecipeRequest;
 import com.heap.backend.data.request.UpdateRecipeRequest;
 import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.data.response.Response;
+import com.heap.backend.service.auth.JwtService;
 import com.heap.backend.service.auth.RecipeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,60 +17,47 @@ import org.springframework.web.bind.annotation.*;
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private final JwtService jwtService;
 
     @PostMapping("/createRecipe")
-    public ResponseEntity<Response> create (@RequestBody CreateRecipeRequest request) {
+    public ResponseEntity<Response> create (@RequestBody CreateRecipeRequest request, @RequestHeader ("Authorization") String token) {
+
+        //Obtaining jwt token and email from jwt token
+        String jwt = token.substring(7);
+        String oldEmail = jwtService.extractEmail(jwt);
 
         //Current error faced is the token is being cut off in the RequestParam, need to fix
-        Response response = recipeService.create(request);
+        Response response = recipeService.create(request, oldEmail);
 
         //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        if (response instanceof ErrorResponse) {
-
-            ErrorResponse errorResponse = (ErrorResponse) response;
-
-            //Add in variations of error if devised
-
-            if (errorResponse.getMessage().contains("Bad Request")) {
-
-                ResponseEntity.badRequest().body(errorResponse);
-
-            } else {
-
-                return ResponseEntity.internalServerError().body(errorResponse);
-            }
-        }
-
-        //Else, return ok response
-        return ResponseEntity.ok(response);
+        return checkResponse(response);
     }
 
     @PostMapping("/deleteRecipe")
-    public ResponseEntity<Response> delete (@RequestBody DeleteRecipeRequest request) {
-        Response response = recipeService.delete(request);
+    public ResponseEntity<Response> delete (@RequestBody DeleteRecipeRequest request, @RequestHeader ("Authorization") String token) {
 
-        if (response instanceof ErrorResponse) {
+        //Obtaining jwt token and email from jwt token
+        String jwt = token.substring(7);
+        String oldEmail = jwtService.extractEmail(jwt);
 
-            ErrorResponse errorResponse = (ErrorResponse) response;
+        Response response = recipeService.delete(request, oldEmail);
 
-            if (errorResponse.getMessage().contains("Bad Request")) {
-
-                return ResponseEntity.badRequest().body(errorResponse);
-
-            } else {
-
-                return ResponseEntity.internalServerError().body(errorResponse);
-            }
-
-        }
-
-        return ResponseEntity.ok(response);
+        return checkResponse(response);
     }
 
     @PutMapping("/updateRecipe/{recipeId}")
-    public ResponseEntity<Response> update (@PathVariable String recipeId, @RequestBody UpdateRecipeRequest request) {
+    public ResponseEntity<Response> update (@PathVariable String recipeId, @RequestBody UpdateRecipeRequest request, @RequestHeader ("Authorization") String token) {
 
-        Response response = recipeService.update(recipeId, request);
+        //Obtaining jwt token and email from jwt token
+        String jwt = token.substring(7);
+        String oldEmail = jwtService.extractEmail(jwt);
+
+        Response response = recipeService.update(recipeId, request, oldEmail);
+
+        return checkResponse(response);
+    }
+
+    public ResponseEntity<Response> checkResponse(Response response) {
 
         if (response instanceof ErrorResponse) {
 

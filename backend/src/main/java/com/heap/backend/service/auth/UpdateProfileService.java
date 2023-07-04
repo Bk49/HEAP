@@ -38,6 +38,7 @@ public class UpdateProfileService {
 
             //Creates new business class based on updateRequest
             Business business = origUser.getBusiness().duplicate();
+            business.setBusinessName(request.getBusinessName());
             business.setBusinessType(request.getBusinessType());
             business.setCuisineType(request.getCuisineType());
             business.setFusion(request.isFusion());
@@ -94,7 +95,7 @@ public class UpdateProfileService {
 
         //If Everything goes smoothly, response will be created using UpdateResponse with message
         return SuccessResponse.builder()
-                .response("Item updated successfully")
+                .response("Profile updated successfully")
                 .build();
     }
 }
