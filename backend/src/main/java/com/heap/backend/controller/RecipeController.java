@@ -67,10 +67,10 @@ public class RecipeController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateRecipe/{name}")
-    public ResponseEntity<Response> update (@PathVariable String name, @RequestBody UpdateRecipeRequest request) {
+    @PutMapping("/updateRecipe/{recipeId}")
+    public ResponseEntity<Response> update (@PathVariable String recipeId, @RequestBody UpdateRecipeRequest request) {
 
-        Response response = recipeService.update(name, request);
+        Response response = recipeService.update(recipeId, request);
 
         if (response instanceof ErrorResponse) {
 

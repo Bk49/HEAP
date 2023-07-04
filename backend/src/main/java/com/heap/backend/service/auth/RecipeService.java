@@ -74,12 +74,14 @@ public class RecipeService {
         }
 
         try {
+
             recipeRepository.deleteByUserIdAndName(id, request.getName());
+
         } catch (Exception e) {
+
             return ErrorResponse.builder()
-                    .error("Bad Request: Recipe not found")
-                    .message(e.getClass().getName())
-                    //.message("Please ensure that the recipe name has been spelt correctly")
+                    .error("Internal Server Error")
+                    .message("Unknown Error")
                     .build();
         }
 
@@ -88,14 +90,14 @@ public class RecipeService {
                 .build();
     }
 
-    public Response update(String recipeName, UpdateRecipeRequest request) {
+    public Response update(String recipeId, UpdateRecipeRequest request) {
 
         String oldEmail = "John2@gmail.com";    //Debugging line! Hardcode
         User origUser = userRepository.findByEmail(oldEmail).orElseThrow();
         String userId = origUser.getId();
 
         //Assuming all are filled
-        Recipe recipe = recipeRepository.findByUserIdAndName(userId, recipeName).orElseThrow();
+        Recipe recipe = recipeRepository.findByUserIdAndId(userId, recipeId).orElseThrow();
         recipe.setUserId(userId);
         recipe.setName(request.getName());
         recipe.setCategory(request.getCategory());
