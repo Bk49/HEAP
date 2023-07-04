@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateService {
+public class UpdateProfileService {
     private final UserRepository repository;
     private final AuthenticationService authenticationService;
     private final PasswordEncoder passwordEncoder;
 
-    public Response update(UpdateProfileRequest request, String token) {
+    public Response update(UpdateProfileRequest request, String oldEmail) {
 
         //Check if Password and ConfirmPassword are the same
         //If not the same, return UpdateErrorResponse based on bad request
@@ -29,30 +29,28 @@ public class UpdateService {
         }
 
         //Obtain old email to be used to access old user details
-        String oldEmail = "John3@gmail.com";    //Debugging line! Hardcode
-//        String oldEmail = jwtService.extractEmail(token);
-        User origUser = repository.findByEmail(oldEmail).orElseThrow();
-
-        String id = origUser.getId();
-
-        //Creates new business class based on updateRequest
-        Business business = origUser.getBusiness().duplicate();
-        business.setBusinessType(request.getBusinessType());
-        business.setCuisineType(request.getCuisineType());
-        business.setFusion(request.isFusion());
-        business.setStoreAddress(request.getStoreAddress());
-        business.setPostalCode(request.getPostalCode());
-
-        //Creates new user based on updateRequest
-        User user = User.builder()
-                .id(id)
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .business(business)
-                .build();
-
-        //Tries to delete old details of user and create new entry
+        User origUser = null;
         try {
+
+            origUser = repository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException()) ;
+            String id = origUser.getId();
+
+            //Creates new business class based on updateRequest
+            Business business = origUser.getBusiness().duplicate();
+            business.setBusinessType(request.getBusinessType());
+            business.setCuisineType(request.getCuisineType());
+            business.setFusion(request.isFusion());
+            business.setStoreAddress(request.getStoreAddress());
+            business.setPostalCode(request.getPostalCode());
+
+            //Creates new user based on updateRequest
+            User user = User.builder()
+                    .id(id)
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .business(business)
+                    .build();
 
             //Deletes previous entity of user
             repository.delete(origUser);
@@ -61,15 +59,15 @@ public class UpdateService {
 
         } catch (IllegalArgumentException e) {
 
-            //If unsuccessful to delete previous entity
+            //If user cannot be found in the repository based on token obtained info, return ErrorResponse
             return ErrorResponse.builder()
-                    .error("Bad Request: No such user found")
-                    .message("Please check your old Email")
+                    .error("Bad Request: Invalid Token")
+                    .message("User not found")
                     .build();
 
         } catch (DuplicateKeyException e) {
 
-            //If email has already been found, return error
+            //If new email has already been found, save old user and return ErrorResponse
             repository.save(origUser);
             return ErrorResponse.builder()
                     .error("Bad Request: Duplicated user email")
@@ -77,6 +75,8 @@ public class UpdateService {
                     .build();
 
         } catch (Exception e) {
+
+            //For any other forms of error, return as unknown error
 
             /*
              * Note to future developer:
@@ -86,9 +86,10 @@ public class UpdateService {
 
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
-                    .error("Unknown Error")
+                    .error("Internal Server Error: Unknown Error")
                     .message("An unknown error has occurred! Do try again!")
                     .build();
+
         }
 
         //If Everything goes smoothly, response will be created using UpdateResponse with message

@@ -42,8 +42,8 @@ public class Business {
     private ArrayList<Menu> menuList;
 
     public Business duplicate() {
-        ArrayList<Menu> newMenuList = new ArrayList<>();
-        newMenuList.addAll(this.menuList);
+//        ArrayList<Menu> newMenuList = new ArrayList<>();
+//        newMenuList.addAll(this.menuList);
 
         return Business.builder()
                 .businessName(this.getBusinessName())
@@ -52,7 +52,7 @@ public class Business {
                 .isFusion(this.isFusion())
                 .storeAddress(this.getStoreAddress())
                 .postalCode(this.getPostalCode())
-                .menuList(newMenuList)
+                .menuList(new ArrayList<Menu>())
                 .build();
     }
 }

@@ -3,9 +3,11 @@ package com.heap.backend.controller;
 import com.heap.backend.data.request.UpdateProfileRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.data.response.ErrorResponse;
-import com.heap.backend.service.auth.UpdateService;
+import com.heap.backend.service.auth.JwtService;
+import com.heap.backend.service.auth.UpdateProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,13 +15,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UpdateProfileController {
 
-    private final UpdateService updateService;
+    private final UpdateProfileService updateProfileService;
+    private final JwtService jwtService;
 
     @PutMapping("/update")
-    public ResponseEntity<Response> update (@RequestBody UpdateProfileRequest request, @RequestParam String token){
+    public ResponseEntity<Response> update (@RequestBody UpdateProfileRequest request, @RequestHeader ("Authorization") String token){
 
-        //Current error faced is the token is being cut off in the RequestParam, need to fix
-        Response response = updateService.update(request, token);
+        //Obtaining jwt token and email from jwt token
+        String jwt = token.substring(7);
+        String oldEmail = jwtService.extractEmail(jwt);
+
+        //Ontaining Response from UpdateProfileService
+        Response response = updateProfileService.update(request, oldEmail);
+
 
         //If response is instance of Error Response, it means that duplicated username or Internal Server Error
         if (response instanceof ErrorResponse errorResponse) {
