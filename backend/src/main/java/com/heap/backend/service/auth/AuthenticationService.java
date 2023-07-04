@@ -50,7 +50,6 @@ public class AuthenticationService {
                     .isFusion(request.isFusion())
                     .storeAddress(request.getStoreAddress())
                     .postalCode(request.getPostalCode())
-                    .menuList(new ArrayList<Menu>())
                     .build();
 
         User user = User.builder()

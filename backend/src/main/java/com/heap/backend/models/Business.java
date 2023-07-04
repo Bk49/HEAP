@@ -39,13 +39,7 @@ public class Business {
     @NotBlank
     private String postalCode;
 
-    private ArrayList<Menu> menuList;
-
     public Business duplicate() {
-        ArrayList<Menu> newMenuList = new ArrayList<>();
-        for (Menu m : this.menuList) {
-            newMenuList.add(m);
-        }
 
         return Business.builder()
                 .businessName(this.getBusinessName())
@@ -54,7 +48,6 @@ public class Business {
                 .isFusion(this.isFusion())
                 .storeAddress(this.getStoreAddress())
                 .postalCode(this.getPostalCode())
-                .menuList(newMenuList)
                 .build();
     }
 }
