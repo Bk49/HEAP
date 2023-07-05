@@ -8,6 +8,16 @@
     src: url('../assets/fonts/cocogoose/Cocogoose.ttf');
 }
 
+@font-face {
+    font-family: "CocogooseLight";
+    src: url('../assets/fonts/cocogoose/CocogooseLight.ttf')
+}
+
+@font-face {
+    font-family: "HelveticaCust";
+    src: url('../assets//fonts/helvetica/Helvetica.ttf');
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
