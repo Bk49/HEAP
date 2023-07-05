@@ -6,7 +6,7 @@ import TextField from "../../../common/form/TextField";
 import SingleItemDropdown from "../../../common/form/SingleItemDropdown";
 
 const BGPOutletExpansionForm = () => {
-    return {
+    return (
         <Fragment>
             <HeadingThree>Outlet Expansion Address and Location</HeadingThree>
             <FieldsColumn>
@@ -38,7 +38,7 @@ const BGPOutletExpansionForm = () => {
                 />
             </FieldsRow>
         </Fragment>
-    };
+    );
 };
 
 export default BGPOutletExpansionForm;
