@@ -20,6 +20,7 @@ const BGPOutletExpansionForm = () => {
             </FieldsColumn>
 
             <HeadingThree>Staffs</HeadingThree>
+            <FieldsColumn>
             <FieldsRow>
                 <TextField
                     rules={{ required: true }}
@@ -37,6 +38,7 @@ const BGPOutletExpansionForm = () => {
                     name="position"
                 />
             </FieldsRow>
+            </FieldsColumn>
         </Fragment>
     );
 };
