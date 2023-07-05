@@ -154,3 +154,21 @@ export const planType = [
     { value: "OE", text: "Outlet Expansion Strategy" },
     { value: "MK", text: "Marketing Strategy" },
 ]
+
+export const hiringMethod = [
+    { value: "", text: "Please Select Hiring Method"},
+    { value: "", text: "Direct Application"},
+    { value: "", text: "Online Job Platform"},
+    { value: "", text: "Employee Referral"},
+    { value: "", text: "Job Agency"},
+    { value: "", text: "Social Media Hiring"},
+]
+
+export const position = [
+    { value: "", text: "Please Select Position"},
+    { value: "", text: "Service Staff"},
+    { value: "", text: "Kitchen Staff"},
+    { value: "", text: "Supervisor"},
+    { value: "", text: "Assistant Manager"},
+    { value: "", text: "Manager"},
+]

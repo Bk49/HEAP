@@ -3,6 +3,8 @@ import TextField from "../../common/form/TextField";
 import SingleItemDropdown from "../../common/form/SingleItemDropdown";
 import IconButton from "@mui/material/IconButton";
 import { useFormContext } from "react-hook-form";
+import { hiringMethod } from "../../../constants/dropdown-choices";
+import { position } from "../../../constants/dropdown-choices";
 
 const StaffRow = ({ index = -1, removeFn = () => {} }) => {
     const {
@@ -33,10 +35,7 @@ const StaffRow = ({ index = -1, removeFn = () => {} }) => {
                 label="Hiring Method"
                 name={`staffs.${index}.hiringMethod`}
                 choices={[
-                    {
-                        text: "Please Select a Hiring Method",
-                        value: "",
-                    },
+                    { hiringMethod },
                 ]}
                 nestedError={errors.staffs?.[index]?.hiringMethod}
             />
@@ -45,10 +44,7 @@ const StaffRow = ({ index = -1, removeFn = () => {} }) => {
                 label="Position"
                 name={`staffs.${index}.position`}
                 choices={[
-                    {
-                        text: "Please Select a Position",
-                        value: "",
-                    },
+                    { position },
                 ]}
                 nestedError={errors.staffs?.[index]?.position}
             />
