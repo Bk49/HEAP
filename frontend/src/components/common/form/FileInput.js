@@ -13,7 +13,7 @@ const FileInput = ({
     return (
         <Controller
             name={name}
-            rules={rules}
+            rules={rules.required ? { required: "No files chosen!" } : {}}
             control={control}
             render={({ field, fieldState }) => (
                 <MUIFileInput

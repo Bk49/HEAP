@@ -1,27 +1,20 @@
 import { Fragment } from "react";
 import { useFieldArray } from "react-hook-form";
-import HeadingThree from "../../common/heading/HeadingThree";
-import ContainersSourcingRow from "./ContainersSourcingRow";
+import HeadingThree from "../../../common/heading/HeadingThree";
+import InfluencerCollaborationRow from "./InfluencerCollaborationRow";
 
-const ContainersSourcingFieldArray = () => {
-    const { fields, append, remove } = useFieldArray({
-        name: "containers",
-    });
+const InfluencerCollaborationFieldArray = () => {
+    const { fields, append, remove } = useFieldArray({ name: "influencer" });
 
     return (
         <Fragment>
             <HeadingThree
                 add={true}
                 addFn={() =>
-                    append({
-                        containerName: "",
-                        vendorName: "",
-                        price: "",
-                        quantity: "",
-                    })
+                    append({ name: "", email: "", phone: "", price: 0 })
                 }
             >
-                Containers Sourcing
+                Influencers Collaboration
             </HeadingThree>
             <div
                 style={{
@@ -32,7 +25,7 @@ const ContainersSourcingFieldArray = () => {
                 }}
             >
                 {fields.map((field, index) => (
-                    <ContainersSourcingRow
+                    <InfluencerCollaborationRow
                         removeFn={() => remove(index)}
                         key={field.id}
                         index={index}
@@ -43,4 +36,4 @@ const ContainersSourcingFieldArray = () => {
     );
 };
 
-export default ContainersSourcingFieldArray;
+export default InfluencerCollaborationFieldArray;

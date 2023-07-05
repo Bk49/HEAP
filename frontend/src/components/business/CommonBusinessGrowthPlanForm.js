@@ -2,9 +2,10 @@ import { Fragment, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import BasicDetailsSection from "../business/section/BasicDetailsSection";
 import HeadingTwo from "../common/heading/HeadingTwo";
-import BGPFoodDeliveryForm from "./BGPFoodDeliveryForm";
-import BGPOutletExpansionForm from "./BGPOutletExpansionForm";
-import BGPMarketingForm from "./BGPMarketingForm";
+import BGPFoodDeliveryForm from "./formgroup/bgp/BGPFoodDeliveryForm";
+import BGPOutletExpansionForm from "./formgroup/bgp/BGPOutletExpansionForm";
+import BGPMarketingForm from "./formgroup/bgp/BGPMarketingForm";
+import SubmitFormGroup from "../common/form/SubmitFormGroup";
 
 const CommonBusinessGrowthPlanForm = ({ isCreate = true }) => {
     const formMethods = useForm();
@@ -24,9 +25,16 @@ const CommonBusinessGrowthPlanForm = ({ isCreate = true }) => {
                     <BGPFoodDeliveryForm isCreate={isCreate} />
                 ) : currentPlan === "OE" ? (
                     <BGPOutletExpansionForm isCreate={isCreate} />
-                ) : (
+                ) : currentPlan === "MK" ? (
                     <BGPMarketingForm isCreate={isCreate} />
+                ) : (
+                    <Fragment />
                 )}
+                <SubmitFormGroup
+                    submitErrorText={`${
+                        isCreate ? "Creation" : "Update"
+                    } of business growth plan is unsuccessful, please check your input`}
+                />
             </FormProvider>
         </Fragment>
     );
