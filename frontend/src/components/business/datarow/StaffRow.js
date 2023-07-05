@@ -1,5 +1,6 @@
 import RemoveIcon from "@mui/icons-material/RemoveCircleOutline";
 import TextField from "../../common/form/TextField";
+import SingleItemDropdown from "../../common/form/SingleItemDropdown";
 import IconButton from "@mui/material/IconButton";
 import { useFormContext } from "react-hook-form";
 
@@ -54,3 +55,5 @@ const StaffRow = ({ index = -1, removeFn = () => {} }) => {
         </div>
     );
 };
+
+export default StaffRow;
