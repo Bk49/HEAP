@@ -6,7 +6,7 @@ const CreateBusinessGrowthPlan = () => {
     return (
         <Fragment>
             <HeadingOne>Create Business Growth Plan</HeadingOne>
-            <CommonBusinessGrowthPlanForm />
+            <CommonBusinessGrowthPlanForm isCreate={true} />
         </Fragment>
     );
 };
