@@ -11,4 +11,4 @@ const EditBusinessGrowthPlan = () => {
     );
 };
 
-export default EditBusinessGrowthPlan
+export default EditBusinessGrowthPlan;
