@@ -162,6 +162,7 @@ export const hiringMethod = [
     { value: "", text: "Employee Referral"},
     { value: "", text: "Job Agency"},
     { value: "", text: "Social Media Hiring"},
+    { value: "", text: "Transfer From Existing Outlet"},
 ]
 
 export const position = [
