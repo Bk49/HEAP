@@ -3,7 +3,9 @@ import HeadingThree from "../../../common/heading/HeadingThree";
 import FieldsColumn from "../../../common/form/FieldsColumn";
 import FieldsRow from "../../../common/form/FieldsRow";
 import TextField from "../../../common/form/TextField";
+import TextArea from "../../../common/form/TextArea";
 import SingleItemDropdown from "../../../common/form/SingleItemDropdown";
+import ContainersSourcingFieldArray from "../../datarow/container/ContainersSourcingFieldArray";
 
 const BGPOutletExpansionForm = () => {
     return (
@@ -11,7 +13,7 @@ const BGPOutletExpansionForm = () => {
             <HeadingThree>Outlet Expansion Address and Location</HeadingThree>
             <FieldsColumn>
             <FieldsRow>
-                <TextField
+                <TextArea
                     rules={{ required: true }}
                     label="Outlet Expansion Address and Location"
                     name="address"
@@ -19,23 +21,22 @@ const BGPOutletExpansionForm = () => {
             </FieldsRow>
             </FieldsColumn>
 
-            <HeadingThree>Staffs</HeadingThree>
+            <StaffFieldArray />
+
+            <HeadingThree>Other Details</HeadingThree>
             <FieldsColumn>
             <FieldsRow>
                 <TextField
                     rules={{ required: true }}
-                    label="Staff Name"
-                    name="staffName"
+                    label="Rental Price"
+                    name="rentalPrice"
+                    type="number"
                 />
-                 <SingleItemDropdown
+                <TextField
                     rules={{ required: true }}
-                    label="Hiring Method"
-                    name="hiringMethod"
-                />
-                <SingleItemDropdown
-                    rules={{ required: true }}
-                    label="Position"
-                    name="position"
+                    label="Renovation Est. Cost"
+                    name="renovation"
+                    type="number"
                 />
             </FieldsRow>
             </FieldsColumn>
