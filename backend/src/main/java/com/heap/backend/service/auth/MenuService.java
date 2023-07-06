@@ -9,6 +9,7 @@ import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,25 +26,31 @@ public class MenuService {
             User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            Menu menu = Menu.builder()
-                    .userId(id)
-                    .name(request.getName())
-                    .type(request.getType())
-                    .sections(request.getSections())
-                    .build();
-
             //Checks through Items in the Menu to see if these are legit recipe in entries
-            MenuSection[] menuSections = menu.getSections();
+            MenuSection[] menuSections = request.getSections();
+            StoredMenuSection[] storedMenuSections = new StoredMenuSection[menuSections.length];
 
-            for (MenuSection ms : menuSections) {
+            for (int i = 0 ; i < menuSections.length ; i++) {
 
-                for (Item i : ms.getItems()) {
+                MenuSection ms = menuSections[i];
+                storedMenuSections[i].setName(ms.getName());
 
-                    if (recipeRepository.findByNameAndUserId(i.getItem(), id).isEmpty()) {
+                for (int j = 0 ; j < ms.getItems().length ; j++) {
+
+                    Item item = ms.getItems()[j];
+
+                    if (recipeRepository.findByNameAndUserId(item.getItem(), id).isEmpty()) {
 
                         throw new IllegalArgumentException("Missing Recipe");
 
+                    } else {
+
+                        storedMenuSections[i].getItems()[j] =
+                                recipeRepository.findByNameAndUserId(item.getItem(), id)
+                                .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
+
                     }
+
                 }
             }
 
@@ -54,7 +61,16 @@ public class MenuService {
 
             }
 
-            menuRepository.save(menu);
+            //If everything goes well, create StoredMenu and add it into the MenuService
+            StoredMenu storedMenu = StoredMenu.builder()
+                    .userId(id)
+                    .name(request.getName())
+                    .type(request.getType())
+                    .sections(storedMenuSections)
+                    .build();
+
+
+            menuRepository.save(storedMenu);
 
         } catch (IllegalArgumentException e) {
 
@@ -151,29 +167,43 @@ public class MenuService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            Menu menu = menuRepository.findByIdAndUserId(menuId, id)
+            StoredMenu storedMenu = menuRepository.findByIdAndUserId(menuId, id)
                     .orElseThrow(() -> new IllegalArgumentException("No such Menu"));
 
-            menu.setName(request.getName());
-            menu.setType(request.getType());
-            menu.setSections(request.getSections());
+            storedMenu.setName(request.getName());
+            storedMenu.setType(request.getType());
 
             //Checks through Items in the Menu to see if these are legit recipe in entries
-            MenuSection[] menuSections = menu.getSections();
+            MenuSection[] menuSections = request.getSections();
+            StoredMenuSection[] storedMenuSections = new StoredMenuSection[menuSections.length];
 
-            for (MenuSection ms : menuSections) {
+            for (int i = 0 ; i < menuSections.length ; i++) {
 
-                for (Item i : ms.getItems()) {
+                MenuSection ms = menuSections[i];
+                storedMenuSections[i].setName(ms.getName());
 
-                    if (recipeRepository.findByNameAndUserId(i.getItem(), id).isEmpty()) {
+                for (int j = 0 ; j < ms.getItems().length ; j++) {
+
+                    Item item = ms.getItems()[j];
+
+                    if (recipeRepository.findByNameAndUserId(item.getItem(), id).isEmpty()) {
 
                         throw new IllegalArgumentException("Missing Recipe");
 
+                    } else {
+
+                        storedMenuSections[i].getItems()[j] =
+                                recipeRepository.findByNameAndUserId(item.getItem(), id)
+                                        .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
+
                     }
+
                 }
             }
 
-            menuRepository.save(menu);
+            storedMenu.setSections(storedMenuSections);
+
+            menuRepository.save(storedMenu);
 
         } catch (IllegalArgumentException e) {
 
@@ -210,7 +240,7 @@ public class MenuService {
 
     public Response findOne(FindMenuRequest request, String oldEmail) {
 
-        Menu menu = null;
+        ReturnedMenu returnedMenu = null;
 
         try {
 
@@ -224,8 +254,33 @@ public class MenuService {
 
             }
 
-            menu = menuRepository.findByUserIdAndName(id, request.getName())
-                    .orElseThrow(() -> new IllegalArgumentException("User has no such Recipe"));
+            StoredMenu storedMenu = menuRepository.findByUserIdAndName(id, request.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("User has no such Menu"));
+
+            returnedMenu = ReturnedMenu.builder()
+                    .id(storedMenu.getId())
+                    .name(storedMenu.getName())
+                    .userId(storedMenu.getUserId())
+                    .type(storedMenu.getType())
+                    .build();
+
+            ReturnedMenuSection[] returnedMenuSections = new ReturnedMenuSection[storedMenu.getSections().length];
+
+            StoredMenuSection[] storedMenuSections = storedMenu.getSections();
+            for (int i = 0 ; i < storedMenuSections.length ; i++) {
+
+                String[] items = storedMenuSections[i].getItems();
+
+                for (int j = 0 ; j < items.length ; j++) {
+
+                    returnedMenuSections[i].getItems()[j] = recipeRepository
+                            .findByUserIdAndId(id, items[j])
+                            .orElseThrow(() -> new IllegalArgumentException("Invalid Recipe"));
+
+                }
+            }
+
+            returnedMenu.setSections(returnedMenuSections);
 
         } catch (IllegalArgumentException e) {
 
@@ -257,14 +312,14 @@ public class MenuService {
         }
 
         return SingleMenuResponse.builder()
-                .menu(menu)
+                .returnedMenu(returnedMenu)
                 .build();
 
     }
 
     public Response findAll(String oldEmail) {
 
-        List<Menu> menus = null;
+        List<ReturnedMenu> menus = new ArrayList<>();
 
         try {
 
@@ -272,7 +327,40 @@ public class MenuService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            menus = menuRepository.findAllByUserId(id);
+            List<StoredMenu> storedMenuList = menuRepository.findAllByUserId(id);
+
+            for (StoredMenu sm : storedMenuList) {
+
+                StoredMenuSection[] storedMenuSections = sm.getSections();
+                ReturnedMenu rm = ReturnedMenu.builder()
+                        .id(sm.getId())
+                        .type(sm.getType())
+                        .userId(sm.getUserId())
+                        .name(sm.getName())
+                        .build();
+
+                ReturnedMenuSection[] rms = new ReturnedMenuSection[sm.getSections().length];
+
+                for (int i = 0 ; i < storedMenuSections.length ; i++) {
+
+                    StoredMenuSection sms = storedMenuSections[i];
+                    String[] items = sms.getItems();
+                    Recipe[] recipes = new Recipe[items.length];
+
+                    for (int j = 0 ; j < items.length ; j++) {
+
+                        recipes[j] = recipeRepository
+                                .findByUserIdAndName(id, items[j])
+                                .orElseThrow(() -> new IllegalArgumentException("Invalid Recipe"));
+
+                    }
+
+                    rms[i].setItems(recipes);
+
+                }
+
+                rm.setSections(rms);
+            }
 
         } catch (IllegalArgumentException e) {
 
@@ -297,7 +385,7 @@ public class MenuService {
         }
 
         return MultipleMenuResponse.builder()
-                .menus(menus)
+                .returnedMenus(menus)
                 .build();
 
     }

@@ -1,17 +1,18 @@
 package com.heap.backend.repository;
 
 import com.heap.backend.models.Menu;
+import com.heap.backend.models.StoredMenu;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface MenuRepository extends MongoRepository<Menu, String> {
-    Optional<Menu> findByUserIdAndName(String userId, String name);
+public interface MenuRepository extends MongoRepository<StoredMenu, String> {
+    Optional<StoredMenu> findByUserIdAndName(String userId, String name);
 
-    Optional<Menu> findByIdAndUserId(String id, String userId);
+    Optional<StoredMenu> findByIdAndUserId(String id, String userId);
 
-    List<Menu> findAllByUserId(String userId);
+    List<StoredMenu> findAllByUserId(String userId);
 
     void deleteByUserIdAndName(String userId, String name);
 }
