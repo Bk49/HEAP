@@ -2,6 +2,7 @@ package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateRecipeRequest;
 import com.heap.backend.data.request.DeleteRecipeRequest;
+import com.heap.backend.data.request.FindRecipeRequest;
 import com.heap.backend.data.request.UpdateRecipeRequest;
 import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.data.response.Response;
@@ -43,6 +44,19 @@ public class RecipeController {
         String oldEmail = returnOldEmail(token);
         return checkResponse(recipeService.update(recipeId, request, oldEmail));
     }
+
+    @PostMapping ("/findRecipe")
+    public ResponseEntity<Response> findOne(@RequestBody FindRecipeRequest request, @RequestHeader ("Authorization") String token) {
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(recipeService.findOne(request, oldEmail));
+    }
+
+    @GetMapping("/findAllRecipe")
+    public ResponseEntity<Response> findAll(@RequestHeader ("Authorization") String token) {
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(recipeService.findAll(oldEmail));
+    }
+
 
     public String returnOldEmail(String token) {
 
