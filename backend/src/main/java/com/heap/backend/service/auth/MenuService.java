@@ -46,7 +46,7 @@ public class MenuService {
             }
 
             //Search through the menu ArrayList of Specific user and checks if a similar menu is present
-            if (!menuRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
+            if (menuRepository.findByUserIdAndName(id, request.getName()).isPresent()) {
 
                 throw new IllegalArgumentException("Duplicate Menu");
 
@@ -155,6 +155,21 @@ public class MenuService {
             menu.setName(request.getName());
             menu.setType(request.getType());
             menu.setSections(request.getSections());
+
+            //Checks through Items in the Menu to see if these are legit recipe in entries
+            MenuSection[] menuSections = menu.getSections();
+
+            for (MenuSection ms : menuSections) {
+
+                for (Item i : ms.getItems()) {
+
+                    if (recipeRepository.findByNameAndUserId(i.getItem(), id).isEmpty()) {
+
+                        throw new IllegalArgumentException("Missing Recipe");
+
+                    }
+                }
+            }
 
             menuRepository.save(menu);
 
