@@ -157,19 +157,19 @@ export const planType = [
 
 export const hiringMethod = [
     { value: "", text: "Please Select Hiring Method"},
-    { value: "", text: "Direct Application"},
-    { value: "", text: "Online Job Platform"},
-    { value: "", text: "Employee Referral"},
-    { value: "", text: "Job Agency"},
-    { value: "", text: "Social Media Hiring"},
-    { value: "", text: "Transfer From Existing Outlet"},
+    { value: "direct", text: "Direct Application"},
+    { value: "online", text: "Online Job Platform"},
+    { value: "referral", text: "Employee Referral"},
+    { value: "agency", text: "Job Agency"},
+    { value: "socialMedia", text: "Social Media Hiring"},
+    { value: "transfer", text: "Transfer From Existing Outlet"},
 ]
 
 export const position = [
     { value: "", text: "Please Select Position"},
-    { value: "", text: "Service Staff"},
-    { value: "", text: "Kitchen Staff"},
-    { value: "", text: "Supervisor"},
-    { value: "", text: "Assistant Manager"},
-    { value: "", text: "Manager"},
+    { value: "service", text: "Service Staff"},
+    { value: "kitchen", text: "Kitchen Staff"},
+    { value: "supervisor", text: "Supervisor"},
+    { value: "assistant", text: "Assistant Manager"},
+    { value: "manager", text: "Manager"},
 ]
