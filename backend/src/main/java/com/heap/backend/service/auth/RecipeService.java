@@ -253,13 +253,6 @@ public class RecipeService {
                         .message("User not found")
                         .build();
 
-            } else {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Recipe Name")
-                        .message("Recipe Name not found")
-                        .build();
-
             }
 
         } catch (Exception e) {

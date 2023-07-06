@@ -9,6 +9,8 @@ import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MenuService {
@@ -204,5 +206,99 @@ public class MenuService {
         return SuccessResponse.builder()
                 .response("Menu has been updated successfully")
                 .build();
+    }
+
+    public Response findOne(FindMenuRequest request, String oldEmail) {
+
+        Menu menu = null;
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            if (menuRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
+
+                throw new IllegalArgumentException("User has no such Menu");
+
+            }
+
+            menu = menuRepository.findByUserIdAndName(id, request.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("User has no such Recipe"));
+
+        } catch (IllegalArgumentException e) {
+
+            if (e.getMessage().equals("Invalid Token")) {
+
+                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            } else {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Menu Name")
+                        .message("Menu Name not found")
+                        .build();
+
+            }
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error: Unknown Error")
+                    .message("An unknown error has occurred! Do try again!")
+                    .build();
+
+        }
+
+        return SingleMenuResponse.builder()
+                .menu(menu)
+                .build();
+
+    }
+
+    public Response findAll(String oldEmail) {
+
+        List<Menu> menus = null;
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            menus = menuRepository.findAllByUserId(id);
+
+        } catch (IllegalArgumentException e) {
+
+            if (e.getMessage().equals("Invalid Token")) {
+
+                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            }
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error: Unknown Error")
+                    .message("An unknown error has occurred! Do try again!")
+                    .build();
+
+        }
+
+        return MultipleMenuResponse.builder()
+                .menus(menus)
+                .build();
+
     }
 }

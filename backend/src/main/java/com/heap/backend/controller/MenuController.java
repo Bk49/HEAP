@@ -2,6 +2,7 @@ package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateMenuRequest;
 import com.heap.backend.data.request.DeleteMenuRequest;
+import com.heap.backend.data.request.FindMenuRequest;
 import com.heap.backend.data.request.UpdateMenuRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.data.response.ErrorResponse;
@@ -43,6 +44,24 @@ public class MenuController {
         return checkResponse(menuService.update(id, request, oldEmail));
     }
 
+    @PostMapping ("/findMenu")
+    public ResponseEntity<Response> findOne (@RequestBody FindMenuRequest request, @RequestHeader ("Authorization") String token) {
+
+        //Obtaining jwt token and email from jwt token
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(menuService.findOne(request, oldEmail));
+    }
+
+    @GetMapping ("/findAllMenu")
+    public ResponseEntity<Response> findAll (@RequestHeader ("Authorization") String token) {
+
+        //Obtaining jwt token and email from jwt token
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(menuService.findAll(oldEmail));
+    }
+
+
+
     public String returnOldEmail(String token) {
 
         String jwt = token.substring(7);
@@ -52,9 +71,7 @@ public class MenuController {
 
     public ResponseEntity<Response> checkResponse(Response response) {
 
-        if (response instanceof ErrorResponse) {
-
-            ErrorResponse errorResponse = (ErrorResponse) response;
+        if (response instanceof ErrorResponse errorResponse) {
 
             if (errorResponse.getMessage().contains("Bad Request")) {
 
