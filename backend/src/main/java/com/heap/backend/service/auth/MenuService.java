@@ -248,7 +248,7 @@ public class MenuService {
 
     public Response findOne(FindMenuRequest request, String oldEmail) {
 
-        ReturnedMenu returnedMenu = null;
+        ReturnedMenu returnedMenu;
 
         try {
 
@@ -275,9 +275,15 @@ public class MenuService {
             ReturnedMenuSection[] returnedMenuSections = new ReturnedMenuSection[storedMenu.getSections().length];
 
             StoredMenuSection[] storedMenuSections = storedMenu.getSections();
+
             for (int i = 0 ; i < storedMenuSections.length ; i++) {
 
                 String[] items = storedMenuSections[i].getItems();
+                ReturnedMenuSection returnedMenuSection = ReturnedMenuSection.builder()
+                        .name(storedMenuSections[i].getName())
+                        .items(new Recipe[items.length])
+                        .build();
+                returnedMenuSections[i] = returnedMenuSection;
 
                 for (int j = 0 ; j < items.length ; j++) {
 
@@ -314,7 +320,8 @@ public class MenuService {
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
-                    .message("An unknown error has occurred! Do try again!")
+                    .message(e.getClass().getName())
+                    //.message("An unknown error has occurred! Do try again!")
                     .build();
 
         }
@@ -334,41 +341,48 @@ public class MenuService {
             User origUser = userRepository.findByEmail(oldEmail)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
+            int index = 0;
 
             List<StoredMenu> storedMenuList = menuRepository.findAllByUserId(id);
 
             for (StoredMenu sm : storedMenuList) {
 
                 StoredMenuSection[] storedMenuSections = sm.getSections();
-                ReturnedMenu rm = ReturnedMenu.builder()
+
+                menus.add(ReturnedMenu.builder()
                         .id(sm.getId())
                         .type(sm.getType())
                         .userId(sm.getUserId())
                         .name(sm.getName())
-                        .build();
+                        .sections(new ReturnedMenuSection[sm.getSections().length])
+                        .build());
 
-                ReturnedMenuSection[] rms = new ReturnedMenuSection[sm.getSections().length];
+                ReturnedMenu returnedMenu = menus.get(index++);
+                ReturnedMenuSection[] returnedMenuSections = returnedMenu.getSections();
 
                 for (int i = 0 ; i < storedMenuSections.length ; i++) {
 
                     StoredMenuSection sms = storedMenuSections[i];
                     String[] items = sms.getItems();
-                    Recipe[] recipes = new Recipe[items.length];
+
+                    returnedMenuSections[i] = ReturnedMenuSection.builder()
+                            .name(sms.getName())
+                            .items(new Recipe[items.length])
+                            .build();
+                    Recipe[] recipes = returnedMenuSections[i].getItems();
 
                     for (int j = 0 ; j < items.length ; j++) {
 
                         recipes[j] = recipeRepository
-                                .findByUserIdAndName(id, items[j])
+                                .findByUserIdAndId(id, items[j])
                                 .orElseThrow(() -> new IllegalArgumentException("Invalid Recipe"));
 
                     }
 
-                    rms[i].setItems(recipes);
-
                 }
-
-                rm.setSections(rms);
             }
+
+//            System.out.println(menus);
 
         } catch (IllegalArgumentException e) {
 
