@@ -33,7 +33,11 @@ public class MenuService {
             for (int i = 0 ; i < menuSections.length ; i++) {
 
                 MenuSection ms = menuSections[i];
-                storedMenuSections[i].setName(ms.getName());
+                StoredMenuSection sms = StoredMenuSection.builder()
+                        .name(ms.getName())
+                        .items(new String[ms.getItems().length])
+                        .build();
+                storedMenuSections[i] = sms;
 
                 for (int j = 0 ; j < ms.getItems().length ; j++) {
 
@@ -45,7 +49,7 @@ public class MenuService {
 
                     } else {
 
-                        storedMenuSections[i].getItems()[j] =
+                        sms.getItems()[j] =
                                 recipeRepository.findByNameAndUserId(item.getItem(), id)
                                 .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
 
@@ -180,7 +184,11 @@ public class MenuService {
             for (int i = 0 ; i < menuSections.length ; i++) {
 
                 MenuSection ms = menuSections[i];
-                storedMenuSections[i].setName(ms.getName());
+                StoredMenuSection sms = StoredMenuSection.builder()
+                        .name(ms.getName())
+                        .items(new String[ms.getItems().length])
+                        .build();
+                storedMenuSections[i] = sms;
 
                 for (int j = 0 ; j < ms.getItems().length ; j++) {
 
@@ -192,7 +200,7 @@ public class MenuService {
 
                     } else {
 
-                        storedMenuSections[i].getItems()[j] =
+                        sms.getItems()[j] =
                                 recipeRepository.findByNameAndUserId(item.getItem(), id)
                                         .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
 
