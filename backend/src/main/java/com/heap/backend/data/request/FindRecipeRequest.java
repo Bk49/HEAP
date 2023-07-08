@@ -1,16 +1,14 @@
-package com.heap.backend.models;
+package com.heap.backend.data.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Data
-public class MenuSection {
+public class FindRecipeRequest {
     private String name;
-    private Item[] items;
-
 }

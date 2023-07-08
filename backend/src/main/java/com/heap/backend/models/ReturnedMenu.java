@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Data
 
-public class Menu {
+public class ReturnedMenu {
 
     @Id
     private String id;
@@ -26,7 +26,7 @@ public class Menu {
     private String name;
 
     @NotBlank
-    private MenuSection[] sections;
+    private ReturnedMenuSection[] sections;
 
     @NotBlank
     private String type;

@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class MenuSection {
+public class StoredMenuSection {
     private String name;
-    private Item[] items;
+    private String[] items;
 
 }

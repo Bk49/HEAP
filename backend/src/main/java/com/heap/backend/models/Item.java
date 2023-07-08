@@ -14,8 +14,4 @@ public class Item {
     
     private String item;
     private double price;
-
-    public boolean equals(Item i) {
-        return this.item.equals(i.item) && this.price == i.price;
-    }
 }
