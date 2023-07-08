@@ -1,5 +1,6 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NavItem from "./NavItem";
+import IconButton from "@mui/material/IconButton";
 
 const publicPages = [
     { text: "Login", path: "/login" },
@@ -40,7 +41,9 @@ const NavItems = ({ authenticated = false }) => {
             </div>
             {authenticated && (
                 <div>
-                    <AccountCircleIcon sx={{ fontSize: "2rem" }} />
+                    <Link to="/profile">
+                        <AccountCircleIcon sx={{ fontSize: "2rem" }} />
+                    </Link>
                 </div>
             )}
         </div>
