@@ -412,7 +412,7 @@ public class BusinessGrowthPlanService {
 
     public Response findOne(FindBusinessGrowthPlanRequest request, String oldEmail) {
 
-        ReturnedMenu returnedMenu;
+        BusinessGrowthPlan businessGrowthPlan;
 
         try {
 
@@ -420,6 +420,8 @@ public class BusinessGrowthPlanService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
+            businessGrowthPlan = businessGrowthPlanRepository.findByUserIdAndPlanName(id, request.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Plan"));
 
         } catch (IllegalArgumentException e) {
 
@@ -431,21 +433,6 @@ public class BusinessGrowthPlanService {
                         .message("User not found")
                         .build();
 
-            } else if (e.getMessage().equals("No such Menu")) {
-
-                //If menu cannot be found in the repository based on menuID, return ErrorResponse
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Menu")
-                        .message("Please ensure menu ID is valid")
-                        .build();
-
-            } else if (e.getMessage().equals("Duplicate Plan Name")) {
-
-                //If menu cannot be found in the repository based on menuID, return ErrorResponse
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Menu")
-                        .message("Please ensure menu ID is valid")
-                        .build();
             } else {
 
                 return ErrorResponse.builder()
@@ -464,8 +451,10 @@ public class BusinessGrowthPlanService {
 
         }
 
-        return SuccessResponse.builder()
-                .response("Business Growth Plan has been updated successfully")
+        return SingleBusinessGrowthPlanResponse.builder()
+                .businessGrowthPlan(businessGrowthPlan)
                 .build();
     }
+
+
 }
