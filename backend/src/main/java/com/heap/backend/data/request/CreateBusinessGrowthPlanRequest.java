@@ -1,9 +1,6 @@
 package com.heap.backend.data.request;
 
-import com.heap.backend.models.Container;
-import com.heap.backend.models.Content;
-import com.heap.backend.models.HEAPDate;
-import com.heap.backend.models.Influencer;
+import com.heap.backend.models.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -50,6 +47,12 @@ public class CreateBusinessGrowthPlanRequest {
 //    private File flyerDesign;
     private double flyerCost;
     private double flyerQuantity;
+
+    //3. Unique to OutletExpansion
+    private String address;
+    private Staff[] staffs;
+    private double rentalPrice;
+    private double renovation;
 
 
 }

@@ -122,7 +122,14 @@ public class BusinessGrowthPlanService {
                         .build();
 
             } else if ("OE".equals(request.getPlanType())) {
+
                 //3. If Outlet Expansion, Create OutletExpansionStrategy
+                strategy = OutletExpansionStrategy.builder()
+                        .address(request.getAddress())
+                        .rentalPrice(request.getRentalPrice())
+                        .renovation(request.getRenovation())
+                        .staffs(request.getStaffs())
+                        .build();
 
             }
 
