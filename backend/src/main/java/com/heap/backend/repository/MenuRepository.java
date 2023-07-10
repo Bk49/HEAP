@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MenuRepository extends MongoRepository<StoredMenu, String> {
+
+    Optional <StoredMenu> findById(String id);
     Optional<StoredMenu> findByUserIdAndName(String userId, String name);
 
     Optional<StoredMenu> findByIdAndUserId(String id, String userId);

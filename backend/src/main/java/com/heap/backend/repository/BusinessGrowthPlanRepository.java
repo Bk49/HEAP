@@ -6,5 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface BusinessGrowthPlanRepository extends MongoRepository<BusinessGrowthPlan, String> {
-  Optional<BusinessGrowthPlan> findById(String id);
+
+  Optional<BusinessGrowthPlan> findByUserIdAndPlanName(String userId, String planName);
 }

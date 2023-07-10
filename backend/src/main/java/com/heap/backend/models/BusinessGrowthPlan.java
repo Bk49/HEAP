@@ -34,7 +34,7 @@ public class BusinessGrowthPlan {
     private int priority;
 
     @NotBlank
-    private String method;
+    private String planType;
 
     @NotBlank
     private Strategy strategy;

@@ -1,6 +1,6 @@
 package com.heap.backend.models;
 
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class Container {
-    
-    private String containerName;
-    private String vendorName;
-    private double price;
-    private double quantity;
+
+public class FoodDeliveryMarketingStrategy implements Strategy{
+
+    private String menuId;
+    private Container[] containers;
+
 }

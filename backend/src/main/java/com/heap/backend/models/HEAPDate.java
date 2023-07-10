@@ -1,32 +1,48 @@
 package com.heap.backend.models;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
 public class HEAPDate {
 
     @NotBlank
-    private int $D;
+    private int day;
 
     @NotBlank
-    private int $M;
+    private int month;
 
     @NotBlank
-    private int $y;
+    private int year;
+
+    public HEAPDate(int $D, int $M, int $y) {
+        this.day = $D;
+        this.month = $M + 1;
+        this.year = $y;
+    }
+
+//    @Override
+//    public String toString() {
+//        String out = "";
+//        if ($D < 10) {out += "0";}
+//        out += $D + "/";
+//        if ($M < 10) {out += "0";}
+//        out += $M + "/";
+//        return out + $y;
+//    }
 
     @Override
     public String toString() {
         String out = "";
-        if ($D < 10) {out += "0";}
-        out += $D + "/";
-        if ($M < 10) {out += "0";}
-        out += $M + "/";
-        return out + $y;
+        if (day < 10) {out += "0";}
+        out += day + "/";
+        if (month < 10) {out += "0";}
+        out += month + "/";
+        return out + year;
     }
 
 }
