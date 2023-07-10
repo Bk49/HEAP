@@ -10,7 +10,8 @@ const login = async (data) => {
             msg =
                 "Login unsuccessful due to network error!\nPlease check your internet connection!";
         } else {
-            msg = "An unknown error has occured";
+            const { error, message } = e.response.data;
+            msg = error +"\n"+ message;
         }
 
         throw msg;
