@@ -4,40 +4,46 @@ import FieldsColumn from "../../../common/form/FieldsColumn";
 import FieldsRow from "../../../common/form/FieldsRow";
 import TextField from "../../../common/form/TextField";
 import TextArea from "../../../common/form/TextArea";
-import StaffFieldArray from "../../datarow/StaffFieldArray";
+import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
+import StaffRow from "../../datarow/StaffRow";
 
 const BGPOutletExpansionForm = () => {
     return (
         <Fragment>
             <HeadingThree>Outlet Expansion Address and Location</HeadingThree>
             <FieldsColumn>
-            <FieldsRow>
-                <TextArea
-                    rules={{ required: true }}
-                    label="Outlet Expansion Address and Location"
-                    name="address"
-                />
-            </FieldsRow>
+                <FieldsRow>
+                    <TextArea
+                        rules={{ required: true }}
+                        label="Outlet Expansion Address and Location"
+                        name="address"
+                    />
+                </FieldsRow>
             </FieldsColumn>
 
-            <StaffFieldArray />
+            <CommonFieldArray
+                name="staffs"
+                appendObj={{ name: "", hiringMethod: "", position: "" }}
+                heading="Staffs"
+                Component={StaffRow}
+            />
 
             <HeadingThree>Other Details</HeadingThree>
             <FieldsColumn>
-            <FieldsRow>
-                <TextField
-                    rules={{ required: true }}
-                    label="Rental Price"
-                    name="rentalPrice"
-                    type="number"
-                />
-                <TextField
-                    rules={{ required: true }}
-                    label="Renovation Est. Cost"
-                    name="renovation"
-                    type="number"
-                />
-            </FieldsRow>
+                <FieldsRow>
+                    <TextField
+                        rules={{ required: true }}
+                        label="Rental Price"
+                        name="rentalPrice"
+                        type="number"
+                    />
+                    <TextField
+                        rules={{ required: true }}
+                        label="Renovation Est. Cost"
+                        name="renovation"
+                        type="number"
+                    />
+                </FieldsRow>
             </FieldsColumn>
         </Fragment>
     );
