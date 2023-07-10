@@ -7,7 +7,7 @@ const publicPages = [
     { text: "Register", path: "/register" },
 ];
 const authenticatedPages = [
-    { text: "Summary", path: "/summary" },
+    { text: "Summary", path: "/my-summary" },
     { text: "My Business Growth Plan", path: "/my-business-growth-plans" },
     { text: "My Menus", path: "/my-menus" },
     { text: "My Recipes", path: "/my-recipes" },
@@ -41,7 +41,10 @@ const NavItems = ({ authenticated = false }) => {
             </div>
             {authenticated && (
                 <div>
-                    <Link to="/profile">
+                    <Link
+                        to="/profile"
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
                         <AccountCircleIcon sx={{ fontSize: "2rem" }} />
                     </Link>
                 </div>

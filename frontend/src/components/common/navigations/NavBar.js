@@ -23,7 +23,7 @@ const NavBar = ({ authenticated = false }) => {
                             flexDirection: "row",
                             textDecoration: "none",
                         }}
-                        to={authenticated ? "/summary" : "/"}
+                        to={authenticated ? "/my-summary" : "/"}
                     >
                         <img
                             style={{
