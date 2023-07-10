@@ -33,21 +33,21 @@ public class BusinessGrowthPlanController {
         return checkResponse(businessGrowthPlanService.delete(request, oldEmail));
     }
 
-//    @PutMapping ("/updateBGP/{BGPId}")
-//    public ResponseEntity<Response> delete (@PathVariable String BGPId, @RequestBody UpdateMenuRequest request, @RequestHeader ("Authorization") String token) {
-//
-//        //Obtaining jwt token and email from jwt token
-//        String oldEmail = returnOldEmail(token);
-//        return checkResponse(businessGrowthPlanService.update(BGPId, request, oldEmail));
-//    }
-//
-//    @PostMapping ("/findMenu")
-//    public ResponseEntity<Response> findOne (@RequestBody FindMenuRequest request, @RequestHeader ("Authorization") String token) {
-//
-//        //Obtaining jwt token and email from jwt token
-//        String oldEmail = returnOldEmail(token);
-//        return checkResponse(businessGrowthPlanService.findOne(request, oldEmail));
-//    }
+    @PutMapping ("/updateBGP/{BGPId}")
+    public ResponseEntity<Response> delete (@PathVariable String BGPId, @RequestBody UpdateBusinessGrowthPlanRequest request, @RequestHeader ("Authorization") String token) {
+
+        //Obtaining jwt token and email from jwt token
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(businessGrowthPlanService.update(BGPId, request, oldEmail));
+    }
+
+    @PostMapping ("/findBGP")
+    public ResponseEntity<Response> findOne (@RequestBody FindBusinessGrowthPlanRequest request, @RequestHeader ("Authorization") String token) {
+
+        //Obtaining jwt token and email from jwt token
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(businessGrowthPlanService.findOne(request, oldEmail));
+    }
 //
 //    @GetMapping ("/findAllMenu")
 //    public ResponseEntity<Response> findAll (@RequestHeader ("Authorization") String token) {

@@ -9,5 +9,7 @@ public interface BusinessGrowthPlanRepository extends MongoRepository<BusinessGr
 
   Optional<BusinessGrowthPlan> findByUserIdAndPlanName(String userId, String planName);
 
+  Optional<BusinessGrowthPlan> findByIdAndUserId(String planId, String userId);
+
   void deleteByUserIdAndPlanName(String id, String planName);
 }
