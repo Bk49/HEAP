@@ -54,5 +54,4 @@ public class CreateBusinessGrowthPlanRequest {
     private double rentalPrice;
     private double renovation;
 
-
 }

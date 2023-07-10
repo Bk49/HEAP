@@ -25,14 +25,14 @@ public class BusinessGrowthPlanController {
         return checkResponse(businessGrowthPlanService.create(request, oldEmail));
     }
 
-//    @PostMapping("/deleteBGP")
-//    public ResponseEntity<Response> delete (@RequestBody DeleteMenuRequest request, @RequestHeader ("Authorization") String token) {
-//
-//        //Obtaining jwt token and email from jwt token
-//        String oldEmail = returnOldEmail(token);
-//        return checkResponse(businessGrowthPlanService.delete(request, oldEmail));
-//    }
-//
+    @PostMapping("/deleteBGP")
+    public ResponseEntity<Response> delete (@RequestBody DeleteBusinessGrowthPlanRequest request, @RequestHeader ("Authorization") String token) {
+
+        //Obtaining jwt token and email from jwt token
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(businessGrowthPlanService.delete(request, oldEmail));
+    }
+
 //    @PutMapping ("/updateBGP/{BGPId}")
 //    public ResponseEntity<Response> delete (@PathVariable String BGPId, @RequestBody UpdateMenuRequest request, @RequestHeader ("Authorization") String token) {
 //

@@ -1,6 +1,8 @@
 package com.heap.backend.service.auth;
 
 import com.heap.backend.data.request.CreateBusinessGrowthPlanRequest;
+import com.heap.backend.data.request.DeleteBusinessGrowthPlanRequest;
+import com.heap.backend.data.request.DeleteMenuRequest;
 import com.heap.backend.data.response.*;
 import com.heap.backend.models.*;
 import com.heap.backend.repository.BusinessGrowthPlanRepository;
@@ -195,6 +197,53 @@ public class BusinessGrowthPlanService {
 
         return SuccessResponse.builder()
                 .response("Business Growth Plan has been created successfully")
+                .build();
+    }
+
+    public Response delete(DeleteBusinessGrowthPlanRequest request, String oldEmail) {
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            if (businessGrowthPlanRepository.findByUserIdAndPlanName(id, request.getName()).isEmpty()) {
+
+                throw new IllegalArgumentException("No Such Business Growth Plan");
+
+            }
+
+            businessGrowthPlanRepository.deleteByUserIdAndPlanName(id, request.getName());
+
+        } catch (IllegalArgumentException e) {
+
+            if ("Invalid Token".equals(e.getMessage())) {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            } else {
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Business Growth Plan")
+                        .message("Business Growth Plan not found")
+                        .build();
+
+            }
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error")
+                    .message("Unknown Error")
+                    .build();
+        }
+
+        return SuccessResponse.builder()
+                .response("Business Growth Plan has been deleted successfully")
                 .build();
     }
 }

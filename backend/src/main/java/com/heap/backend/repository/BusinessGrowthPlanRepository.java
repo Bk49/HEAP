@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface BusinessGrowthPlanRepository extends MongoRepository<BusinessGrowthPlan, String> {
 
   Optional<BusinessGrowthPlan> findByUserIdAndPlanName(String userId, String planName);
+
+  void deleteByUserIdAndPlanName(String id, String planName);
 }
