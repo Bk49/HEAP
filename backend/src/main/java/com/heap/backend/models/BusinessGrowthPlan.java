@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @Document("businessGrowthPlan")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,13 +19,16 @@ public class BusinessGrowthPlan {
     private String id;
 
     @NotBlank
+    private String userId;
+
+    @NotBlank
     private String planName;
 
     @NotBlank
-    private Date startDate;
+    private HEAPDate startDate;
 
     @NotBlank
-    private Date endDate;
+    private HEAPDate endDate;
 
     @NotBlank
     private int priority;
