@@ -5,7 +5,7 @@ import SingleItemDropdown from "../../../common/form/SingleItemDropdown";
 import HeadingThree from "../../../common/heading/HeadingThree";
 import FoodDeliveryMarketplaceCardGroup from "../../cardgroup/FoodDeliveryMarketplaceCardGroup";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
-import ContainersSourcingRow from "../../datarow/container/ContainersSourcingRow";
+import ContainersSourcingRow from "../../datarow/ContainersSourcingRow";
 
 const BGPFoodDeliveryForm = ({ isCreate }) => {
     return (

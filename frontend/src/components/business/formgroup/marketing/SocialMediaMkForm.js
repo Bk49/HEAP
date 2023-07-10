@@ -5,7 +5,7 @@ import FieldsRow from "../../../common/form/FieldsRow";
 import TextField from "../../../common/form/TextField";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import SocialMediaPlatformsCardGroup from "../../cardgroup/SocialMediaPlatformsCardGroup";
-import ContentsToBeUploadedRow from "../../datarow/content/ContentsToBeUploadedRow";
+import ContentsToBeUploadedRow from "../../datarow/ContentsToBeUploadedRow";
 
 const SocialMediaMkForm = () => {
     return (

@@ -11,7 +11,7 @@ import SocialMediaMkForm from "../marketing/SocialMediaMkForm";
 import PosterNBannerMkForm from "../marketing/PosterNBannerMkForm";
 import FlyerDistributionMkForm from "../marketing/FlyerDistributionMkForm";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
-import InfluencerCollaborationRow from "../../datarow/influencer/InfluencerCollaborationRow";
+import InfluencerCollaborationRow from "../../datarow/InfluencerCollaborationRow";
 
 const BGPMarketingForm = () => {
     const { watch } = useFormContext();
