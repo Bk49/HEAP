@@ -3,8 +3,10 @@ import FieldsColumn from "../../../common/form/FieldsColumn";
 import FieldsRow from "../../../common/form/FieldsRow";
 import SingleItemDropdown from "../../../common/form/SingleItemDropdown";
 import HeadingThree from "../../../common/heading/HeadingThree";
-import ContainersSourcingFieldArray from "../../datarow/container/ContainersSourcingFieldArray";
 import FoodDeliveryMarketplaceCardGroup from "../../cardgroup/FoodDeliveryMarketplaceCardGroup";
+import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
+import ContainersSourcingRow from "../../datarow/ContainersSourcingRow";
+
 const BGPFoodDeliveryForm = ({ isCreate }) => {
     return (
         <Fragment>
@@ -26,7 +28,17 @@ const BGPFoodDeliveryForm = ({ isCreate }) => {
                     />
                 </FieldsRow>
             </FieldsColumn>
-            <ContainersSourcingFieldArray />
+            <CommonFieldArray
+                name="containers"
+                appendObj={{
+                    containerName: "",
+                    vendorName: "",
+                    price: "",
+                    quantity: "",
+                }}
+                heading="Containers Sourcing"
+                Component={ContainersSourcingRow}
+            />
         </Fragment>
     );
 };

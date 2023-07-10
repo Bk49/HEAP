@@ -1,9 +1,9 @@
 import IconButton from "@mui/material/IconButton";
 import RemoveIcon from "@mui/icons-material/RemoveCircleOutline";
-import TextField from "../../../common/form/TextField";
+import TextField from "../../common/form/TextField";
 import { useFormContext } from "react-hook-form";
-import DatePicker from "../../../common/form/DatePicker";
-import FileInput from "../../../common/form/FileInput";
+import DatePicker from "../../common/form/DatePicker";
+import FileInput from "../../common/form/FileInput";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const ContentsToBeUploadedRow = ({ index = -1, removeFn = () => {} }) => {

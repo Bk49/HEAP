@@ -1,20 +1,20 @@
 import { useFieldArray } from "react-hook-form";
-import RecipeIngredientsRow from "./RecipeIngredientsRow";
+import TextField from "../form/TextField";
 import { Fragment } from "react";
-import HeadingThree from "../../common/heading/HeadingThree";
+import HeadingThree from "../heading/HeadingThree";
 
-const RecipeIngredientsFieldArray = () => {
-    const { fields, append, remove } = useFieldArray({
-        name: "ingredients",
-    });
+const CommonFieldArray = ({
+    name = "fieldary",
+    appendObj = { name: "" },
+    heading,
+    Component = TextField,
+}) => {
+    const { fields, append, remove } = useFieldArray({ name: name });
 
     return (
         <Fragment>
-            <HeadingThree
-                add={true}
-                addFn={() => append({ name: "", unit: "", quantity: "" })}
-            >
-                Recipe Ingredients
+            <HeadingThree add={true} addFn={() => append(appendObj)}>
+                {heading}
             </HeadingThree>
             <div
                 style={{
@@ -25,7 +25,7 @@ const RecipeIngredientsFieldArray = () => {
                 }}
             >
                 {fields.map((field, index) => (
-                    <RecipeIngredientsRow
+                    <Component
                         removeFn={() => remove(index)}
                         key={field.id}
                         index={index}
@@ -36,4 +36,4 @@ const RecipeIngredientsFieldArray = () => {
     );
 };
 
-export default RecipeIngredientsFieldArray;
+export default CommonFieldArray;

@@ -3,8 +3,9 @@ import HeadingThree from "../../../common/heading/HeadingThree";
 import FieldsColumn from "../../../common/form/FieldsColumn";
 import FieldsRow from "../../../common/form/FieldsRow";
 import TextField from "../../../common/form/TextField";
-import ContentsTobeUploadedFieldArray from "../../datarow/content/ContentsToBeUploadedFieldArray";
+import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import SocialMediaPlatformsCardGroup from "../../cardgroup/SocialMediaPlatformsCardGroup";
+import ContentsToBeUploadedRow from "../../datarow/ContentsToBeUploadedRow";
 
 const SocialMediaMkForm = () => {
     return (
@@ -15,7 +16,12 @@ const SocialMediaMkForm = () => {
                     <SocialMediaPlatformsCardGroup />
                 </FieldsRow>
             </FieldsColumn>
-            <ContentsTobeUploadedFieldArray />
+            <CommonFieldArray
+                name="contents"
+                appendObj={{ name: "", file: null, date: "" }}
+                heading="Contents to be Uploaded"
+                Component={ContentsToBeUploadedRow}
+            />
             <HeadingThree>Additional Advertising Costs</HeadingThree>
             <FieldsColumn>
                 <FieldsRow>

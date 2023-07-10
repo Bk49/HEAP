@@ -11,13 +11,14 @@ import FieldsColumn from "../../components/common/form/FieldsColumn";
 import FieldsRow from "../../components/common/form/FieldsRow";
 import TextArea from "../../components/common/form/TextArea";
 import ImagePlaceHolder from "../../assets/image-placeholder.png";
-import RecipeIngredientsFieldArray from "../../components/recipe/datarow/RecipeIngredientsFieldArray";
 import PreparationStepsFieldArray from "../../components/recipe/datarow/PreparationStepsFieldArray";
 import { useNavigate } from "react-router-dom";
 import { queueError } from "../../functions/formHandling";
 import { enqueueSnackbar } from "notistack";
 import createRecipe from "../../axios/recipe/createRecipeAPI";
 import Cookies from "js-cookie";
+import CommonFieldArray from "../common/datarow/CommonFieldArray";
+import RecipeIngredientsRow from "./datarow/RecipeIngredientsRow";
 
 const CommonRecipeForm = ({ isCreate = false }) => {
     const formMethods = useForm();
@@ -112,7 +113,12 @@ const CommonRecipeForm = ({ isCreate = false }) => {
 
                 <HeadingTwo>Recipe Preparation</HeadingTwo>
                 <br />
-                <RecipeIngredientsFieldArray />
+                <CommonFieldArray
+                    name="ingredients"
+                    appendObj={{ name: "", unit: "", quantity: "" }}
+                    heading="Recipe Ingredients"
+                    Component={RecipeIngredientsRow}
+                />
                 <br />
                 <PreparationStepsFieldArray />
                 <SubmitFormGroup
