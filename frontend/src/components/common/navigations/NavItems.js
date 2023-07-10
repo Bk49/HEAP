@@ -1,6 +1,6 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NavItem from "./NavItem";
-import IconButton from "@mui/material/IconButton";
+import { Link } from "react-router-dom";
 
 const publicPages = [
     { text: "Login", path: "/login" },
