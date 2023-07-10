@@ -155,7 +155,7 @@ export const planType = [
     { value: "MK", text: "Marketing Strategy" },
 ]
 
-export const hiringMethod = [
+export const hiringMethods = [
     { value: "", text: "Please Select Hiring Method"},
     { value: "direct", text: "Direct Application"},
     { value: "online", text: "Online Job Platform"},
