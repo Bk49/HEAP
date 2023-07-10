@@ -47,21 +47,83 @@ public class BusinessGrowthPlanService {
 
 
             //Create Strategy based on planType
-            Strategy strategy;
-            //1. If Food Delivery Marketing Strategy, Create FoodDeliveryMarketingStrategy
+            Strategy strategy = null;
+
             if ("FD".equals(request.getPlanType())) {
+
+                //1. If Food Delivery Marketing Strategy, Create FoodDeliveryMarketingStrategy
 
                 //Check if menuID is legit
                 if (menuRepository.findById(request.getMenuId()).isEmpty()) {
                     throw new IllegalArgumentException("No such Menu");
                 }
 
-                strategy = FoodDeliveryMarketingStrategy.builder()
+                //Create FoodDeliveryMarketingStrategy
+                strategy = FoodDeliveryMarketplaceStrategy.builder()
                         .menuId(request.getMenuId())
                         .containers(request.getContainers())
                         .build();
-            } else {
-                strategy = null;
+
+            } else if ("MK".equals(request.getPlanType())) {
+                //2. If Marketing, Create MarketingStrategy
+
+                //Decide which type of MarketingMethod to create based on method field
+                MarketingMethod marketingMethod = null;
+                if ("SM".equals(request.getMethod())) {
+                    //2.1. If Social Media, Create SocialMediaMarketingMethod
+                    marketingMethod = SocialMediaMarketingMethod.builder()
+                            .promotionName(request.getPromotionName())
+                            .promoStartDate(request.getPromoStartDate())
+                            .promoEndDate(request.getPromoEndDate())
+                            .promoDescription(request.getPromoDescription())
+                            .promoTnC(request.getPromoTnC())
+                            .influencer(request.getInfluencer())
+                            .platform(request.getPlatform())
+                            .contents(request.getContents())
+                            .platformCost(request.getPlatformCost())
+                            .platformDuration(request.getPlatformDuration())
+                            .platformRate(request.getPlatformRate())
+                            .build();
+
+                } else if ("PB".equals(request.getMethod())) {
+                    //2.2. If Poster and Banner, Create PosterAndBannerMarketingMethod
+                    marketingMethod = PosterAndBannerMarketingMethod.builder()
+                            .promotionName(request.getPromotionName())
+                            .promoStartDate(request.getPromoStartDate())
+                            .promoEndDate(request.getPromoEndDate())
+                            .promoDescription(request.getPromoDescription())
+                            .promoTnC(request.getPromoTnC())
+                            .influencer(request.getInfluencer())
+//                            .posterDesign(request.getPosterDesign())
+                            .posterCost(request.getPosterCost())
+                            .posterQuantity(request.getPosterQuantity())
+                            .build();
+
+                } else if ("FD".equals(request.getMethod())) {
+                    //2.3. If Flyer Distribution, Create FlyerDistributionMarketingMethod
+                    marketingMethod = FlyerDistributionMarketingMethod.builder()
+                            .promotionName(request.getPromotionName())
+                            .promoStartDate(request.getPromoStartDate())
+                            .promoEndDate(request.getPromoEndDate())
+                            .promoDescription(request.getPromoDescription())
+                            .promoTnC(request.getPromoTnC())
+                            .influencer(request.getInfluencer())
+//                            .flyerDesign(request.getFlyerDesign())
+                            .flyerCost(request.getFlyerCost())
+                            .flyerQuantity(request.getFlyerQuantity())
+                            .build();
+
+                }
+
+                //Create MarketingStrategy
+                strategy = MarketingStrategy.builder()
+                        .method(request.getMethod())
+                        .marketingMethod(marketingMethod)
+                        .build();
+
+            } else if ("OE".equals(request.getPlanType())) {
+                //3. If Outlet Expansion, Create OutletExpansionStrategy
+
             }
 
             //Create BusinessGrowthPlan
