@@ -15,7 +15,7 @@ import MyMenus from "../pages/menu/MyMenus";
 import CreateBusinessGrowthPlan from "../pages/business/CreateBusinessGrowthPlan";
 import EditBusinessGrowthPlan from "../pages/business/EditBusinessGrowthPlan";
 import MySummary from "../pages/business/MySummary";
-import ProtectedRoute from "./routes/ProtectedRoute"
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 export default createBrowserRouter([
     {
@@ -25,11 +25,7 @@ export default createBrowserRouter([
                 <Home />
             </PublicRoute>
         ),
-        errorElement: (
-            <PublicRoute>
-                <Error />
-            </PublicRoute>
-        ),
+        errorElement: <Error />,
     },
     {
         path: "login",
@@ -128,11 +124,11 @@ export default createBrowserRouter([
         ),
     },
     {
-        path:"my-summary",
+        path: "my-summary",
         element: (
             <ProtectedRoute>
                 <MySummary />
             </ProtectedRoute>
-        )
-    }
+        ),
+    },
 ]);
