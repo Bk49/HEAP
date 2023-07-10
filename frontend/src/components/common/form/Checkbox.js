@@ -2,7 +2,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import MUICheckbox from "@mui/material/Checkbox";
 import { Controller, useFormContext } from "react-hook-form";
 
-const Checkbox = ({ name = "checkbox", label = "" }) => {
+const Checkbox = ({ name = "checkbox", label = "", defaultValue = false }) => {
     const { control } = useFormContext();
 
     return (
@@ -14,6 +14,7 @@ const Checkbox = ({ name = "checkbox", label = "" }) => {
                     control={
                         <MUICheckbox
                             {...field}
+                            checked={defaultValue}
                             sx={{
                                 "&.Mui-checked": {
                                     color: "#163172",

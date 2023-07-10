@@ -4,6 +4,7 @@ import { generateRules } from "../../../functions/generateRules";
 
 const TextArea = ({
     rules = {},
+    defaultValue = "",
     name = "textarea",
     label = "Text Area",
     nestedError = null,
@@ -18,6 +19,7 @@ const TextArea = ({
         <Controller
             name={name}
             control={control}
+            defaultValue={defaultValue}
             rules={generateRules({ name: label, ...rules })}
             render={({ field }) => (
                 <TextField

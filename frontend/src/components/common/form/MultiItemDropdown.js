@@ -10,6 +10,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 
 const MultiItemDropdown = ({
     rules = {},
+    defaultValue = [],
     name = "multidropdown",
     label = "Multi Dropdown",
     size = "small",
@@ -25,7 +26,7 @@ const MultiItemDropdown = ({
         <Controller
             control={control}
             name={name}
-            defaultValue={[]}
+            defaultValue={defaultValue}
             rules={generateRules({ name: label, ...rules })}
             render={({ field }) => (
                 <FormControl
