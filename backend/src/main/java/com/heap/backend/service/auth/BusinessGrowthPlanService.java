@@ -9,6 +9,9 @@ import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -256,16 +259,10 @@ public class BusinessGrowthPlanService {
             BusinessGrowthPlan businessGrowthPlan = businessGrowthPlanRepository.findByIdAndUserId(planId, id)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Business Growth Plan"));
 
-            //Ensures that user does not have a plan name by the same planName
-            if (businessGrowthPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                throw new IllegalArgumentException("Duplicate Plan Name");
-
-            }
-
-
             //Create Strategy based on planType
             Strategy strategy = null;
+
+            //DEBUG: WHY DOES CODE KEEP GOING INTO FIRST IF, ALTHOUGH request plan type is "OE"
 
             if ("FD".equals(request.getPlanType())) {
 
@@ -380,13 +377,6 @@ public class BusinessGrowthPlanService {
                         .message("Please ensure menu ID is valid")
                         .build();
 
-            } else if (e.getMessage().equals("Duplicate Plan Name")) {
-
-                //If menu cannot be found in the repository based on menuID, return ErrorResponse
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Menu")
-                        .message("Please ensure menu ID is valid")
-                        .build();
             } else {
 
                 return ErrorResponse.builder()
@@ -456,5 +446,46 @@ public class BusinessGrowthPlanService {
                 .build();
     }
 
+    public Response findAll(String oldEmail) {
+
+        List<BusinessGrowthPlan> businessGrowthPlans = new ArrayList<>();
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            List<BusinessGrowthPlan> search = businessGrowthPlanRepository.findAllByUserId(id);
+            for (BusinessGrowthPlan bgp : search) {
+                businessGrowthPlans.add(bgp);
+            }
+
+            //Ordering of businessGrowthPlans missing (To be worked on)
+
+        } catch (IllegalArgumentException e) {
+
+            //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+            return ErrorResponse.builder()
+                    .error("Bad Request: Invalid Token")
+                    .message("User not found")
+                    .build();
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error: Unknown Error")
+                    .message(e.getMessage())
+                    //.message("An unknown error has occurred! Do try again!")
+                    .build();
+
+        }
+
+        return MultipleBusinessGrowthPlanResponse.builder()
+                .businessGrowthPlans(businessGrowthPlans)
+                .build();
+
+    }
 
 }

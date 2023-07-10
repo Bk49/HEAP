@@ -48,16 +48,14 @@ public class BusinessGrowthPlanController {
         String oldEmail = returnOldEmail(token);
         return checkResponse(businessGrowthPlanService.findOne(request, oldEmail));
     }
-//
-//    @GetMapping ("/findAllMenu")
-//    public ResponseEntity<Response> findAll (@RequestHeader ("Authorization") String token) {
-//
-//        //Obtaining jwt token and email from jwt token
-//        String oldEmail = returnOldEmail(token);
-//        return checkResponse(businessGrowthPlanService.findAll(oldEmail));
-//    }
 
+    @GetMapping ("/findAllBGP")
+    public ResponseEntity<Response> findAll (@RequestHeader ("Authorization") String token) {
 
+        //Obtaining jwt token and email from jwt token
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(businessGrowthPlanService.findAll(oldEmail));
+    }
 
     public String returnOldEmail(String token) {
 
