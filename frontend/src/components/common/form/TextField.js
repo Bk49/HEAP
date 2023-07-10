@@ -5,12 +5,13 @@ import { generateRules } from "../../../functions/generateRules";
 
 const TextField = ({
     rules = {},
+    defaultValue = "",
     name = "textfield",
     icon,
     label = "Label Text",
     type = "text",
     size = "small",
-    nestedError = null
+    nestedError = null,
 }) => {
     const {
         control,
@@ -22,12 +23,19 @@ const TextField = ({
         <Controller
             name={name}
             control={control}
+            defaultValue={defaultValue}
             rules={generateRules({ name: label, ...rules })}
             render={({ field }) => (
                 <MUITextField
                     {...field}
                     error={nestedError ? nestedError : error}
-                    helperText={nestedError ? nestedError.message : error ? error.message : ""}
+                    helperText={
+                        nestedError
+                            ? nestedError.message
+                            : error
+                            ? error.message
+                            : ""
+                    }
                     label={label}
                     type={type}
                     InputProps={
