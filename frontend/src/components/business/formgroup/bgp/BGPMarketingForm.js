@@ -7,10 +7,11 @@ import TextField from "../../../common/form/TextField";
 import DatePicker from "../../../common/form/DatePicker";
 import TextArea from "../../../common/form/TextArea";
 import { useFormContext } from "react-hook-form";
-import InfluencerCollaborationFieldArray from "../../../business/datarow/influencer/InfluencerCollaborationFieldArray";
 import SocialMediaMkForm from "../marketing/SocialMediaMkForm";
 import PosterNBannerMkForm from "../marketing/PosterNBannerMkForm";
 import FlyerDistributionMkForm from "../marketing/FlyerDistributionMkForm";
+import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
+import InfluencerCollaborationRow from "../../datarow/influencer/InfluencerCollaborationRow";
 
 const BGPMarketingForm = () => {
     const { watch } = useFormContext();
@@ -24,12 +25,12 @@ const BGPMarketingForm = () => {
                     <MarketingMethodCardGroup />
                 </FieldsRow>
             </FieldsColumn>
-            {currentMethod === "SM" ? (
-                <SocialMediaMkForm />
+            {currentMethod === "FD" ? (
+                <FlyerDistributionMkForm />
             ) : currentMethod === "PB" ? (
                 <PosterNBannerMkForm />
             ) : (
-                <FlyerDistributionMkForm />
+                <SocialMediaMkForm />
             )}
             <HeadingThree>Promotions Associated</HeadingThree>
             <FieldsColumn>
@@ -65,7 +66,12 @@ const BGPMarketingForm = () => {
                     />
                 </FieldsRow>
             </FieldsColumn>
-            <InfluencerCollaborationFieldArray />
+            <CommonFieldArray
+                name="influencer"
+                appendObj={{ name: "", email: "", phone: "", price: 0 }}
+                heading="Influencers Collaboration"
+                Component={InfluencerCollaborationRow}
+            />
         </Fragment>
     );
 };
