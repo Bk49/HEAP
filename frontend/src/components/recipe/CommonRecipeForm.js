@@ -13,12 +13,19 @@ import TextArea from "../../components/common/form/TextArea";
 import ImagePlaceHolder from "../../assets/image-placeholder.png";
 import RecipeIngredientsFieldArray from "../../components/recipe/datarow/RecipeIngredientsFieldArray";
 import PreparationStepsFieldArray from "../../components/recipe/datarow/PreparationStepsFieldArray";
+import { useNavigate } from "react-router-dom";
+import { queueError } from "../../functions/formHandling";
+import { enqueueSnackbar } from "notistack";
+import createRecipe from "../../axios/recipe/createRecipeAPI";
+import Cookies from "js-cookie";
 
 const CommonRecipeForm = ({ isCreate = false }) => {
     const formMethods = useForm();
     const { watch } = formMethods;
     const imageFile = watch("image");
     const [imgUrl, setImgUrl] = useState(null);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const reader = new FileReader();
@@ -112,9 +119,19 @@ const CommonRecipeForm = ({ isCreate = false }) => {
                     submitErrorText={`${
                         isCreate ? "Creation" : "Update"
                     } of recipe is unsuccessful, please check your input`}
-                    onSubmit={(data) => {
-                        console.log(data);
-                    }}
+                    onSubmit={
+                            async (data) => {
+                                try {
+                                    const result = await createRecipe(data);
+                                    console.log(result);
+                                } catch (e) {
+                                    queueError(e, enqueueSnackbar);
+                                }
+        
+                                // navigate("/my-recipes")
+                            }
+
+                        }
                 />
             </FormProvider>
         </Fragment>
