@@ -177,7 +177,7 @@ public class RecipeService {
                 .build();
     }
 
-    public Response findOne(FindRecipeRequest request, String oldEmail) {
+    public Response findOne(String recipeId, String oldEmail) {
 
         Recipe recipe = null;
 
@@ -187,13 +187,7 @@ public class RecipeService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            if (recipeRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
-
-                throw new IllegalArgumentException("User has no such Recipe");
-
-            }
-
-            recipe = recipeRepository.findByUserIdAndName(id, request.getName())
+            recipe = recipeRepository.findByUserIdAndId(id, recipeId)
                     .orElseThrow(() -> new IllegalArgumentException("User has no such Recipe"));
 
         } catch (IllegalArgumentException e) {
