@@ -32,8 +32,8 @@ public class Recipe {
     @NotBlank
     private double cost;
 
-//    @NotBlank
-//    private File image;
+    @NotBlank
+    private String image;
 
     @NotBlank
     private String description;

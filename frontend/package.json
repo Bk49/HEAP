@@ -10,6 +10,7 @@
     "@fullcalendar/core": "^6.1.8",
     "@fullcalendar/daygrid": "^6.1.8",
     "@fullcalendar/react": "^6.1.8",
+    "@googlemaps/react-wrapper": "^1.1.35",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.3",
     "@mui/x-date-pickers": "^6.8.0",

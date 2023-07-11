@@ -45,10 +45,10 @@ public class RecipeController {
         return checkResponse(recipeService.update(recipeId, request, oldEmail));
     }
 
-    @PostMapping ("/findRecipe")
-    public ResponseEntity<Response> findOne(@RequestBody FindRecipeRequest request, @RequestHeader ("Authorization") String token) {
+    @GetMapping ("/findRecipe/{recipeId}")
+    public ResponseEntity<Response> findOne(@RequestParam String recipeId, @RequestHeader ("Authorization") String token) {
         String oldEmail = returnOldEmail(token);
-        return checkResponse(recipeService.findOne(request, oldEmail));
+        return checkResponse(recipeService.findOne(recipeId, oldEmail));
     }
 
     @GetMapping("/findAllRecipe")

@@ -16,7 +16,7 @@ public class UpdateRecipeRequest {
     private String name;
     private String category;
     private double cost;
-    private File image;
+    private String image;
     private String description;
     private RecipeIngredient[] ingredients;
     private String[] steps;
