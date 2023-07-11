@@ -16,5 +16,5 @@ public interface MenuRepository extends MongoRepository<StoredMenu, String> {
 
     List<StoredMenu> findAllByUserId(String userId);
 
-    void deleteByUserIdAndName(String userId, String name);
+    void deleteByUserIdAndId(String userId, String id);
 }

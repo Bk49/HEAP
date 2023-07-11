@@ -27,12 +27,12 @@ public class MenuController {
         return checkResponse(menuService.create(request, oldEmail));
     }
 
-    @PostMapping("/deleteMenu")
-    public ResponseEntity<Response> delete (@RequestBody DeleteMenuRequest request, @RequestHeader ("Authorization") String token) {
+    @DeleteMapping("/deleteMenu/{menuId}")
+    public ResponseEntity<Response> delete (@PathVariable String menuId, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = returnOldEmail(token);
-        return checkResponse(menuService.delete(request, oldEmail));
+        return checkResponse(menuService.delete(menuId, oldEmail));
     }
 
     @PutMapping ("/updateMenu/{id}")

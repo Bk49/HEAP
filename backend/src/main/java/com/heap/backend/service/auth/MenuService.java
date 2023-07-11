@@ -116,7 +116,7 @@ public class MenuService {
                 .build();
     }
 
-    public Response delete(DeleteMenuRequest request, String oldEmail) {
+    public Response delete(String menuId, String oldEmail) {
 
         try {
 
@@ -124,13 +124,13 @@ public class MenuService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            if (menuRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
+            if (menuRepository.findByIdAndUserId(menuId, id).isEmpty()) {
 
                 throw new IllegalArgumentException("No Such Menu");
 
             }
 
-            menuRepository.deleteByUserIdAndName(id, request.getName());
+            menuRepository.deleteByUserIdAndId(id, menuId);
 
         } catch (IllegalArgumentException e) {
 
