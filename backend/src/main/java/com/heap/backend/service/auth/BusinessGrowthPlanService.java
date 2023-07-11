@@ -201,7 +201,7 @@ public class BusinessGrowthPlanService {
                 .build();
     }
 
-    public Response delete(DeleteBusinessGrowthPlanRequest request, String oldEmail) {
+    public Response delete(String bgpId, String oldEmail) {
 
         try {
 
@@ -209,13 +209,13 @@ public class BusinessGrowthPlanService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            if (businessGrowthPlanRepository.findByUserIdAndPlanName(id, request.getName()).isEmpty()) {
+            if (businessGrowthPlanRepository.findByIdAndUserId(bgpId, id).isEmpty()) {
 
                 throw new IllegalArgumentException("No Such Business Growth Plan");
 
             }
 
-            businessGrowthPlanRepository.deleteByUserIdAndPlanName(id, request.getName());
+            businessGrowthPlanRepository.deleteByUserIdAndId(id, bgpId);
 
         } catch (IllegalArgumentException e) {
 

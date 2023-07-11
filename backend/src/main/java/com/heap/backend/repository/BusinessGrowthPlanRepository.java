@@ -14,5 +14,5 @@ public interface BusinessGrowthPlanRepository extends MongoRepository<BusinessGr
 
   List<BusinessGrowthPlan> findAllByUserId(String userId);
 
-  void deleteByUserIdAndPlanName(String id, String planName);
+  void deleteByUserIdAndId(String id, String bgpId);
 }
