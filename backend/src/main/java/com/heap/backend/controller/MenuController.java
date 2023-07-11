@@ -2,7 +2,6 @@ package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateMenuRequest;
 import com.heap.backend.data.request.DeleteMenuRequest;
-import com.heap.backend.data.request.FindMenuRequest;
 import com.heap.backend.data.request.UpdateMenuRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.data.response.ErrorResponse;
@@ -45,7 +44,7 @@ public class MenuController {
     }
 
     @GetMapping ("/findMenu/{menuId}")
-    public ResponseEntity<Response> findOne (@RequestParam String menuId, @RequestHeader ("Authorization") String token) {
+    public ResponseEntity<Response> findOne (@PathVariable String menuId, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = returnOldEmail(token);

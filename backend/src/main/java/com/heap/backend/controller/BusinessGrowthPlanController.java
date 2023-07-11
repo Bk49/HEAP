@@ -42,7 +42,7 @@ public class BusinessGrowthPlanController {
     }
 
     @GetMapping ("/findBGP/{bgpId}")
-    public ResponseEntity<Response> findOne (@RequestParam String bgpId, @RequestHeader ("Authorization") String token) {
+    public ResponseEntity<Response> findOne (@PathVariable String bgpId, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = returnOldEmail(token);
