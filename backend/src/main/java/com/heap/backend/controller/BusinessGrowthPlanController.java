@@ -41,12 +41,12 @@ public class BusinessGrowthPlanController {
         return checkResponse(businessGrowthPlanService.update(BGPId, request, oldEmail));
     }
 
-    @PostMapping ("/findBGP")
-    public ResponseEntity<Response> findOne (@RequestBody FindBusinessGrowthPlanRequest request, @RequestHeader ("Authorization") String token) {
+    @GetMapping ("/findBGP/{bgpId}")
+    public ResponseEntity<Response> findOne (@RequestParam String bgpId, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = returnOldEmail(token);
-        return checkResponse(businessGrowthPlanService.findOne(request, oldEmail));
+        return checkResponse(businessGrowthPlanService.findOne(bgpId, oldEmail));
     }
 
     @GetMapping ("/findAllBGP")

@@ -400,7 +400,7 @@ public class BusinessGrowthPlanService {
                 .build();
     }
 
-    public Response findOne(FindBusinessGrowthPlanRequest request, String oldEmail) {
+    public Response findOne(String bgpId, String oldEmail) {
 
         BusinessGrowthPlan businessGrowthPlan;
 
@@ -410,7 +410,7 @@ public class BusinessGrowthPlanService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            businessGrowthPlan = businessGrowthPlanRepository.findByUserIdAndPlanName(id, request.getName())
+            businessGrowthPlan = businessGrowthPlanRepository.findByIdAndUserId(bgpId, id)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Plan"));
 
         } catch (IllegalArgumentException e) {
