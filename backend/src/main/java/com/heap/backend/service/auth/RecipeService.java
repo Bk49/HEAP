@@ -33,7 +33,7 @@ public class RecipeService {
                     .category(request.getCategory())
                     .cost(request.getCost())
                     .description(request.getDescription())
-//                .image(request.getImage())                //To be fixed when everything has been settled
+                    .image(request.getImage())
                     .ingredients(request.getIngredients())
                     .steps(request.getSteps())
                     .build();
@@ -137,7 +137,7 @@ public class RecipeService {
             recipe.setName(request.getName());
             recipe.setCategory(request.getCategory());
             recipe.setCost(request.getCost());
-            //recipe.setImage(request.setImage());
+            recipe.setImage(request.getImage());
             recipe.setDescription(request.getDescription());
             recipe.setIngredients(request.getIngredients());
             recipe.setSteps(request.getSteps());
