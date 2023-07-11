@@ -8,11 +8,10 @@ import java.util.Optional;
 
 public interface RecipeRepository extends MongoRepository<Recipe, String> {
   Optional<Recipe> findByNameAndUserId(String name, String userId);
-  Optional<Recipe> findByUserIdAndName(String userId, String name);
 
   Optional<Recipe> findByUserIdAndId(String userId, String Id);
 
   List<Recipe> findAllByUserId(String userId);
 
-  void deleteByUserIdAndName(String userId, String name);
+  void deleteByUserIdAndId(String userId, String id);
 }

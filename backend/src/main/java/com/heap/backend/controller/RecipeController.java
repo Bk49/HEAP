@@ -28,12 +28,12 @@ public class RecipeController {
 
     }
 
-    @PostMapping("/deleteRecipe")
-    public ResponseEntity<Response> delete (@RequestBody DeleteRecipeRequest request, @RequestHeader ("Authorization") String token) {
+    @DeleteMapping("/deleteRecipe/{recipeId}")
+    public ResponseEntity<Response> delete (@PathVariable String recipeId, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = returnOldEmail(token);
-        return checkResponse(recipeService.delete(request, oldEmail));
+        return checkResponse(recipeService.delete(recipeId, oldEmail));
     }
 
     @PutMapping("/updateRecipe/{recipeId}")

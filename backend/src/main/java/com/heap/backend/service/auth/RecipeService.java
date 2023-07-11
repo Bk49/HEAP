@@ -82,13 +82,13 @@ public class RecipeService {
 
     }
 
-    public Response delete(DeleteRecipeRequest request, String oldEmail) {
+    public Response delete(String recipeId, String oldEmail) {
 
         try {
             User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            if (recipeRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
+            if (recipeRepository.findByUserIdAndId(id, recipeId).isEmpty()) {
 
                 //If Recipe cannot be found
                 return ErrorResponse.builder()
@@ -97,7 +97,7 @@ public class RecipeService {
                         .build();
             }
 
-            recipeRepository.deleteByUserIdAndName(id, request.getName());
+            recipeRepository.deleteByUserIdAndId(id, recipeId);
 
         } catch (IllegalArgumentException e) {
 
