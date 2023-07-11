@@ -44,12 +44,12 @@ public class MenuController {
         return checkResponse(menuService.update(id, request, oldEmail));
     }
 
-    @PostMapping ("/findMenu")
-    public ResponseEntity<Response> findOne (@RequestBody FindMenuRequest request, @RequestHeader ("Authorization") String token) {
+    @GetMapping ("/findMenu/{menuId}")
+    public ResponseEntity<Response> findOne (@RequestParam String menuId, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = returnOldEmail(token);
-        return checkResponse(menuService.findOne(request, oldEmail));
+        return checkResponse(menuService.findOne(menuId, oldEmail));
     }
 
     @GetMapping ("/findAllMenu")

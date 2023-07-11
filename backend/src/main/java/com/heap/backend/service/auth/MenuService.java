@@ -246,7 +246,7 @@ public class MenuService {
                 .build();
     }
 
-    public Response findOne(FindMenuRequest request, String oldEmail) {
+    public Response findOne(String menuId, String oldEmail) {
 
         ReturnedMenu returnedMenu;
 
@@ -256,13 +256,7 @@ public class MenuService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            if (menuRepository.findByUserIdAndName(id, request.getName()).isEmpty()) {
-
-                throw new IllegalArgumentException("User has no such Menu");
-
-            }
-
-            StoredMenu storedMenu = menuRepository.findByUserIdAndName(id, request.getName())
+            StoredMenu storedMenu = menuRepository.findByIdAndUserId(menuId, id)
                     .orElseThrow(() -> new IllegalArgumentException("User has no such Menu"));
 
             returnedMenu = ReturnedMenu.builder()
