@@ -37,8 +37,8 @@ const MyMenus = () => {
             <br />
             <Grid container direction="row" columnGap={4} rowGap={5}>
                 {menus.map((menu, index) => (
-                    <Grid item>
-                        <MenuCard key={index} menu={menu}/>
+                    <Grid key={index} item>
+                        <MenuCard menu={menu} />
                     </Grid>
                 ))}
             </Grid>
