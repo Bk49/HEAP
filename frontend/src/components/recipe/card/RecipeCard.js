@@ -11,15 +11,7 @@ import { Fragment } from "react";
 import ConfirmDeleteDialog from "../../common/dialog/ConfirmDeleteDialog";
 
 const RecipeCard = ({ recipe }) => {
-    const {
-        id,
-        name,
-        type,
-        cost,
-        ingredients,
-        steps,
-        image = "default",
-    } = recipe;
+    const { id, name, type, cost, ingredients, steps, image } = recipe;
     const navigate = useNavigate();
 
     return (
@@ -27,8 +19,8 @@ const RecipeCard = ({ recipe }) => {
             <Card sx={{ width: "22vw", boxShadow: 4 }}>
                 <CardMedia
                     sx={{ height: "12rem", width: "100%" }}
-                    image={ImagePlaceholder}
-                    title={image}
+                    image={image ? image : ImagePlaceholder}
+                    title={image ? image : "default"}
                 />
                 <CardContent>
                     <Typography gutterBottom component="div" variant="h5">
@@ -51,10 +43,13 @@ const RecipeCard = ({ recipe }) => {
                     >
                         Edit
                     </SmallButton>
-                    <ConfirmDeleteDialog name={name} type="recipe"/>
+                    <ConfirmDeleteDialog
+                        id={id}
+                        name={name}
+                        type="recipe"
+                    />
                 </CardActions>
             </Card>
-
         </Fragment>
     );
 };
