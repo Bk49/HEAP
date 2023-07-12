@@ -10,8 +10,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Fragment } from "react";
 import Button from "@mui/material/Button";
 import { grey } from "@mui/material/colors";
+import deleteRecipe from "../../../axios/recipe/deleteRecipeAPI";
+import { queueError } from "../../../functions/formHandling";
+import { enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 const ConfirmDeleteDialog = ({
+    id = "",
     type = "business",
     name = "Name Text",
     dateCreated = new Date(),
@@ -23,6 +28,7 @@ const ConfirmDeleteDialog = ({
             ? "Recipe"
             : "Business Growth Plan";
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <Fragment>
@@ -67,7 +73,20 @@ const ConfirmDeleteDialog = ({
                     >
                         Cancel
                     </Button>
-                    <Button onClick={() => {}}>Confirm</Button>
+                    <Button
+                        onClick={async () => {
+                            try {
+                                const result = await deleteRecipe(id);
+                                navigate("/my-recipes", {
+                                    state: { success: result },
+                                });
+                            } catch (e) {
+                                queueError(e, enqueueSnackbar);
+                            }
+                        }}
+                    >
+                        Confirm
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Fragment>
