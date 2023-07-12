@@ -2,6 +2,8 @@ import NavBar from "../../components/common/navigations/NavBar";
 import BaseRoute from "./BaseRoute";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+// import { queueSuccess } from "../../functions/formHandling";
+// import { enqueueSnackbar } from "notistack";
 // import jwtDecode from "jwt-decode";
 // import Cookies from "js-cookie";
 
@@ -18,7 +20,7 @@ const PublicRoute = ({ children }) => {
         //             return navigate("/my-summary", {state: {info: "Session found, redirect to Summary Page"}})
         //         }
         //     } catch (e) {
-        //         console.log("Invalid/ Expired token found, removing token")
+        //         queueSuccess("Invalid/ Expired token found, removing token", enqueueSnackbar)
         //         Cookies.set("token", null);
         //     }
         // }

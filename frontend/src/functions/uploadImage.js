@@ -15,27 +15,51 @@ AWS.config.update({
 // Create an S3 client
 const s3 = new AWS.S3();
 
-const uploadImage = async (images) => {
-    for (let { imageUrl, base64 } of images) {
-        if (/^https?:\/\//.test(imageUrl)) continue;
-        const buf = new buffer.from(
-            base64.replace(/^data:image\/\w+;base64,/, ""),
-            "base64"
-        );
-        console.log("buffer: " + buf);
-        const mime = base64.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
-        console.log("MIME in upload.js: " + mime);
-        await s3
-            .upload({
-                Bucket: "heap-g26-image-bucket",
-                Key: `${imageUrl}`,
-                ContentEncoding: "base64",
-                Body: buf,
-                ContentType: mime[1],
-            })
-            .promise();
-    }
-    return;
+const fileToBase64 = async (file) => {
+    return new Promise((res, rej) => {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            res(reader.result);
+        };
+
+        reader.onerror = (err) => {
+            rej(err);
+        };
+
+        reader.readAsDataURL(file);
+    });
 };
 
-export default uploadImage;
+const uploadImage = async (image, url) => {
+    const buf = new buffer.from(
+        image.replace(/^data:image\/\w+;base64,/, ""),
+        "base64"
+    );
+    const mime = image.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
+
+    return await s3
+        .upload({
+            Bucket: "heap-g26-image-bucket",
+            Key: `${url}.${mime[1].substring(6)}`,
+            ContentEncoding: "base64",
+            Body: buf,
+            ContentType: mime[1],
+        })
+        .promise();
+};
+
+const handleImageUpload = async (image, url) => {
+    try {
+        if (image instanceof File) {
+            const base64Url = await fileToBase64(image);
+            return await uploadImage(base64Url, url);
+        } else {
+            return { Location: image };
+        }
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export default handleImageUpload;

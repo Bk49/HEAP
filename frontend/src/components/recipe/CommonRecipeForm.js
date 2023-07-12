@@ -16,17 +16,18 @@ import { useNavigate } from "react-router-dom";
 import { queueError } from "../../functions/formHandling";
 import { enqueueSnackbar } from "notistack";
 import createRecipe from "../../axios/recipe/createRecipeAPI";
-import Cookies from "js-cookie";
 import CommonFieldArray from "../common/datarow/CommonFieldArray";
 import RecipeIngredientsRow from "./datarow/RecipeIngredientsRow";
+import updateRecipe from "../../axios/recipe/updateRecipeAPI";
 
-const CommonRecipeForm = ({ isCreate = false }) => {
-    const formMethods = useForm();
+const CommonRecipeForm = ({ isCreate = false, loaderData }) => {
+    const formMethods = useForm({
+        values: !isCreate && loaderData ? loaderData : {},
+    });
     const { watch } = formMethods;
     const imageFile = watch("image");
     const [imgUrl, setImgUrl] = useState(null);
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const reader = new FileReader();
@@ -35,7 +36,9 @@ const CommonRecipeForm = ({ isCreate = false }) => {
         };
 
         if (imageFile) {
-            reader.readAsDataURL(imageFile);
+            /^https?:\/\/.+/i.test(imageFile)
+                ? setImgUrl(imageFile)
+                : reader.readAsDataURL(imageFile);
         }
     }, [imageFile]);
 
@@ -125,19 +128,18 @@ const CommonRecipeForm = ({ isCreate = false }) => {
                     submitErrorText={`${
                         isCreate ? "Creation" : "Update"
                     } of recipe is unsuccessful, please check your input`}
-                    onSubmit={
-                            async (data) => {
-                                try {
-                                    const result = await createRecipe(data);
-                                    console.log(result);
-                                } catch (e) {
-                                    queueError(e, enqueueSnackbar);
-                                }
-        
-                                // navigate("/my-recipes")
-                            }
-
+                    onSubmit={async (data) => {
+                        try {
+                            const res = isCreate
+                                ? await createRecipe(data)
+                                : await updateRecipe(data, data.id);
+                            navigate("/my-recipes", {
+                                state: { success: res },
+                            });
+                        } catch (e) {
+                            queueError(e, enqueueSnackbar);
                         }
+                    }}
                 />
             </FormProvider>
         </Fragment>

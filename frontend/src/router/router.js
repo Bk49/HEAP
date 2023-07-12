@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
-import Error from "../pages/Error";
+import Error404 from "../pages/Error404";
+import Error400 from "../pages/Error400";
+import Error403 from "../pages/Error403";
 import PublicRoute from "./routes/PublicRoute";
 import Login from "../pages/user/Login";
 import RegistrationOne from "../pages/user/RegistrationOne";
@@ -16,6 +18,8 @@ import CreateBusinessGrowthPlan from "../pages/business/CreateBusinessGrowthPlan
 import EditBusinessGrowthPlan from "../pages/business/EditBusinessGrowthPlan";
 import MySummary from "../pages/business/MySummary";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import getAllRecipes from "../axios/recipe/getAllRecipesAPI";
+import getRecipe from "../axios/recipe/getRecipeAPI";
 
 export default createBrowserRouter([
     {
@@ -25,7 +29,7 @@ export default createBrowserRouter([
                 <Home />
             </PublicRoute>
         ),
-        errorElement: <Error />,
+        errorElement: <Error404 />,
     },
     {
         path: "login",
@@ -68,11 +72,15 @@ export default createBrowserRouter([
         ),
     },
     {
-        path: "edit-recipe",
+        path: "edit-recipe/:id",
         element: (
             <ProtectedRoute>
                 <EditRecipe />
             </ProtectedRoute>
+        ),
+        loader: getRecipe,
+        errorElement: (
+            <Error400 msg="The requested recipe is not in the database" />
         ),
     },
     {
@@ -81,6 +89,10 @@ export default createBrowserRouter([
             <ProtectedRoute>
                 <MyRecipes />
             </ProtectedRoute>
+        ),
+        loader: getAllRecipes,
+        errorElement: (
+            <Error403 msg="There seems to be an error trying to access the page, try to relogin!" />
         ),
     },
     {

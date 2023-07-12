@@ -2,16 +2,16 @@ import Cookies from "js-cookie";
 import { protectedInstance as instance } from "../instance";
 import handleImageUpload from "../../functions/uploadImage";
 
-const createRecipe = async (data) => {
+const updateRecipe = async (data, id) => {
+    const { image, ...other } = data;
+    console.log(image)
+    const { Location } = await handleImageUpload(
+        image,
+        `recipe/${other.name}/recipe_image${Date.now()}`
+    );
     try {
-        const { image, ...other } = data;
-        const { Location } = await handleImageUpload(
-            image,
-            `recipe/${other.name}/recipe_image${Date.now()}`
-        );
-
-        const result = await instance.post(
-            `/user/createRecipe`,
+        const result = await instance.put(
+            `/user/updateRecipe/${id}`,
             { ...other, image: Location },
             {
                 headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -35,4 +35,4 @@ const createRecipe = async (data) => {
     }
 };
 
-export default createRecipe;
+export default updateRecipe;
