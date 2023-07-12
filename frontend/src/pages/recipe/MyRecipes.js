@@ -24,8 +24,8 @@ const MyRecipes = () => {
             <br />
             <Grid container direction="row" columnGap={4} rowGap={5}>
                 {recipes.map((recipe, index) => (
-                    <Grid item>
-                        <RecipeCard key={index} recipe={recipe} />
+                    <Grid key={index} item>
+                        <RecipeCard recipe={recipe} />
                     </Grid>
                 ))}
             </Grid>

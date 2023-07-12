@@ -34,8 +34,8 @@ const NavItems = ({ authenticated = false }) => {
                 }}
             >
                 {(authenticated ? authenticatedPages : publicPages).map(
-                    (item) => (
-                        <NavItem {...item} />
+                    (item, index) => (
+                        <NavItem key={index} {...item} />
                     )
                 )}
             </div>
