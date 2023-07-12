@@ -1,12 +1,12 @@
 import Container from "@mui/material/Container";
-import Error404Illustration from "../assets/illustrations/error404-illustration.jpg";
+import Error400Illustration from "../assets/illustrations/error400-illustration.png";
 import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import BaseRoute from "../router/routes/BaseRoute";
 import NavBar from "../components/common/navigations/NavBar";
 
-const Error = () => {
+const Error404 = ({ msg }) => {
     const [authenticated, setAuthenticated] = useState(false);
 
     useEffect(() => {
@@ -33,15 +33,13 @@ const Error = () => {
             >
                 <img
                     style={{ height: "30vw", width: "30vw" }}
-                    src={Error404Illustration}
-                    alt="Error404 Illustration"
+                    src={Error400Illustration}
+                    alt="Error400 Illustration"
                 />
-                <span style={{ fontFamily: "Cocogoose" }}>
-                    The page you have requested is not found
-                </span>
+                <span style={{ fontFamily: "Cocogoose" }}>{msg} </span>
             </Container>
         </BaseRoute>
     );
 };
 
-export default Error;
+export default Error404;
