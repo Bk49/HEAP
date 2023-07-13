@@ -23,7 +23,7 @@ const center = {
   lng: 103.8198
 };
 
-const GoogleMaps = () => {
+const Map = () => {
   return (
     <LoadScript googleMapsApiKey="YOUR_API_KEY">
       <GoogleMap
@@ -37,12 +37,12 @@ const GoogleMaps = () => {
   );
 };
 
-// function GoogleMaps() {
-//   return (
-//     <div>
-//       <Map />
-//     </div>
-//   );
-// }
+function App() {
+  return (
+    <div>
+      <Map />
+    </div>
+  );
+}
 
-export default GoogleMaps;
+export default App;
