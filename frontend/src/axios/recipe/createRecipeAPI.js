@@ -5,14 +5,14 @@ import handleImageUpload from "../../functions/uploadImage";
 const createRecipe = async (data) => {
     try {
         const { image, ...other } = data;
-        const { Location } = await handleImageUpload(
+        const imgUrl = await handleImageUpload(
             image,
             `recipe/${other.name}/recipe_image${Date.now()}`
         );
 
         const result = await instance.post(
             `/user/createRecipe`,
-            { ...other, image: Location },
+            { ...other, image: imgUrl },
             {
                 headers: { Authorization: `Bearer ${Cookies.get("token")}` },
                 // headers: {

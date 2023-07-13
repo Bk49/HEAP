@@ -4,15 +4,14 @@ import handleImageUpload from "../../functions/uploadImage";
 
 const updateRecipe = async (data, id) => {
     const { image, ...other } = data;
-    console.log(image)
-    const { Location } = await handleImageUpload(
+    const imgUrl = await handleImageUpload(
         image,
         `recipe/${other.name}/recipe_image${Date.now()}`
     );
     try {
         const result = await instance.put(
             `/user/updateRecipe/${id}`,
-            { ...other, image: Location },
+            { ...other, image: imgUrl },
             {
                 headers: { Authorization: `Bearer ${Cookies.get("token")}` },
                 // headers: {

@@ -1,19 +1,32 @@
 import { Buffer as buffer } from "buffer";
-
 // Load the AWS SDK for Node.js
-const AWS = require("aws-sdk");
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
+const {
+    REACT_APP_AWS_ACCESS_KEY_ID,
+    REACT_APP_AWS_SECRET_ACCESS_KEY,
+    REACT_APP_BUCKET_REGION,
+    REACT_APP_BUCKET_NAME,
+} = process.env;
 // Set the region
-AWS.config.update({ region: "ap-southeast-1" });
-
-// Set the credentials
-AWS.config.update({
-    accessKeyId: "AKIA2VI2VRVWY5QHR62D",
-    secretAccessKey: "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",
+const S3 = new S3Client({
+    region: REACT_APP_BUCKET_REGION,
+    credentials: {
+        accessKeyId: REACT_APP_AWS_ACCESS_KEY_ID,
+        secretAccessKey: REACT_APP_AWS_SECRET_ACCESS_KEY,
+    },
 });
 
+// Set the credentials
+// AWS.config.update({
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+// });
+// const credentials = new AWS.SharedIniFileCredentials({ profile: "default" });
+// AWS.config.credentials(credentials);
+
 // Create an S3 client
-const s3 = new AWS.S3();
+// const s3 = new AWS.S3();
 
 const fileToBase64 = async (file) => {
     return new Promise((res, rej) => {
@@ -38,15 +51,18 @@ const uploadImage = async (image, url) => {
     );
     const mime = image.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
 
-    return await s3
-        .upload({
-            Bucket: "heap-g26-image-bucket",
-            Key: `${url}.${mime[1].substring(6)}`,
-            ContentEncoding: "base64",
+    const fileLocation = `${url}.${mime[1].substring(6)}`;
+    const { $metadata } = await S3.send(
+        new PutObjectCommand({
+            Bucket: REACT_APP_BUCKET_NAME,
+            Key: fileLocation,
             Body: buf,
-            ContentType: mime[1],
         })
-        .promise();
+    );
+
+    return $metadata.httpStatusCode === 200
+        ? `https://${REACT_APP_BUCKET_NAME}.s3.${REACT_APP_BUCKET_REGION}.amazonaws.com/${fileLocation}`
+        : "";
 };
 
 const handleImageUpload = async (image, url) => {
@@ -55,7 +71,7 @@ const handleImageUpload = async (image, url) => {
             const base64Url = await fileToBase64(image);
             return await uploadImage(base64Url, url);
         } else {
-            return { Location: image };
+            return image;
         }
     } catch (e) {
         console.log(e);
