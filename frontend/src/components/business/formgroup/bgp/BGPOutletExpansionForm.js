@@ -6,11 +6,14 @@ import TextField from "../../../common/form/TextField";
 import TextArea from "../../../common/form/TextArea";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import StaffRow from "../../datarow/StaffRow";
+import GoogleMaps from "../../map/GoogleMaps";
 
 const BGPOutletExpansionForm = () => {
     return (
         <Fragment>
             <HeadingThree>Outlet Expansion Address and Location</HeadingThree>
+            <Map/>
+
             <FieldsColumn>
                 <FieldsRow>
                     <TextArea
