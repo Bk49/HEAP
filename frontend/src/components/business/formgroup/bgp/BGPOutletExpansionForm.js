@@ -12,11 +12,9 @@ const BGPOutletExpansionForm = () => {
     return (
         <Fragment>
             <HeadingThree>Outlet Expansion Address and Location</HeadingThree>
-
-            <Map/>
-
             <FieldsColumn>
                 <FieldsRow>
+                    <Map/>
                     <TextArea
                         rules={{ required: true }}
                         label="Outlet Expansion Address and Location"
