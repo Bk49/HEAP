@@ -5,10 +5,17 @@ import FieldsRow from "../../../common/form/FieldsRow";
 import FileInput from "../../../common/form/FileInput";
 import TextField from "../../../common/form/TextField";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
+import LocationRow from "../../datarow/LocationRow";
 
 const FlyerDistributionMkForm = () => {
     return (
         <Fragment>
+            <CommonFieldArray
+                name="location"
+                heading="Location to Distribute"
+                Component={LocationRow}
+            />
             <HeadingThree>Other Flyer Distribution Details</HeadingThree>
             <FieldsColumn>
                 <FieldsRow>
