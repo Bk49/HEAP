@@ -1,15 +1,3 @@
-// import { Map } from '@googlemaps/react-wrapper'
-
-// function Map() {
-//   return (
-//     <div>
-//       <Map apiKey="YOUR_API_KEY" />
-//     </div>
-//   )
-// }
-
-// export default Map
-
 import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
@@ -25,7 +13,7 @@ const center = {
 
 const Map = () => {
   return (
-    <LoadScript googleMapsApiKey="YOUR_API_KEY">
+    <LoadScript googleMapsApiKey="AIzaSyChsCzm5-iAjK2cMpj_garxpAQdC4YbqsE">
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
