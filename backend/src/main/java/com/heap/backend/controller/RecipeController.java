@@ -1,7 +1,6 @@
 package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateRecipeRequest;
-import com.heap.backend.data.request.DeleteRecipeRequest;
 import com.heap.backend.data.request.UpdateRecipeRequest;
 import com.heap.backend.data.response.ErrorResponse;
 import com.heap.backend.data.response.Response;

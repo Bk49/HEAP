@@ -1,7 +1,6 @@
 package com.heap.backend.controller;
 
 import com.heap.backend.data.request.CreateMenuRequest;
-import com.heap.backend.data.request.DeleteMenuRequest;
 import com.heap.backend.data.request.UpdateMenuRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.data.response.ErrorResponse;
@@ -36,7 +35,7 @@ public class MenuController {
     }
 
     @PutMapping ("/updateMenu/{id}")
-    public ResponseEntity<Response> delete (@PathVariable String id, @RequestBody UpdateMenuRequest request, @RequestHeader ("Authorization") String token) {
+    public ResponseEntity<Response> update (@PathVariable String id, @RequestBody UpdateMenuRequest request, @RequestHeader ("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = returnOldEmail(token);
