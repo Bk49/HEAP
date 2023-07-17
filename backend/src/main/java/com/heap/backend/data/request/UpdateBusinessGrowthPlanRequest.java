@@ -38,11 +38,11 @@ public class UpdateBusinessGrowthPlanRequest {
     private double platformRate;
     private double platformDuration;
     //2.2. Unique to PosterBanner
-//    private File posterDesign;
+    private String posterDesign;
     private double posterCost;
     private double posterQuantity;
     //2.3. Unique to FlyerDistribution
-//    private File flyerDesign;
+    private String flyerDesign;
     private double flyerCost;
     private double flyerQuantity;
 
