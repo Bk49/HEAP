@@ -12,6 +12,7 @@ import { queueError } from "../../functions/formHandling";
 import { enqueueSnackbar } from "notistack";
 import createMenu from "../../axios/menu/createMenuAPI";
 import { useNavigate } from "react-router-dom";
+import updateMenu from "../../axios/menu/updateMenuAPI";
 
 const CommonMenuForm = ({ isCreate = false, loaderData}) => {
     const formMethods = useForm({
