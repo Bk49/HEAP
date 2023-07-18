@@ -23,7 +23,7 @@ public class FlyerDistributionMarketingMethod implements MarketingMethod {
     private Influencer[] influencer;
 
     //Unique to this
-//    private File flyerDesign;
+    private String flyerDesign;
     private double flyerCost;
     private double flyerQuantity;
 

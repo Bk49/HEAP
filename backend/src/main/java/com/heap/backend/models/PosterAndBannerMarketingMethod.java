@@ -23,7 +23,7 @@ public class PosterAndBannerMarketingMethod implements MarketingMethod {
     private Influencer[] influencer;
 
     //Unique to this
-//    private File posterDesign;
+    private String posterDesign;
     private double posterCost;
     private double posterQuantity;
 

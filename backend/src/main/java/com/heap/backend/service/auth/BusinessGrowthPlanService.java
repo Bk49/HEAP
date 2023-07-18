@@ -97,7 +97,7 @@ public class BusinessGrowthPlanService {
                             .promoDescription(request.getPromoDescription())
                             .promoTnC(request.getPromoTnC())
                             .influencer(request.getInfluencer())
-//                            .posterDesign(request.getPosterDesign())
+                            .posterDesign(request.getPosterDesign())
                             .posterCost(request.getPosterCost())
                             .posterQuantity(request.getPosterQuantity())
                             .build();
@@ -111,7 +111,7 @@ public class BusinessGrowthPlanService {
                             .promoDescription(request.getPromoDescription())
                             .promoTnC(request.getPromoTnC())
                             .influencer(request.getInfluencer())
-//                            .flyerDesign(request.getFlyerDesign())
+                            .flyerDesign(request.getFlyerDesign())
                             .flyerCost(request.getFlyerCost())
                             .flyerQuantity(request.getFlyerQuantity())
                             .build();
