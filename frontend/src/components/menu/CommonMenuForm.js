@@ -8,9 +8,16 @@ import { FormProvider, useForm } from "react-hook-form";
 import MenuSectionFieldsArray from "./datarow/MenuSectionFieldsArray";
 import SubmitFormGroup from "../common/form/SubmitFormGroup";
 import { menuTypes } from "../../constants/dropdown-choices";
+import { queueError } from "../../functions/formHandling";
+import { enqueueSnackbar } from "notistack";
+import createMenu from "../../axios/menu/createMenuAPI";
+import { useNavigate } from "react-router-dom";
 
-const CommonMenuForm = ({ isCreate = false }) => {
-    const formMethods = useForm();
+const CommonMenuForm = ({ isCreate = false, loaderData}) => {
+    const formMethods = useForm({
+        values: !isCreate && loaderData ? loaderData : {},
+    });
+    const navigate = useNavigate();
 
     return (
         <Fragment>
@@ -37,6 +44,22 @@ const CommonMenuForm = ({ isCreate = false }) => {
                     submitErrorText={`${
                         isCreate ? "Creation" : "Update"
                     } of menu is unsuccessful, please check your input`}
+                    onSubmit={async (data) => {
+                        try {
+                            if (isCreate) {
+                                await createMenu(data);
+                            }
+                            console.log()
+                            // const res = isCreate
+                            //     ? await createMenu(data)
+                            //     : await updateMenu(data, data.id);
+                            // navigate("/my-menus", {
+                            //     state: { success: res },
+                            // }); 
+                        } catch (e) {
+                            queueError(e, enqueueSnackbar);
+                        }
+                    }}
                 />
             </FormProvider>
         </Fragment>
