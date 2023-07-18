@@ -46,16 +46,12 @@ const CommonMenuForm = ({ isCreate = false, loaderData}) => {
                     } of menu is unsuccessful, please check your input`}
                     onSubmit={async (data) => {
                         try {
-                            if (isCreate) {
-                                await createMenu(data);
-                            }
-                            console.log()
-                            // const res = isCreate
-                            //     ? await createMenu(data)
-                            //     : await updateMenu(data, data.id);
-                            // navigate("/my-menus", {
-                            //     state: { success: res },
-                            // }); 
+                            const res = isCreate
+                                ? await createMenu(data)
+                                : await updateMenu(data, data.menuId);
+                            navigate("/my-menus", {
+                                state: { success: res },
+                            }); 
                         } catch (e) {
                             queueError(e, enqueueSnackbar);
                         }
