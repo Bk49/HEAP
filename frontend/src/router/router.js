@@ -20,6 +20,8 @@ import MySummary from "../pages/business/MySummary";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import getAllRecipes from "../axios/recipe/getAllRecipesAPI";
 import getRecipe from "../axios/recipe/getRecipeAPI";
+import getMenu from "../axios/menu/getMenuAPI";
+import getAllMenus from "../axios/menu/getAllMenusAPI";
 
 export default createBrowserRouter([
     {
@@ -104,11 +106,15 @@ export default createBrowserRouter([
         ),
     },
     {
-        path: "edit-menu",
+        path: "edit-menu/:id",
         element: (
             <ProtectedRoute>
                 <EditMenu />
             </ProtectedRoute>
+        ),
+        loader: getMenu,
+        errorElement: (
+            <Error403 msg="The requested menu is not in the database" />
         ),
     },
     {
@@ -117,6 +123,10 @@ export default createBrowserRouter([
             <ProtectedRoute>
                 <MyMenus />
             </ProtectedRoute>
+        ),
+        loader: getAllMenus,
+        errorElement: (
+            <Error403 msg="There seems to be an error trying to access the page, try to relogin!" />
         ),
     },
     {
