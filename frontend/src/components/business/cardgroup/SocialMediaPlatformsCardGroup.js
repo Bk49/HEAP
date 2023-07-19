@@ -47,7 +47,7 @@ const SocialMediaPlatformsCardGroup = () => {
     return (
         <Controller
             control={control}
-            name="platform"
+            name="socialMedia.name"
             defaultValue="Facebook"
             rules={generateRules({ required: true })}
             style={{

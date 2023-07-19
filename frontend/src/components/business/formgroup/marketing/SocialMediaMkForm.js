@@ -6,8 +6,13 @@ import TextField from "../../../common/form/TextField";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import SocialMediaPlatformsCardGroup from "../../cardgroup/SocialMediaPlatformsCardGroup";
 import ContentsToBeUploadedRow from "../../datarow/ContentsToBeUploadedRow";
+import { useFormContext } from "react-hook-form";
 
 const SocialMediaMkForm = () => {
+    const {
+        formState: { errors },
+    } = useFormContext();
+
     return (
         <Fragment>
             <HeadingThree>Targeted Platform</HeadingThree>
@@ -17,7 +22,7 @@ const SocialMediaMkForm = () => {
                 </FieldsRow>
             </FieldsColumn>
             <CommonFieldArray
-                name="contents"
+                name="socialMedia.contents"
                 appendObj={{ name: "", file: null, date: "" }}
                 heading="Contents to be Uploaded"
                 Component={ContentsToBeUploadedRow}
@@ -26,22 +31,25 @@ const SocialMediaMkForm = () => {
             <FieldsColumn>
                 <FieldsRow>
                     <TextField
-                        rules={{ required: true, min: 0 }}
+                        rules={{ required: false, min: 0 }}
                         type="number"
-                        name="platformCost"
+                        name="socialMedia.platform.cost"
                         label="Platform Cost"
+                        nestedError={errors.socialMedia?.platform?.cost}
                     />
                     <TextField
-                        rules={{ required: true, min: 0 }}
+                        rules={{ required: false, min: 0 }}
                         type="number"
-                        name="platformRate"
+                        name="socialMedia.platform.rate"
                         label="Rate (Price/hour)"
+                        nestedError={errors.socialMedia?.platform?.rate}
                     />
                     <TextField
-                        rules={{ required: true, min: 0 }}
+                        rules={{ required: false, min: 0 }}
                         type="number"
-                        name="platformDuration"
+                        name="socialMedia.platform.duration"
                         label="Duration"
+                        nestedError={errors.socialMedia?.platform?.duration}
                     />
                 </FieldsRow>
             </FieldsColumn>

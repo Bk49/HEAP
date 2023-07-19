@@ -7,8 +7,13 @@ import TextField from "../../../common/form/TextField";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import LocationRow from "../../datarow/LocationRow";
+import { useFormContext } from "react-hook-form";
 
 const FlyerDistributionMkForm = () => {
+    const {
+        formState: { errors },
+    } = useFormContext();
+
     return (
         <Fragment>
             <CommonFieldArray
@@ -21,21 +26,23 @@ const FlyerDistributionMkForm = () => {
                 <FieldsRow>
                     <FileInput
                         icon={<AttachFileIcon />}
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         label="Flyer Design (File)"
-                        name="flyerDesign"
+                        name="flyer.design"
                     />
                     <TextField
                         type="number"
-                        rules={{ required: true, min: 0 }}
+                        rules={{ required: false, min: 0 }}
                         label="Cost/piece"
-                        name="flyerCost"
+                        name="flyer.cost"
+                        nestedError={errors.flyer?.cost}
                     />
                     <TextField
                         type="number"
-                        rules={{ required: true, min: 0 }}
+                        rules={{ required: false, min: 0 }}
                         label="Quantity"
-                        name="flyerQuantity"
+                        name="flyer.quantity"
+                        nestedError={errors.flyer?.quantity}
                     />
                 </FieldsRow>
             </FieldsColumn>
