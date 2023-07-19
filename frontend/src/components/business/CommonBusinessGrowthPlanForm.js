@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import BasicDetailsSection from "../business/section/BasicDetailsSection";
 import HeadingTwo from "../common/heading/HeadingTwo";
@@ -7,19 +7,19 @@ import BGPOutletExpansionForm from "./formgroup/bgp/BGPOutletExpansionForm";
 import BGPMarketingForm from "./formgroup/bgp/BGPMarketingForm";
 import SubmitFormGroup from "../common/form/SubmitFormGroup";
 
-const CommonBusinessGrowthPlanForm = ({ isCreate = true }) => {
-    const formMethods = useForm();
-    const { watch, setValue } = formMethods;
+const CommonBusinessGrowthPlanForm = ({ isCreate = true, loaderData }) => {
+    const formMethods = useForm({
+        values: !isCreate && loaderData ? loaderData : {},
+    });
+    const { watch } = formMethods;
     const currentPlan = watch("planType");
-
-    useEffect(() => {
-        setValue("planType", isCreate ? "" : "FD");
-    }, [setValue, isCreate]);
 
     return (
         <Fragment>
             <FormProvider {...formMethods}>
-                <BasicDetailsSection defaultPlan={isCreate ? "" : "FD"} />
+                <BasicDetailsSection
+                    defaultPlan={isCreate ? "" : currentPlan}
+                />
                 <HeadingTwo>Additional Details</HeadingTwo>
                 {currentPlan === "FD" ? (
                     <BGPFoodDeliveryForm isCreate={isCreate} />
