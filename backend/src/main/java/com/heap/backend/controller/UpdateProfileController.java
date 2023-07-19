@@ -24,7 +24,7 @@ public class UpdateProfileController {
         String jwt = token.substring(7);
         String oldEmail = jwtService.extractEmail(jwt);
 
-        //Ontaining Response from UpdateProfileService
+        //Obtaining Response from UpdateProfileService
         Response response = updateProfileService.update(request, oldEmail);
 
 
@@ -45,6 +45,37 @@ public class UpdateProfileController {
         }
 
         //Else, return ok response
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/findUser")
+    public ResponseEntity<Response> findOne(@RequestHeader ("Authorization") String token) {
+        String oldEmail = returnOldEmail(token);
+        return checkResponse(updateProfileService.findOne(oldEmail));
+    }
+
+    public String returnOldEmail(String token) {
+
+        String jwt = token.substring(7);
+        return jwtService.extractEmail(jwt);
+
+    }
+
+    public ResponseEntity<Response> checkResponse(Response response) {
+
+        if (response instanceof ErrorResponse errorResponse) {
+
+            if (errorResponse.getMessage().contains("Bad Request")) {
+
+                return ResponseEntity.badRequest().body(errorResponse);
+
+            } else {
+
+                return ResponseEntity.internalServerError().body(errorResponse);
+            }
+
+        }
+
         return ResponseEntity.ok(response);
     }
 }

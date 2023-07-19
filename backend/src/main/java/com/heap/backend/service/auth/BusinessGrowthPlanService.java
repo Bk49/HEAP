@@ -436,7 +436,8 @@ public class BusinessGrowthPlanService {
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
-                    .message("An unknown error has occurred! Do try again!")
+                    .message(e.getMessage())
+//                    .message("An unknown error has occurred! Do try again!")
                     .build();
 
         }
@@ -456,6 +457,7 @@ public class BusinessGrowthPlanService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
+            //Debug from here: remove businessGrowthPlan to try out
             List<BusinessGrowthPlan> search = businessGrowthPlanRepository.findAllByUserId(id);
             for (BusinessGrowthPlan bgp : search) {
                 businessGrowthPlans.add(bgp);
