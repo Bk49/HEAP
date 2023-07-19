@@ -24,7 +24,7 @@ const updateRecipe = async (data, id) => {
         let msg = "";
         if (!e.response) {
             msg =
-                "Create recipe unsuccessful due to network error!\nPlease check your internet connection!";
+                "Update recipe unsuccessful due to network error!\nPlease check your internet connection!";
         } else {
             const { error, message } = e.response.data;
             msg = error + "\n" + message;
