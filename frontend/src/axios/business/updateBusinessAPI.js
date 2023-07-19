@@ -1,17 +1,13 @@
 import Cookies from "js-cookie";
 import { protectedInstance as instance } from "../instance";
-import handleImageUpload from "../../functions/uploadImage";
+import handleBusinessField from "../../functions/handleBusinessField";
 
-const updateRecipe = async (data, id) => {
-    const { image, ...other } = data;
-    const imgUrl = await handleImageUpload(
-        image,
-        `recipe/${other.name}/recipe_image${Date.now()}`
-    );
+const updateBusiness = async (data, businessId) => {
     try {
+        const payload = handleBusinessField(data);
         const result = await instance.put(
-            `/user/updateRecipe/${id}`,
-            { ...other, image: imgUrl },
+            `/user/updateBGP/${businessId}`,
+            payload,
             {
                 headers: { Authorization: `Bearer ${Cookies.get("token")}` },
                 // headers: {
@@ -24,7 +20,7 @@ const updateRecipe = async (data, id) => {
         let msg = "";
         if (!e.response) {
             msg =
-                "Update recipe unsuccessful due to network error!\nPlease check your internet connection!";
+                "Update business growth plan unsuccessful due to network error!\nPlease check your internet connection!";
         } else {
             const { error, message } = e.response.data;
             msg = error + "\n" + message;
@@ -34,4 +30,4 @@ const updateRecipe = async (data, id) => {
     }
 };
 
-export default updateRecipe;
+export default updateBusiness;

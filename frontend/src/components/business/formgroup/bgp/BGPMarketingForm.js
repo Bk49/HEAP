@@ -39,19 +39,19 @@ const BGPMarketingForm = () => {
             <FieldsColumn>
                 <FieldsRow>
                     <TextField
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         name="promotion.name"
                         label="Promotion Name"
                         nestedError={errors.promotion?.name}
                     />
                     <DatePicker
-                        rules={{ required: true, disablePast: true }}
+                        rules={{ required: false, disablePast: true }}
                         name="promotion.startDate"
                         label="Start Date"
                         nestedError={errors.promotion?.startDate}
                     />
                     <DatePicker
-                        rules={{ required: true, disablePast: true }}
+                        rules={{ required: false, disablePast: true }}
                         name="promotion.endDate"
                         label="End Date"
                         nestedError={errors.promotion?.endDate}
@@ -59,7 +59,7 @@ const BGPMarketingForm = () => {
                 </FieldsRow>
                 <FieldsRow>
                     <TextArea
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         label="Description"
                         name="promotion.description"
                         nestedError={errors.promotion?.description}
@@ -67,7 +67,7 @@ const BGPMarketingForm = () => {
                 </FieldsRow>
                 <FieldsRow>
                     <TextArea
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         label="Terms and Conditions"
                         name="promotion.tnc"
                         nestedError={errors.promotion?.tnc}
@@ -76,7 +76,7 @@ const BGPMarketingForm = () => {
             </FieldsColumn>
             <CommonFieldArray
                 name="influencer"
-                appendObj={{ name: "", email: "", phone: "", price: 0 }}
+                appendObj={{ name: "", email: "", phone: "", price: "" }}
                 heading="Influencers Collaboration"
                 Component={InfluencerCollaborationRow}
             />

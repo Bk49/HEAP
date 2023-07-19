@@ -3,6 +3,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker as MUIDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Controller, useFormContext } from "react-hook-form";
 import { generateRules } from "../../../functions/generateRules";
+import { convertDateToObject } from "../../../functions/convertDate";
 
 const DatePicker = ({
     defaultValue,
@@ -22,7 +23,7 @@ const DatePicker = ({
         <Controller
             name={name}
             control={control}
-            defaultValue={defaultValue}
+            defaultValue={convertDateToObject(defaultValue)}
             rules={generateRules({ name: label, required: required })}
             render={({ field }) => (
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
