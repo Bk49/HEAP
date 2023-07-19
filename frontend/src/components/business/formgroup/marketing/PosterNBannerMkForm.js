@@ -7,12 +7,17 @@ import TextField from "../../../common/form/TextField";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import LocationRow from "../../datarow/LocationRow";
+import { useFormContext } from "react-hook-form";
 
 const PosterNBannerMkForm = () => {
+    const {
+        formState: { errors },
+    } = useFormContext();
+
     return (
         <Fragment>
             <CommonFieldArray
-                name="location"
+                name="posterBanner.location"
                 heading="Location to Place"
                 Component={LocationRow}
             />
@@ -21,21 +26,24 @@ const PosterNBannerMkForm = () => {
                 <FieldsRow>
                     <FileInput
                         icon={<AttachFileIcon />}
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         label="Poster Design (File)"
-                        name="posterDesign"
+                        name="posterBanner.design"
+                        nestedError={errors.posterBanner?.design}
                     />
                     <TextField
                         type="number"
-                        rules={{ required: true, min: 0 }}
+                        rules={{ required: false, min: 0 }}
                         label="Cost/piece"
-                        name="posterCost"
+                        name="posterBanner.cost"
+                        nestedError={errors.posterBanner?.cost}
                     />
                     <TextField
                         type="number"
-                        rules={{ required: true, min: 0 }}
+                        rules={{ required: false, min: 0 }}
                         label="Quantity"
-                        name="posterQuantity"
+                        name="posterBanner.quantity"
+                        nestedError={errors.posterBanner?.quantity}
                     />
                 </FieldsRow>
             </FieldsColumn>

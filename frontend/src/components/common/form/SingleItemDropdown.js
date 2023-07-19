@@ -7,7 +7,7 @@ import { generateRules } from "../../../functions/generateRules";
 import FormHelperText from "@mui/material/FormHelperText";
 
 const SingleItemDropdown = ({
-    rules = {},
+    rules = { required: false },
     name = "singledropdown",
     label = "Single Dropdown",
     size = "small",
@@ -35,7 +35,11 @@ const SingleItemDropdown = ({
                     sx={{ width: size === "small" ? "20rem" : "40rem" }}
                 >
                     <InputLabel>{label}</InputLabel>
-                    <Select {...field} value={field.value || ""} disabled={disabled}>
+                    <Select
+                        {...field}
+                        value={field.value || ""}
+                        disabled={disabled}
+                    >
                         {choices.map(({ text, value }) => (
                             <MenuItem key={text} value={value}>
                                 {value === "" ? <em>{text}</em> : text}
