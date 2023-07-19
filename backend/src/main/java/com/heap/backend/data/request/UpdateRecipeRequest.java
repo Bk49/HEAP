@@ -1,6 +1,7 @@
 package com.heap.backend.data.request;
 
 import com.heap.backend.models.RecipeIngredient;
+import com.heap.backend.models.RecipeSteps;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class UpdateRecipeRequest {
     private String image;
     private String description;
     private RecipeIngredient[] ingredients;
-    private String[] steps;
+    private RecipeSteps[] steps;
 }

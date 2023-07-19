@@ -42,7 +42,7 @@ public class Recipe {
     private RecipeIngredient[] ingredients;
 
     @NotBlank
-    private String[] steps;
+    private RecipeSteps[] steps;
 
     public Recipe duplicate() {
         return Recipe.builder()
@@ -51,7 +51,7 @@ public class Recipe {
                 .name(this.name)
                 .category(this.category)
                 .cost(this.cost)
-                //.image(this.image)
+                .image(this.image)
                 .description(this.description)
                 .ingredients(this.ingredients.clone())
                 .steps(this.steps.clone())
