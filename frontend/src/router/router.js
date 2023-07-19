@@ -22,6 +22,7 @@ import getAllRecipes from "../axios/recipe/getAllRecipesAPI";
 import getRecipe from "../axios/recipe/getRecipeAPI";
 import getMenu from "../axios/menu/getMenuAPI";
 import getAllMenus from "../axios/menu/getAllMenusAPI";
+import getBusiness from "../axios/business/getBusinessAPI";
 
 export default createBrowserRouter([
     {
@@ -114,7 +115,7 @@ export default createBrowserRouter([
         ),
         loader: getMenu,
         errorElement: (
-            <Error403 msg="The requested menu is not in the database" />
+            <Error400 msg="The requested menu is not in the database" />
         ),
     },
     {
@@ -143,6 +144,10 @@ export default createBrowserRouter([
             <ProtectedRoute>
                 <EditBusinessGrowthPlan />
             </ProtectedRoute>
+        ),
+        loader: getBusiness,
+        errorElement: (
+            <Error400 msg="The requested business growth plan is not in the database" />
         ),
     },
     {
