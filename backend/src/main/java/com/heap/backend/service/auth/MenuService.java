@@ -43,17 +43,10 @@ public class MenuService {
 
                     Item item = ms.getItems()[j];
 
-                    if (recipeRepository.findByNameAndUserId(item.getItem(), id).isEmpty()) {
-
-                        throw new IllegalArgumentException("Missing Recipe");
-
-                    } else {
-
-                        sms.getItems()[j] =
-                                recipeRepository.findByNameAndUserId(item.getItem(), id)
-                                .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
-
-                    }
+                    sms.getItems()[j] =
+                            recipeRepository.findByUserIdAndId(id, item.getItem())
+                                    .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
+                    System.out.println(sms.getItems()[j]);
 
                 }
             }
@@ -86,7 +79,7 @@ public class MenuService {
                         .message("User not found")
                         .build();
 
-            } else if ("Repeat Menu".equals(e.getMessage())) {
+            } else if ("Duplicate Menu".equals(e.getMessage())) {
 
                 return ErrorResponse.builder()
                         .error("Bad Request: Duplicate Menu")
@@ -194,17 +187,9 @@ public class MenuService {
 
                     Item item = ms.getItems()[j];
 
-                    if (recipeRepository.findByNameAndUserId(item.getItem(), id).isEmpty()) {
-
-                        throw new IllegalArgumentException("Missing Recipe");
-
-                    } else {
-
-                        sms.getItems()[j] =
-                                recipeRepository.findByNameAndUserId(item.getItem(), id)
-                                        .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
-
-                    }
+                    sms.getItems()[j] =
+                            recipeRepository.findByUserIdAndId(id, item.getItem())
+                                    .orElseThrow(() -> new IllegalArgumentException("Missing Recipe")).getId();
 
                 }
             }
