@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [marker, setMarker] = useState(null);
-  const [markerAdded, setMarkerAdded] = useState(false);
+  const [infoWindow, setInfoWindow] = useState(null);
+  const [clickedLocation, setClickedLocation] = useState(null);
 
   const onLoad = (map) => {
     setMap(map);
@@ -26,22 +27,34 @@ const MapComponent = () => {
   }, []);
 
   const handleSearch = (event) => {
-    // Handle search input and update the map's center
+    event.preventDefault();
     const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address: event.target.value }, (results, status) => {
+    geocoder.geocode({ address: event.target.search.value }, (results, status) => {
       if (status === window.google.maps.GeocoderStatus.OK) {
         setCenter({
           lat: results[0].geometry.location.lat(),
           lng: results[0].geometry.location.lng(),
         });
+        setMarker(null); // Reset marker when a new location is searched
       }
     });
   };
 
   const handleMapClick = (event) => {
     // Update marker's position on map click
-    setMarker({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+    setClickedLocation(event.latLng);
   };
+
+  const handleInfoWindowClose = () => {
+    setClickedLocation(null);
+  };
+
+  useEffect(() => {
+    if (clickedLocation) {
+      setMarker(clickedLocation);
+      setInfoWindow(clickedLocation);
+    }
+  }, [clickedLocation]);
 
   return (
     <LoadScript googleMapsApiKey="AIzaSyChsCzm5-iAjK2cMpj_garxpAQdC4YbqsE">
@@ -52,28 +65,24 @@ const MapComponent = () => {
         onLoad={onLoad}
         onClick={handleMapClick}
       >
-        {/* Add search input */}
-        <div>
-          <input
-            type="text"
-            placeholder="Search location"
-            onChange={handleSearch}
-          />
-        </div>
 
         {/* Add marker */}
-        {marker && <Marker position={{ lat: marker.lat, lng: marker.lng }} />}
+        {marker && <Marker position={{ lat: marker.lat(), lng: marker.lng() }} />}
+
+        {/* Add info window */}
+        {infoWindow && (
+          <InfoWindow
+            position={{ lat: infoWindow.lat(), lng: infoWindow.lng() }}
+            onCloseClick={handleInfoWindowClose}
+          >
+            <div>
+              <p>Clicked Location</p>
+            </div>
+          </InfoWindow>
+        )}
       </GoogleMap>
     </LoadScript>
   );
 };
 
-function App() {
-    return (
-        <div>
-            <MapComponent/>
-        </div>
-    );
-}
-
-export default App;
+export default MapComponent;
