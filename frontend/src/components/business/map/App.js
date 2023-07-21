@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [marker, setMarker] = useState(null);
-  const [infoWindow, setInfoWindow] = useState(null);
-  const [clickedLocation, setClickedLocation] = useState(null);
 
   const onLoad = (map) => {
     setMap(map);
@@ -27,9 +25,9 @@ const MapComponent = () => {
   }, []);
 
   const handleSearch = (event) => {
-    event.preventDefault();
+    // Handle search input and update the map's center
     const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address: event.target.search.value }, (results, status) => {
+    geocoder.geocode({ address: event.target.value }, (results, status) => {
       if (status === window.google.maps.GeocoderStatus.OK) {
         setCenter({
           lat: results[0].geometry.location.lat(),
@@ -42,19 +40,8 @@ const MapComponent = () => {
 
   const handleMapClick = (event) => {
     // Update marker's position on map click
-    setClickedLocation(event.latLng);
+    setMarker({ lat: event.latLng.lat(), lng: event.latLng.lng() });
   };
-
-  const handleInfoWindowClose = () => {
-    setClickedLocation(null);
-  };
-
-  useEffect(() => {
-    if (clickedLocation) {
-      setMarker(clickedLocation);
-      setInfoWindow(clickedLocation);
-    }
-  }, [clickedLocation]);
 
   return (
     <LoadScript googleMapsApiKey="AIzaSyChsCzm5-iAjK2cMpj_garxpAQdC4YbqsE">
@@ -67,19 +54,7 @@ const MapComponent = () => {
       >
 
         {/* Add marker */}
-        {marker && <Marker position={{ lat: marker.lat(), lng: marker.lng() }} />}
-
-        {/* Add info window */}
-        {infoWindow && (
-          <InfoWindow
-            position={{ lat: infoWindow.lat(), lng: infoWindow.lng() }}
-            onCloseClick={handleInfoWindowClose}
-          >
-            <div>
-              <p>Clicked Location</p>
-            </div>
-          </InfoWindow>
-        )}
+        {marker && <Marker position={{ lat: marker.lat, lng: marker.lng }} />}
       </GoogleMap>
     </LoadScript>
   );
