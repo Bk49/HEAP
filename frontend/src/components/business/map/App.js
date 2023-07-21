@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [marker, setMarker] = useState(null);
+  const [clickedLocation, setClickedLocation] = useState(null);
+  const [addressDetails, setAddressDetails] = useState(null);
 
   const onLoad = (map) => {
     setMap(map);
@@ -33,14 +35,26 @@ const MapComponent = () => {
           lat: results[0].geometry.location.lat(),
           lng: results[0].geometry.location.lng(),
         });
-        setMarker(null); // Reset marker when a new location is searched
+        setClickedLocation(null);
+        setAddressDetails(null);
       }
     });
   };
 
   const handleMapClick = (event) => {
     // Update marker's position on map click
-    setMarker({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+    setClickedLocation({
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+    });
+
+    // Reverse geocode the clicked location to get address details
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ location: { lat: event.latLng.lat(), lng: event.latLng.lng() } }, (results, status) => {
+      if (status === window.google.maps.GeocoderStatus.OK) {
+        setAddressDetails(results[0].formatted_address);
+      }
+    });
   };
 
   return (
@@ -52,9 +66,31 @@ const MapComponent = () => {
         onLoad={onLoad}
         onClick={handleMapClick}
       >
+        {/* Add search input */}
+        <div>
+          <input
+            type="text"
+            placeholder="Search location"
+            onChange={handleSearch}
+          />
+        </div>
 
         {/* Add marker */}
-        {marker && <Marker position={{ lat: marker.lat, lng: marker.lng }} />}
+        {clickedLocation && <Marker position={clickedLocation} />}
+
+        {/* Add info window */}
+        {addressDetails && clickedLocation && (
+          <InfoWindow
+            position={clickedLocation}
+            onCloseClick={() => setClickedLocation(null)}
+          >
+            <div>
+              <p>Address: {addressDetails}</p>
+              <p>Latitude: {clickedLocation.lat}</p>
+              <p>Longitude: {clickedLocation.lng}</p>
+            </div>
+          </InfoWindow>
+        )}
       </GoogleMap>
     </LoadScript>
   );
