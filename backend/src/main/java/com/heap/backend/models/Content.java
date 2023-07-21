@@ -14,7 +14,7 @@ import java.io.File;
 public class Content {
     
     private String name;
-//    private File file;
-    private HEAPDate date;
+    private String file;
+    private String date;
 
 }

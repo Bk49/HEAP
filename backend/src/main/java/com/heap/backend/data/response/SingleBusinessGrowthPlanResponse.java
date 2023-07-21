@@ -1,7 +1,6 @@
 package com.heap.backend.data.response;
 
 import com.heap.backend.models.BusinessGrowthPlan;
-import com.heap.backend.models.ReturnedMenu;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

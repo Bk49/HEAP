@@ -16,8 +16,9 @@ public class CreateBusinessGrowthPlanRequest {
 
     private String id;
     private String planName;
-    private HEAPDate startDate;
-    private HEAPDate endDate;
+    private String startDate;
+    private String endDate;
+    private double budget;
     private int priority;
     private String planType;
 
@@ -28,8 +29,8 @@ public class CreateBusinessGrowthPlanRequest {
     //2. Unique to MK (Marketing Strategy)
     private String method;
     private String promotionName;
-    private HEAPDate promoStartDate;
-    private HEAPDate promoEndDate;
+    private String promoStartDate;
+    private String promoEndDate;
     private String promoDescription;
     private String promoTnC;
     private Influencer[] influencer;

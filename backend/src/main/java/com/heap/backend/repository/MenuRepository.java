@@ -1,6 +1,5 @@
 package com.heap.backend.repository;
 
-import com.heap.backend.models.Menu;
 import com.heap.backend.models.StoredMenu;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
