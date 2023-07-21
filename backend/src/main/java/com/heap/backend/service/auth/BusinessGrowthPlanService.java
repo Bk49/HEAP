@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -38,7 +39,18 @@ public class BusinessGrowthPlanService {
 
             }
 
-            //Create Strategy based on planType
+            //Ensures that user does not have a plan name by the same planName
+            if (foodDeliveryMarketplacePlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
+                flyerDistributionMarketingRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
+                posterAndBannerMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
+                socialMediaMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
+                outletExpansionPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
+
+                throw new IllegalArgumentException("Duplicate Plan Name");
+
+            }
+
+            //Create Plan based on planType
             if ("FD".equals(request.getPlanType())) {
 
                 //1. If Food Delivery Marketing Strategy, Create FoodDeliveryMarketingPlan
@@ -46,13 +58,6 @@ public class BusinessGrowthPlanService {
                 //Check if menuID is legit
                 if (menuRepository.findById(request.getMenuId()).isEmpty()) {
                     throw new IllegalArgumentException("No such Menu");
-                }
-
-                //Ensures that user does not have a plan name by the same planName
-                if (foodDeliveryMarketplacePlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                    throw new IllegalArgumentException("Duplicate Plan Name");
-
                 }
 
                 //Create FoodDeliveryMarketingStrategy
@@ -242,8 +247,6 @@ public class BusinessGrowthPlanService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            boolean found = false;
-
             //Check each repository whether id can be found
 
             if (flyerDistributionMarketingRepository.findByIdAndUserId(bgpId, id).isPresent()) {
@@ -302,206 +305,246 @@ public class BusinessGrowthPlanService {
                 .response("Business Growth Plan has been deleted successfully")
                 .build();
     }
-//
-//    public Response update(String planId, UpdateBusinessGrowthPlanRequest request, String oldEmail) {
-//
-//        try {
-//
-//            User origUser = userRepository.findByEmail(oldEmail)
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-//            String id = origUser.getId();
-//
-//            BusinessGrowthPlan businessGrowthPlan = businessGrowthPlanRepository.findByIdAndUserId(planId, id)
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Business Growth Plan"));
-//
-//            //Create Strategy based on planType
-//            Strategy strategy = null;
-//
-//            //DEBUG: WHY DOES CODE KEEP GOING INTO FIRST IF, ALTHOUGH request plan type is "OE"
-//
-//            if ("FD".equals(request.getPlanType())) {
-//
-//                //1. If Food Delivery Marketing Strategy, Create FoodDeliveryMarketingStrategy
-//
-//                //Check if menuID is legit
-//                if (menuRepository.findById(request.getMenuId()).isEmpty()) {
-//                    throw new IllegalArgumentException("No such Menu");
-//                }
-//
-//                //Create FoodDeliveryMarketingStrategy
-//                strategy = FoodDeliveryMarketplacePlan.builder()
-//                        .menuId(request.getMenuId())
-//                        .containers(request.getContainers())
-//                        .build();
-//
-//            } else if ("MK".equals(request.getPlanType())) {
-//                //2. If Marketing, Create MarketingStrategy
-//
-//                //Decide which type of MarketingMethod to create based on method field
-//                MarketingMethod marketingMethod = null;
-//                if ("SM".equals(request.getMethod())) {
-//                    //2.1. If Social Media, Create SocialMediaMarketingMethod
-//                    marketingMethod = SocialMediaMarketingPlan.builder()
-//                            .promotionName(request.getPromotionName())
-//                            .promoStartDate(request.getPromoStartDate())
-//                            .promoEndDate(request.getPromoEndDate())
-//                            .promoDescription(request.getPromoDescription())
-//                            .promoTnC(request.getPromoTnC())
-//                            .influencer(request.getInfluencer())
-//                            .platform(request.getPlatform())
-//                            .contents(request.getContents())
-//                            .platformCost(request.getPlatformCost())
-//                            .platformDuration(request.getPlatformDuration())
-//                            .platformRate(request.getPlatformRate())
-//                            .build();
-//
-//                } else if ("PB".equals(request.getMethod())) {
-//                    //2.2. If Poster and Banner, Create PosterAndBannerMarketingMethod
-//                    marketingMethod = PosterAndBannerMarketingPlan.builder()
-//                            .promotionName(request.getPromotionName())
-//                            .promoStartDate(request.getPromoStartDate())
-//                            .promoEndDate(request.getPromoEndDate())
-//                            .promoDescription(request.getPromoDescription())
-//                            .promoTnC(request.getPromoTnC())
-//                            .influencer(request.getInfluencer())
-////                            .posterDesign(request.getPosterDesign())
-//                            .posterCost(request.getPosterCost())
-//                            .posterQuantity(request.getPosterQuantity())
-//                            .build();
-//
-//                } else if ("FD".equals(request.getMethod())) {
-//                    //2.3. If Flyer Distribution, Create FlyerDistributionMarketingMethod
-//                    marketingMethod = FlyerDistributionMarketingPlan.builder()
-//                            .promotionName(request.getPromotionName())
-//                            .promoStartDate(request.getPromoStartDate())
-//                            .promoEndDate(request.getPromoEndDate())
-//                            .promoDescription(request.getPromoDescription())
-//                            .promoTnC(request.getPromoTnC())
-//                            .influencer(request.getInfluencer())
-////                            .flyerDesign(request.getFlyerDesign())
-//                            .flyerCost(request.getFlyerCost())
-//                            .flyerQuantity(request.getFlyerQuantity())
-//                            .build();
-//
-//                }
-//
-//                //Create MarketingStrategy
-//                strategy = MarketingPlan.builder()
-//                        .method(request.getMethod())
-//                        .marketingMethod(marketingMethod)
-//                        .build();
-//
-//            } else if ("OE".equals(request.getPlanType())) {
-//
-//                //3. If Outlet Expansion, Create OutletExpansionStrategy
-//                strategy = OutletExpansionPlan.builder()
-//                        .address(request.getAddress())
-//                        .rentalPrice(request.getRentalPrice())
-//                        .renovation(request.getRenovation())
-//                        .staffs(request.getStaffs())
-//                        .build();
-//
-//            }
-//
-//            //Create BusinessGrowthPlan
-//            businessGrowthPlan.setUserId(id);
-//            businessGrowthPlan.setPlanName(request.getPlanName());
-//            businessGrowthPlan.setPriority(request.getPriority());
-//            businessGrowthPlan.setStartDate(request.getStartDate());
-//            businessGrowthPlan.setEndDate(request.getEndDate());
-//            businessGrowthPlan.setStrategy(strategy);
-//
-//            businessGrowthPlanRepository.save(businessGrowthPlan);
-//
-//
-//        } catch (IllegalArgumentException e) {
-//
-//            if (e.getMessage().equals("Invalid Token")) {
-//
-//                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-//                return ErrorResponse.builder()
-//                        .error("Bad Request: Invalid Token")
-//                        .message("User not found")
-//                        .build();
-//
-//            } else if (e.getMessage().equals("No such Menu")) {
-//
-//                //If menu cannot be found in the repository based on menuID, return ErrorResponse
-//                return ErrorResponse.builder()
-//                        .error("Bad Request: Invalid Menu")
-//                        .message("Please ensure menu ID is valid")
-//                        .build();
-//
-//            } else {
-//
-//                return ErrorResponse.builder()
-//                        .error("Bad Request: Invalid Business Growth Plan")
-//                        .message("Business Growth Plan not found")
-//                        .build();
-//            }
-//
-//        } catch (Exception e) {
-//
-//            //Catches any other form of exception as unknown error
-//            return ErrorResponse.builder()
-//                    .error("Internal Server Error: Unknown Error")
-//                    .message("An unknown error has occurred! Do try again!")
-//                    .build();
-//
-//        }
-//
-//        return SuccessResponse.builder()
-//                .response("Business Growth Plan has been updated successfully")
-//                .build();
-//    }
-//
-//    public Response findOne(String bgpId, String oldEmail) {
-//
-//        BusinessGrowthPlan businessGrowthPlan;
-//
-//        try {
-//
-//            User origUser = userRepository.findByEmail(oldEmail)
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-//            String id = origUser.getId();
-//
-//            businessGrowthPlan = businessGrowthPlanRepository.findByIdAndUserId(bgpId, id)
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Plan"));
-//
-//        } catch (IllegalArgumentException e) {
-//
-//            if (e.getMessage().equals("Invalid Token")) {
-//
-//                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-//                return ErrorResponse.builder()
-//                        .error("Bad Request: Invalid Token")
-//                        .message("User not found")
-//                        .build();
-//
-//            } else {
-//
-//                return ErrorResponse.builder()
-//                        .error("Bad Request: Invalid Business Growth Plan")
-//                        .message("Business Growth Plan not found")
-//                        .build();
-//            }
-//
-//        } catch (Exception e) {
-//
-//            //Catches any other form of exception as unknown error
-//            return ErrorResponse.builder()
-//                    .error("Internal Server Error: Unknown Error")
+
+    public Response update(String bgpId, UpdateBusinessGrowthPlanRequest request, String oldEmail) {
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            BusinessGrowthPlan businessGrowthPlan = find(bgpId, id);
+
+            //Create Plan based on planType
+            if ("FD".equals(request.getPlanType())) {
+
+                //1. If Food Delivery Marketing Strategy, Create FoodDeliveryMarketingPlan
+
+                //Check if menuID is legit
+                if (menuRepository.findById(request.getMenuId()).isEmpty()) {
+                    throw new IllegalArgumentException("No such Menu");
+                }
+
+                //Create FoodDeliveryMarketingStrategy
+                FoodDeliveryMarketplacePlan plan = FoodDeliveryMarketplacePlan.builder()
+                        .id(bgpId)
+                        .userId(id)
+                        .planName(request.getPlanName())
+                        .startDate(request.getStartDate())
+                        .endDate(request.getEndDate())
+                        .priority(request.getPriority())
+                        .planType(request.getPlanType())
+                        .menuId(request.getMenuId())
+                        .containers(request.getContainers())
+                        .build();
+
+                foodDeliveryMarketplacePlanRepository.save(plan);
+
+            } else if ("MK".equals(request.getPlanType())) {
+                //2. If Marketing, Create MarketingStrategy based on type of marketing strategy
+
+                //Decide which type of MarketingMethod to create based on method field
+                if ("SM".equals(request.getMethod())) {
+                    //2.1. If Social Media, Create SocialMediaMarketingPlan
+
+                    //Ensures that user does not have a plan name by the same planName
+                    if (socialMediaMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
+
+                        throw new IllegalArgumentException("Duplicate Plan Name");
+
+                    }
+
+                    SocialMediaMarketingPlan plan  = SocialMediaMarketingPlan.builder()
+                            .id(bgpId)
+                            .userId(id)
+                            .planName(request.getPlanName())
+                            .startDate(request.getStartDate())
+                            .endDate(request.getEndDate())
+                            .priority(request.getPriority())
+                            .planType(request.getPlanType())
+                            .method(request.getMethod())
+                            .promotion(request.getPromotion())
+                            .influencer(request.getInfluencer())
+                            .socialMedia(request.getSocialMedia())
+                            .build();
+
+                    socialMediaMarketingPlanRepository.save(plan);
+
+                } else if ("PB".equals(request.getMethod())) {
+
+                    //2.2. If Poster and Banner, Create PosterAndBannerMarketingPlan
+
+                    //Ensures that user does not have a plan name by the same planName
+                    if (posterAndBannerMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
+
+                        throw new IllegalArgumentException("Duplicate Plan Name");
+
+                    }
+
+                    PosterAndBannerMarketingPlan plan  = PosterAndBannerMarketingPlan.builder()
+                            .id(bgpId)
+                            .userId(id)
+                            .planName(request.getPlanName())
+                            .startDate(request.getStartDate())
+                            .endDate(request.getEndDate())
+                            .priority(request.getPriority())
+                            .planType(request.getPlanType())
+                            .method(request.getMethod())
+                            .promotion(request.getPromotion())
+                            .influencer(request.getInfluencer())
+                            .posterBanner(request.getPosterBanner())
+                            .build();
+
+                    posterAndBannerMarketingPlanRepository.save(plan);
+
+                } else if ("FD".equals(request.getMethod())) {
+                    //2.3. If Flyer Distribution, Create FlyerDistributionMarketingPlan
+
+                    //Ensures that user does not have a plan name by the same planName
+                    if (flyerDistributionMarketingRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
+
+                        throw new IllegalArgumentException("Duplicate Plan Name");
+
+                    }
+
+                    FlyerDistributionMarketingPlan plan = FlyerDistributionMarketingPlan.builder()
+                            .id(bgpId)
+                            .userId(id)
+                            .planName(request.getPlanName())
+                            .startDate(request.getStartDate())
+                            .endDate(request.getEndDate())
+                            .priority(request.getPriority())
+                            .planType(request.getPlanType())
+                            .method(request.getMethod())
+                            .promotion(request.getPromotion())
+                            .influencer(request.getInfluencer())
+                            .flyer(request.getFlyer())
+                            .build();
+
+                    flyerDistributionMarketingRepository.save(plan);
+                }
+
+            } else if ("OE".equals(request.getPlanType())) {
+
+                //3. If Outlet Expansion, Create OutletExpansionPlan
+
+                //Ensures that user does not have a plan name by the same planName
+                if (outletExpansionPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
+
+                    throw new IllegalArgumentException("Duplicate Plan Name");
+
+                }
+
+                OutletExpansionPlan plan  = OutletExpansionPlan.builder()
+                        .id(bgpId)
+                        .userId(id)
+                        .planName(request.getPlanName())
+                        .startDate(request.getStartDate())
+                        .endDate(request.getEndDate())
+                        .priority(request.getPriority())
+                        .planType(request.getPlanType())
+                        .address(request.getAddress())
+                        .rentalPrice(request.getRentalPrice())
+                        .renovation(request.getRenovation())
+                        .staffs(request.getStaffs())
+                        .build();
+
+                outletExpansionPlanRepository.save(plan);
+
+            } else {
+
+                throw new Exception();
+
+            }
+
+        } catch (IllegalArgumentException e) {
+
+            if (e.getMessage().equals("Invalid Token")) {
+
+                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            } else if (e.getMessage().equals("No such Menu")) {
+
+                //If menu cannot be found in the repository based on menuID, return ErrorResponse
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Menu")
+                        .message("Please ensure menu ID is valid")
+                        .build();
+
+            } else {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Business Growth Plan")
+                        .message("Business Growth Plan not found")
+                        .build();
+            }
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error: Unknown Error")
+                    .message("An unknown error has occurred! Do try again!")
+                    .build();
+
+        }
+
+        return SuccessResponse.builder()
+                .response("Business Growth Plan has been updated successfully")
+                .build();
+    }
+
+    public Response findOne(String bgpId, String oldEmail) {
+
+        BusinessGrowthPlan businessGrowthPlan;
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            businessGrowthPlan = find(bgpId, id);
+
+        } catch (IllegalArgumentException e) {
+
+            if (e.getMessage().equals("Invalid Token")) {
+
+                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            } else {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Business Growth Plan")
+                        .message("Business Growth Plan not found")
+                        .build();
+            }
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error: Unknown Error")
 //                    .message(e.getMessage())
-////                    .message("An unknown error has occurred! Do try again!")
-//                    .build();
-//
-//        }
-//
-//        return SingleBusinessGrowthPlanResponse.builder()
-//                .businessGrowthPlan(businessGrowthPlan)
-//                .build();
-//    }
-//
+                    .message("An unknown error has occurred! Do try again!")
+                    .build();
+
+        }
+
+        return SingleBusinessGrowthPlanResponse.builder()
+                .businessGrowthPlan(businessGrowthPlan)
+                .build();
+    }
+
 //    public Response findAll(String oldEmail) {
 //
 //        List<BusinessGrowthPlan> businessGrowthPlans = new ArrayList<>();
@@ -544,5 +587,50 @@ public class BusinessGrowthPlanService {
 //                .build();
 //
 //    }
+
+    public BusinessGrowthPlan find(String bgpId, String userId) {
+
+        BusinessGrowthPlan businessGrowthPlan = null;
+
+        if (flyerDistributionMarketingRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
+
+            businessGrowthPlan = flyerDistributionMarketingRepository
+                    .findByIdAndUserId(bgpId, userId)
+                    .orElseThrow(() -> new IllegalArgumentException("No such Plan"));
+
+        } else if (foodDeliveryMarketplacePlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
+
+            businessGrowthPlan = foodDeliveryMarketplacePlanRepository
+                    .findByIdAndUserId(bgpId, userId)
+                    .orElseThrow(() -> new IllegalArgumentException("No such Plan"));
+
+        } else if (outletExpansionPlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
+
+            businessGrowthPlan = outletExpansionPlanRepository
+                    .findByIdAndUserId(bgpId, userId)
+                    .orElseThrow(() -> new IllegalArgumentException("No such Plan"));
+
+        } else if (posterAndBannerMarketingPlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
+
+            businessGrowthPlan = posterAndBannerMarketingPlanRepository
+                    .findByIdAndUserId(bgpId, userId)
+                    .orElseThrow(() -> new IllegalArgumentException("No such Plan"));
+
+        } else if (socialMediaMarketingPlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
+
+            businessGrowthPlan = socialMediaMarketingPlanRepository
+                    .findByIdAndUserId(bgpId, userId)
+                    .orElseThrow(() -> new IllegalArgumentException("No such Plan"));
+
+        } else {
+
+            throw new IllegalArgumentException("Invalid Business Growth Plan");
+
+        }
+
+        return businessGrowthPlan;
+
+    }
+
 
 }
