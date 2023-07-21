@@ -4,7 +4,8 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 const MapComponent = () => {
   const [map, setMap] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
-  const [markers, setMarkers] = useState([]);
+  const [marker, setMarker] = useState(null);
+  const [markerAdded, setMarkerAdded] = useState(false);
 
   const onLoad = (map) => {
     setMap(map);
@@ -38,8 +39,8 @@ const MapComponent = () => {
   };
 
   const handleMapClick = (event) => {
-    // Add a new marker on map click
-    setMarkers([...markers, { lat: event.latLng.lat(), lng: event.latLng.lng() }]);
+    // Update marker's position on map click
+    setMarker({ lat: event.latLng.lat(), lng: event.latLng.lng() });
   };
 
   return (
@@ -60,10 +61,8 @@ const MapComponent = () => {
           />
         </div>
 
-        {/* Add markers */}
-        {markers.map((marker, index) => (
-          <Marker key={index} position={{ lat: marker.lat, lng: marker.lng }} />
-        ))}
+        {/* Add marker */}
+        {marker && <Marker position={{ lat: marker.lat, lng: marker.lng }} />}
       </GoogleMap>
     </LoadScript>
   );
@@ -78,41 +77,3 @@ function App() {
 }
 
 export default App;
-
-
-// import React from "react";
-// import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-
-// const containerStyle = {
-//     width: "652px",
-//     height: "342px",
-// };
-
-// const center = {
-//     lat: 1.3521,
-//     lng: 103.8198,
-// };
-
-// const Map = () => {
-//     return (
-//         <LoadScript googleMapsApiKey="AIzaSyChsCzm5-iAjK2cMpj_garxpAQdC4YbqsE">
-//             <GoogleMap
-//                 mapContainerStyle={containerStyle}
-//                 center={center}
-//                 zoom={10}
-//             >
-//                 <Marker position={center} />
-//             </GoogleMap>
-//         </LoadScript>
-//     );
-// };
-
-// function App() {
-//     return (
-//         <div>
-//             <Map />
-//         </div>
-//     );
-// }
-
-// export default App;
