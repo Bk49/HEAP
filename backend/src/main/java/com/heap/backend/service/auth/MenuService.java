@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -233,7 +234,7 @@ public class MenuService {
 
     public Response findOne(String menuId, String oldEmail) {
 
-        Menu menu = null;
+        Menu menu;
 
         try {
 
@@ -290,15 +291,7 @@ public class MenuService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            List<Menu> returnedMenuList = menuRepository.findAllByUserId(id);
-
-            for (Menu m : returnedMenuList) {
-
-                System.out.println(m);
-
-                menus.add(m);
-
-            }
+            menus = menuRepository.findAllByUserId(id);
 
         } catch (IllegalArgumentException e) {
 
@@ -313,6 +306,8 @@ public class MenuService {
             }
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
