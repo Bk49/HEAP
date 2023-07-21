@@ -90,17 +90,10 @@ public class BusinessGrowthPlanService {
                             .endDate(request.getEndDate())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
-                            .promotionName(request.getPromotionName())
-                            .promoStartDate(request.getPromoStartDate())
-                            .promoEndDate(request.getPromoEndDate())
-                            .promoDescription(request.getPromoDescription())
-                            .promoTnC(request.getPromoTnC())
+                            .method(request.getMethod())
+                            .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
-                            .platform(request.getPlatform())
-                            .contents(request.getContents())
-                            .platformCost(request.getPlatformCost())
-                            .platformDuration(request.getPlatformDuration())
-                            .platformRate(request.getPlatformRate())
+                            .socialMedia(request.getSocialMedia())
                             .build();
 
                     socialMediaMarketingPlanRepository.save(plan);
@@ -123,15 +116,10 @@ public class BusinessGrowthPlanService {
                             .endDate(request.getEndDate())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
-                            .promotionName(request.getPromotionName())
-                            .promoStartDate(request.getPromoStartDate())
-                            .promoEndDate(request.getPromoEndDate())
-                            .promoDescription(request.getPromoDescription())
-                            .promoTnC(request.getPromoTnC())
+                            .method(request.getMethod())
+                            .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
-                            .posterDesign(request.getPosterDesign())
-                            .posterCost(request.getPosterCost())
-                            .posterQuantity(request.getPosterQuantity())
+                            .posterBanner(request.getPosterBanner())
                             .build();
 
                     posterAndBannerMarketingPlanRepository.save(plan);
@@ -153,15 +141,10 @@ public class BusinessGrowthPlanService {
                             .endDate(request.getEndDate())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
-                            .promotionName(request.getPromotionName())
-                            .promoStartDate(request.getPromoStartDate())
-                            .promoEndDate(request.getPromoEndDate())
-                            .promoDescription(request.getPromoDescription())
-                            .promoTnC(request.getPromoTnC())
+                            .method(request.getMethod())
+                            .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
-                            .flyerDesign(request.getFlyerDesign())
-                            .flyerCost(request.getFlyerCost())
-                            .flyerQuantity(request.getFlyerQuantity())
+                            .flyer(request.getFlyer())
                             .build();
 
                     flyerDistributionMarketingRepository.save(plan);
@@ -250,53 +233,75 @@ public class BusinessGrowthPlanService {
                 .response("Business Growth Plan has been created successfully")
                 .build();
     }
-//
-//    public Response delete(String bgpId, String oldEmail) {
-//
-//        try {
-//
-//            User origUser = userRepository.findByEmail(oldEmail)
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-//            String id = origUser.getId();
-//
-//            if (businessGrowthPlanRepository.findByIdAndUserId(bgpId, id).isEmpty()) {
-//
-//                throw new IllegalArgumentException("No Such Business Growth Plan");
-//
-//            }
-//
-//            businessGrowthPlanRepository.deleteByUserIdAndId(id, bgpId);
-//
-//        } catch (IllegalArgumentException e) {
-//
-//            if ("Invalid Token".equals(e.getMessage())) {
-//
-//                return ErrorResponse.builder()
-//                        .error("Bad Request: Invalid Token")
-//                        .message("User not found")
-//                        .build();
-//
-//            } else {
-//                return ErrorResponse.builder()
-//                        .error("Bad Request: Invalid Business Growth Plan")
-//                        .message("Business Growth Plan not found")
-//                        .build();
-//
-//            }
-//
-//        } catch (Exception e) {
-//
-//            //Catches any other form of exception as unknown error
-//            return ErrorResponse.builder()
-//                    .error("Internal Server Error")
-//                    .message("Unknown Error")
-//                    .build();
-//        }
-//
-//        return SuccessResponse.builder()
-//                .response("Business Growth Plan has been deleted successfully")
-//                .build();
-//    }
+
+    public Response delete(String bgpId, String oldEmail) {
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            boolean found = false;
+
+            //Check each repository whether id can be found
+
+            if (flyerDistributionMarketingRepository.findByIdAndUserId(bgpId, id).isPresent()) {
+
+                flyerDistributionMarketingRepository.deleteByUserIdAndId(id, bgpId);
+
+            } else if (foodDeliveryMarketplacePlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
+
+                foodDeliveryMarketplacePlanRepository.deleteByUserIdAndId(id, bgpId);
+
+            } else if (outletExpansionPlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
+
+                outletExpansionPlanRepository.deleteByUserIdAndId(id, bgpId);
+
+            } else if (posterAndBannerMarketingPlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
+
+                posterAndBannerMarketingPlanRepository.deleteByUserIdAndId(id, bgpId);
+
+            } else if (socialMediaMarketingPlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
+
+                socialMediaMarketingPlanRepository.deleteByUserIdAndId(id, bgpId);
+
+            } else {
+
+                throw new IllegalArgumentException("Invalid Business Growth Plan");
+
+            }
+
+        } catch (IllegalArgumentException e) {
+
+            if ("Invalid Token".equals(e.getMessage())) {
+
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Token")
+                        .message("User not found")
+                        .build();
+
+            } else {
+                return ErrorResponse.builder()
+                        .error("Bad Request: Invalid Business Growth Plan")
+                        .message("Business Growth Plan not found")
+                        .build();
+
+            }
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error")
+                    .message("Unknown Error")
+                    .build();
+        }
+
+        return SuccessResponse.builder()
+                .response("Business Growth Plan has been deleted successfully")
+                .build();
+    }
 //
 //    public Response update(String planId, UpdateBusinessGrowthPlanRequest request, String oldEmail) {
 //

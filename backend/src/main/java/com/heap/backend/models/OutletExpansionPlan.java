@@ -29,9 +29,9 @@ public class OutletExpansionPlan implements BusinessGrowthPlan {
     @NotBlank
     private int priority;
     @NotBlank
+    private String planType;
 
     //Specific to OutletExpansionPlan
-    private String planType;
     private String address;
     private Staff[] staffs;
     private double rentalPrice;

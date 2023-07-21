@@ -33,16 +33,10 @@ public class FlyerDistributionMarketingPlan implements BusinessGrowthPlan {
 
     //Common to all MarketingPlan
     private String method;
-    private String promotionName;
-    private String promoStartDate;
-    private String promoEndDate;
-    private String promoDescription;
-    private String promoTnC;
+    private Promotion promotion;
     private Influencer[] influencer;
 
     //Unique to this FlyerDistributionMarketingPlan
-    private String flyerDesign;
-    private double flyerCost;
-    private double flyerQuantity;
+    private Flyer flyer;
 
 }

@@ -27,27 +27,15 @@ public class CreateBusinessGrowthPlanRequest {
     private Container[] containers;
 
     //2. Unique to MK (Marketing Strategy)
+    private Promotion promotion;
     private String method;
-    private String promotionName;
-    private String promoStartDate;
-    private String promoEndDate;
-    private String promoDescription;
-    private String promoTnC;
     private Influencer[] influencer;
     //2.1. Unique to SocialMedia
-    private String platform;
-    private Content[] contents;
-    private double platformCost;
-    private double platformRate;
-    private double platformDuration;
+    private SocialMedia socialMedia;
     //2.2. Unique to PosterBanner
-    private String posterDesign;
-    private double posterCost;
-    private double posterQuantity;
+    private PosterBanner posterBanner;
     //2.3. Unique to FlyerDistribution
-    private String flyerDesign;
-    private double flyerCost;
-    private double flyerQuantity;
+    private Flyer flyer;
 
     //3. Unique to OutletExpansion
     private String address;

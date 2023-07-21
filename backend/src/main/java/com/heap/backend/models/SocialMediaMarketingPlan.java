@@ -34,18 +34,10 @@ public class SocialMediaMarketingPlan implements BusinessGrowthPlan {
 
     //Common to all MarketingPlan
     private String method;
-    private String promotionName;
-    private String promoStartDate;
-    private String promoEndDate;
-    private String promoDescription;
-    private String promoTnC;
+    private Promotion promotion;
     private Influencer[] influencer;
 
     //Unique to SocialMediaMarketingPlan
-    private String platform;
-    private Content[] contents;
-    private double platformCost;
-    private double platformRate;
-    private double platformDuration;
+    private SocialMedia socialMedia;
 
 }

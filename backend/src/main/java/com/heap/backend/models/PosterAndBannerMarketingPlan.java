@@ -33,16 +33,10 @@ public class PosterAndBannerMarketingPlan implements BusinessGrowthPlan {
 
     //Common to all MarketingPlan
     private String method;
-    private String promotionName;
-    private String promoStartDate;
-    private String promoEndDate;
-    private String promoDescription;
-    private String promoTnC;
+    private Promotion promotion;
     private Influencer[] influencer;
 
     //Unique to PosterAndBannerMarketingPlan
-    private String posterDesign;
-    private double posterCost;
-    private double posterQuantity;
+    private PosterBanner posterBanner;
 
 }
