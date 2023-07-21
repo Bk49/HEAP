@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class MenuSection {
+
     private String name;
     private Item[] items;
 

@@ -1,6 +1,6 @@
 package com.heap.backend.data.response;
 
-import com.heap.backend.models.ReturnedMenu;
+import com.heap.backend.models.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class MultipleMenuResponse implements Response {
 
-    private List<ReturnedMenu> returnedMenus;
+    private List<Menu> menus;
 
 }

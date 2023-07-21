@@ -74,7 +74,4 @@ public class User implements UserDetails{
         return true;
     }
 
-    public User duplicate() {
-        return new User(this.id, this.email, this.password, this.business.duplicate());
-    }
 }
