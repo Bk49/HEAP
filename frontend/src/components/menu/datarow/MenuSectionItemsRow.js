@@ -26,8 +26,6 @@ const MenuSectionItemsRow = ({
                 text: recipe.name,
                 value: recipe.id,
             }));
-            console.log(dropdownChoices)
-
             setChoices((prev) => [...prev, ...dropdownChoices]);
         })();
     }, []);

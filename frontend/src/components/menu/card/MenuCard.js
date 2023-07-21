@@ -11,13 +11,7 @@ import { Fragment } from "react";
 import ConfirmDeleteDialog from "../../common/dialog/ConfirmDeleteDialog";
 
 const MenuCard = ({ menu }) => {
-    const {
-        id,
-        name,
-        items,
-        sections,
-        image = "default",
-    } = menu;
+    const { id, name, sections, image = "default" } = menu;
     const navigate = useNavigate();
 
     return (
@@ -33,10 +27,15 @@ const MenuCard = ({ menu }) => {
                         {name}
                     </Typography>
                     <MenuCardDetails type="sections">
-                        {sections} Sections
+                        {sections.length} Sections
                     </MenuCardDetails>
                     <MenuCardDetails type="preparation">
-                        {items} Food & Beverages
+                        {sections.length === 0
+                            ? 0
+                            : sections
+                                  .map(({ items }) => items.length)
+                                  .reduce((a, b) => a + b)}{" "}
+                        Food & Beverages
                     </MenuCardDetails>
                 </CardContent>
                 <CardActions>
@@ -46,7 +45,7 @@ const MenuCard = ({ menu }) => {
                     >
                         Edit
                     </SmallButton>
-                    <ConfirmDeleteDialog name={name} type="menu" />
+                    <ConfirmDeleteDialog id={id} name={name} type="menu" />
                 </CardActions>
             </Card>
         </Fragment>

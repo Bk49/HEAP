@@ -1,18 +1,30 @@
 import Cookies from "js-cookie";
 import { protectedInstance as instance } from "../instance";
 
-const getMenu = async ({ params: { menuId } }) => {
+const getMenu = async ({ params: { id } }) => {
     try {
-        const result = await instance.get(`/user/findMenu/${menuId}`, {
+        const result = await instance.get(`/user/findMenu/${id}`, {
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
             // headers: {
-            //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpQGdtYWlsLmNvbSIsImlhdCI6MTY4OTA0MDQyMSwiZXhwIjoxNjg5MTI2ODIxfQ.dq4Xgx8AColJm86n4vJPOvzhVQs221XxoaHvbW74q1w"}`,
+            //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpMkBnbWFpbC5jb20iLCJpYXQiOjE2ODk5Mjg2NjAsImV4cCI6MTY5MDAxNTA2MH0.LKRKFJgf10iAWp4kdqO_VI-_xunsID94DQuTUn_AggU"}`,
             // },
         });
 
-        return result.data;
+        const { sections, ...other } = result.data.returnedMenu;
+        const refactoredSections = sections.map(
+            ({ items, ...otherSectionFields }) => ({
+                ...otherSectionFields,
+                items: items.map(({ id, price }) => ({
+                    item: id,
+                    price: price,
+                })),
+            })
+        );
+        console.log({ menu: { ...other, sections: refactoredSections } });
+        return { menu: { ...other, sections: refactoredSections } };
     } catch (e) {
         let msg = "";
+        console.log(e);
         if (!e.response) {
             msg =
                 "Get menu unsuccessful due to network error!\nPlease check your internet connection!";

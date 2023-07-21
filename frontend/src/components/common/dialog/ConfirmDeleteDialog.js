@@ -11,6 +11,8 @@ import { Fragment } from "react";
 import Button from "@mui/material/Button";
 import { grey } from "@mui/material/colors";
 import deleteRecipe from "../../../axios/recipe/deleteRecipeAPI";
+import deleteMenu from "../../../axios/menu/deleteMenuAPI";
+import deleteBusiness from "../../../axios/business/deleteBusinessAPI";
 import { queueError } from "../../../functions/formHandling";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
@@ -76,10 +78,22 @@ const ConfirmDeleteDialog = ({
                     <Button
                         onClick={async () => {
                             try {
-                                const result = await deleteRecipe(id);
-                                navigate("/my-recipes", {
-                                    state: { success: result },
-                                });
+                                if (type === "recipe") {
+                                    const result = await deleteRecipe(id);
+                                    navigate("/my-recipes", {
+                                        state: { success: result },
+                                    });
+                                } else if (type === "menu") {
+                                    const result = await deleteMenu(id);
+                                    navigate("/my-menus", {
+                                        state: { success: result },
+                                    });
+                                } else {
+                                    const result = await deleteBusiness(id);
+                                    navigate("/my-plans", {
+                                        state: { success: result },
+                                    });
+                                }
                             } catch (e) {
                                 queueError(e, enqueueSnackbar);
                             }
