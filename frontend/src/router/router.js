@@ -24,6 +24,7 @@ import getMenu from "../axios/menu/getMenuAPI";
 import getAllMenus from "../axios/menu/getAllMenusAPI";
 import getBusiness from "../axios/business/getBusinessAPI";
 import getUser from "../axios/user/getUserAPI";
+import MyBusinessGrowthPlan from "../pages/business/MyBusinessGrowthPlan";
 
 export default createBrowserRouter([
     {
@@ -160,6 +161,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <MySummary />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "my-business-growth-plan",
+        element: (
+            <ProtectedRoute>
+                <MyBusinessGrowthPlan />
             </ProtectedRoute>
         ),
     },
