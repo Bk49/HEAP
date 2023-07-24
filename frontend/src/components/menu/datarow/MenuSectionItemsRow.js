@@ -20,13 +20,16 @@ const MenuSectionItemsRow = ({
 
     useEffect(() => {
         (async () => {
-            const {recipes} = await getAllRecipes();
+            const { recipes } = await getAllRecipes();
             const dropdownChoices = await recipes.map((recipe, index) => ({
                 key: index,
                 text: recipe.name,
                 value: recipe.id,
             }));
-            setChoices((prev) => [...prev, ...dropdownChoices]);
+            setChoices([
+                { text: "Please Select a Recipe", value: "" },
+                ...dropdownChoices,
+            ]);
         })();
     }, []);
 
