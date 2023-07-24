@@ -1,6 +1,7 @@
 package com.heap.backend.models;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -44,17 +45,5 @@ public class Recipe {
     @NotBlank
     private RecipeSteps[] steps;
 
-    public Recipe duplicate() {
-        return Recipe.builder()
-                .id(this.id)
-                .userId(this.userId)
-                .name(this.name)
-                .category(this.category)
-                .cost(this.cost)
-                .image(this.image)
-                .description(this.description)
-                .ingredients(this.ingredients.clone())
-                .steps(this.steps.clone())
-                .build();
-    }
+    private String createDateTime;
 }

@@ -3,13 +3,17 @@ package com.heap.backend.service.auth;
 import com.heap.backend.data.request.CreateRecipeRequest;
 import com.heap.backend.data.request.UpdateRecipeRequest;
 import com.heap.backend.data.response.*;
+import com.heap.backend.models.HEAPDate;
 import com.heap.backend.models.Recipe;
 import com.heap.backend.models.User;
 import com.heap.backend.repository.RecipeRepository;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,6 +28,9 @@ public class RecipeService {
             User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
+            //Generate current DateTime String
+            String currentDateTimeStr = new HEAPDate().toString();
+
             //Creating Recipe
             Recipe recipe = Recipe.builder()
                     .userId(id)
@@ -34,6 +41,7 @@ public class RecipeService {
                     .image(request.getImage())
                     .ingredients(request.getIngredients())
                     .steps(request.getSteps())
+                    .createDateTime(currentDateTimeStr)
                     .build();
 
             //If Recipe of the same name and user exists, throws IllegalArgumentException
@@ -233,7 +241,9 @@ public class RecipeService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            recipes = recipeRepository.findAllByUserId(id);
+//            recipes = recipeRepository.findAllByUserId(id);
+
+            recipes = recipeRepository.findAllByUserIdOrderByCreateDateTimeDesc(id);
 
         } catch (IllegalArgumentException e) {
 
