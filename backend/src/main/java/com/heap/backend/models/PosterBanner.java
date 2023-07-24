@@ -15,6 +15,6 @@ public class PosterBanner {
     private String design;
     private double cost;
     private double quantity;
-    private String location;
+    private String[] location;
 
 }
