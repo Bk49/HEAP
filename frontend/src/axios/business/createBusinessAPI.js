@@ -4,7 +4,7 @@ import handleBusinessField from "../../functions/handleBusinessField";
 
 const createBusiness = async (data) => {
     try {
-        const payload = handleBusinessField(data);
+        const payload = await handleBusinessField(data);
         const result = await instance.post(`/user/createBGP`, payload, {
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
             // headers: {
