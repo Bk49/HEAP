@@ -33,30 +33,31 @@ public class UpdateProfileService {
         try {
 
             origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException()) ;
+                    .orElseThrow(() -> new IllegalArgumentException("No such user found"));
             String id = origUser.getId();
 
-            //Creates new business class based on updateRequest
-            Business business = origUser.getBusiness().duplicate();
+            //Changes business class based on updateRequest
+            Business business = origUser.getBusiness();
             business.setBusinessName(request.getBusinessName());
             business.setBusinessType(request.getBusinessType());
             business.setCuisineType(request.getCuisineType());
             business.setFusion(request.isFusion());
             business.setStoreAddress(request.getStoreAddress());
             business.setPostalCode(request.getPostalCode());
+            origUser.setBusiness(business);
 
-            //Creates new user based on updateRequest
-            User user = User.builder()
-                    .id(id)
-                    .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .business(business)
-                    .build();
+            //Changes user based on updateRequest
+            origUser.setEmail(request.getEmail());
 
-            //Deletes previous entity of user
-            userRepository.delete(origUser);
+            //In the case that user wants to change password
+            if (request.getPassword() != null) {
+
+                origUser.setPassword(passwordEncoder.encode(request.getPassword()));
+
+            }
+
             //Attempts to save new entity of user using register
-            userRepository.save(user);
+            userRepository.save(origUser);
 
         } catch (IllegalArgumentException e) {
 
