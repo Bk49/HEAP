@@ -33,4 +33,6 @@ public class Menu {
 
     private String image;
 
+    private String createDateTime;
+
 }

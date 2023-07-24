@@ -11,7 +11,7 @@ public interface MenuRepository extends MongoRepository<Menu, String> {
 
     Optional<Menu> findByIdAndUserId(String id, String userId);
 
-    List<Menu> findAllByUserId(String userId);
+    List<Menu> findAllByUserIdOrderByCreateDateTimeDesc(String userId);
 
     void deleteByUserIdAndId(String userId, String id);
 }

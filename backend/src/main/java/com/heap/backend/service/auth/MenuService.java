@@ -26,6 +26,9 @@ public class MenuService {
             User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
+            //Generate current DateTime String
+            String currentDateTimeStr = new HEAPDate().toString();
+
             //Checks through Items in the Menu to see if these are legit recipe in entries
             MenuSection[] menuSections = request.getSections();
             MenuSection[] storedMenuSections = new MenuSection[menuSections.length];
@@ -64,6 +67,8 @@ public class MenuService {
                     .name(request.getName())
                     .type(request.getType())
                     .image(request.getImage())
+                    .createDateTime(currentDateTimeStr)
+                    .sections(storedMenuSections)
                     .build();
 
             //If non-required field (Image) is filled
@@ -300,7 +305,9 @@ public class MenuService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             String id = origUser.getId();
 
-            menus = menuRepository.findAllByUserId(id);
+//            menus = menuRepository.findAllByUserId(id);
+
+            menus = menuRepository.findAllByUserIdOrderByCreateDateTimeDesc(id);
 
         } catch (IllegalArgumentException e) {
 
@@ -316,7 +323,7 @@ public class MenuService {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+//            e.printStackTrace();
 
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
