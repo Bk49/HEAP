@@ -9,19 +9,7 @@ const getMenu = async ({ params: { id } }) => {
             //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpMkBnbWFpbC5jb20iLCJpYXQiOjE2ODk5Mjg2NjAsImV4cCI6MTY5MDAxNTA2MH0.LKRKFJgf10iAWp4kdqO_VI-_xunsID94DQuTUn_AggU"}`,
             // },
         });
-
-        const { sections, ...other } = result.data.returnedMenu;
-        const refactoredSections = sections.map(
-            ({ items, ...otherSectionFields }) => ({
-                ...otherSectionFields,
-                items: items.map(({ id, price }) => ({
-                    item: id,
-                    price: price,
-                })),
-            })
-        );
-        console.log({ menu: { ...other, sections: refactoredSections } });
-        return { menu: { ...other, sections: refactoredSections } };
+        return result.data;
     } catch (e) {
         let msg = "";
         console.log(e);
