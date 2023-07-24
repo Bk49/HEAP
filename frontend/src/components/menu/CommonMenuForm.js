@@ -49,7 +49,7 @@ const CommonMenuForm = ({ isCreate = false, loaderData}) => {
                         try {
                             const res = isCreate
                                 ? await createMenu(data)
-                                : await updateMenu(data, data.menuId);
+                                : await updateMenu(data, data.id);
                             navigate("/my-menus", {
                                 state: { success: res },
                             }); 
