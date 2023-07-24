@@ -31,4 +31,6 @@ public class Menu {
     @NotBlank
     private String type;
 
+    private String image;
+
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -64,8 +63,13 @@ public class MenuService {
                     .userId(id)
                     .name(request.getName())
                     .type(request.getType())
-                    .sections(storedMenuSections)
+                    .image(request.getImage())
                     .build();
+
+            //If non-required field (Image) is filled
+            if (request.getImage() != null) {
+                storedMenu.setImage(request.getImage());
+            }
 
             menuRepository.save(storedMenu);
 
@@ -169,6 +173,11 @@ public class MenuService {
 
             storedMenu.setName(request.getName());
             storedMenu.setType(request.getType());
+
+            if (request.getImage() != null) {
+                storedMenu.setImage(request.getImage());
+            }
+
 
             //Checks through Items in the Menu to see if these are legit recipe in entries
             MenuSection[] menuSections = request.getSections();

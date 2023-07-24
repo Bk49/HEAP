@@ -15,5 +15,6 @@ public class UpdateMenuRequest {
     private String name;
     private MenuSection[] sections;
     private String type;
+    private String image;
 
 }
