@@ -23,6 +23,7 @@ import getRecipe from "../axios/recipe/getRecipeAPI";
 import getMenu from "../axios/menu/getMenuAPI";
 import getAllMenus from "../axios/menu/getAllMenusAPI";
 import getBusiness from "../axios/business/getBusinessAPI";
+import getUser from "../axios/user/getUserAPI";
 
 export default createBrowserRouter([
     {
@@ -64,6 +65,10 @@ export default createBrowserRouter([
             <ProtectedRoute>
                 <Profile />
             </ProtectedRoute>
+        ),
+        loader: getUser,
+        errorElement: (
+            <Error400 msg="The requested user is not in the database" />
         ),
     },
     {

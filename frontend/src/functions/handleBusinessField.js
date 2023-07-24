@@ -22,7 +22,7 @@ const handleBusinessField = async (data) => {
         priority: priority,
         planType: planType,
     };
-    
+
     // Inject additional fields to payload based on planType (Filtering unnecessary data from other forms)
     if (planType === "FD") {
         const { marketplace, containers, menuId } = other;

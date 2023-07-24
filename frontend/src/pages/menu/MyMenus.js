@@ -7,8 +7,8 @@ import MenuCard from "../../components/menu/card/MenuCard";
 
 const MyMenus = () => {
     const navigate = useNavigate();
-    const { returnedMenus: menus } = useLoaderData();
-
+    const { menus } = useLoaderData();
+    
     return (
         <Fragment>
             <HeadingOne divider={true}>My Menus</HeadingOne>

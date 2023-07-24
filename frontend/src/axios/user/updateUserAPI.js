@@ -1,11 +1,9 @@
 import Cookies from "js-cookie";
 import { protectedInstance as instance } from "../instance";
-import handleBusinessField from "../../functions/handleBusinessField";
 
-const createBusiness = async (data) => {
+const updateUser = async (data) => {
     try {
-        const payload = await handleBusinessField(data);
-        const result = await instance.post(`/user/createBGP`, payload, {
+        const result = await instance.put(`/user/update`, data, {
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
             // headers: {
             //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpQGdtYWlsLmNvbSIsImlhdCI6MTY4OTA0MDQyMSwiZXhwIjoxNjg5MTI2ODIxfQ.dq4Xgx8AColJm86n4vJPOvzhVQs221XxoaHvbW74q1w"}`,
@@ -16,7 +14,7 @@ const createBusiness = async (data) => {
         let msg = "";
         if (!e.response) {
             msg =
-                "Create business growth plan unsuccessful due to network error!\nPlease check your internet connection!";
+                "Update user unsuccessful due to network error!\nPlease check your internet connection!";
         } else {
             const { error, message } = e.response.data;
             msg = error + "\n" + message;
@@ -26,4 +24,4 @@ const createBusiness = async (data) => {
     }
 };
 
-export default createBusiness;
+export default updateUser;
