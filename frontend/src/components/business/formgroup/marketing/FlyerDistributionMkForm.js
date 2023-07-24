@@ -17,7 +17,7 @@ const FlyerDistributionMkForm = () => {
     return (
         <Fragment>
             <CommonFieldArray
-                name="location"
+                name="flyer.location"
                 heading="Location to Distribute"
                 Component={LocationRow}
             />

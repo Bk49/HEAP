@@ -6,6 +6,11 @@ import BGPFoodDeliveryForm from "./formgroup/bgp/BGPFoodDeliveryForm";
 import BGPOutletExpansionForm from "./formgroup/bgp/BGPOutletExpansionForm";
 import BGPMarketingForm from "./formgroup/bgp/BGPMarketingForm";
 import SubmitFormGroup from "../common/form/SubmitFormGroup";
+import { queueError } from "../../functions/formHandling";
+import { enqueueSnackbar } from "notistack";
+import createBusiness from "../../axios/business/createBusinessAPI";
+import updateBusiness from "../../axios/business/updateBusinessAPI";
+import { useNavigate } from "react-router-dom";
 
 const CommonBusinessGrowthPlanForm = ({ isCreate = true, loaderData }) => {
     const formMethods = useForm({
@@ -13,6 +18,7 @@ const CommonBusinessGrowthPlanForm = ({ isCreate = true, loaderData }) => {
     });
     const { watch } = formMethods;
     const currentPlan = watch("planType");
+    const navigate = useNavigate();
 
     return (
         <Fragment>
@@ -34,6 +40,20 @@ const CommonBusinessGrowthPlanForm = ({ isCreate = true, loaderData }) => {
                     submitErrorText={`${
                         isCreate ? "Creation" : "Update"
                     } of business growth plan is unsuccessful, please check your input`}
+                    onSubmit={async (data) => {
+                        try {
+                            console.log(data)
+                            const res = isCreate
+                                ? await createBusiness(data)
+                                : await updateBusiness(data, data.id);
+                            // To be changed to /my-plans
+                            navigate("/my-summary", {
+                                state: { success: res },
+                            });
+                        } catch (e) {
+                            queueError(e, enqueueSnackbar);
+                        }
+                    }}
                 />
             </FormProvider>
         </Fragment>
