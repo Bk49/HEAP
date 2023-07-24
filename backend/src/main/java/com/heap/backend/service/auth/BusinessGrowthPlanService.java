@@ -50,6 +50,9 @@ public class BusinessGrowthPlanService {
 
             }
 
+            //Generate current DateTime String
+            String currentDateTimeStr = new HEAPDate().toString();
+
             //Create Plan based on planType
             if ("FD".equals(request.getPlanType())) {
 
@@ -68,6 +71,7 @@ public class BusinessGrowthPlanService {
                         .endDate(request.getEndDate())
                         .priority(request.getPriority())
                         .planType(request.getPlanType())
+                        .createDateTime(currentDateTimeStr)
                         .menuId(request.getMenuId())
                         .containers(request.getContainers())
                         .build();
@@ -81,13 +85,6 @@ public class BusinessGrowthPlanService {
                 if ("SM".equals(request.getMethod())) {
                     //2.1. If Social Media, Create SocialMediaMarketingPlan
 
-                    //Ensures that user does not have a plan name by the same planName
-                    if (socialMediaMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                        throw new IllegalArgumentException("Duplicate Plan Name");
-
-                    }
-
                     SocialMediaMarketingPlan plan  = SocialMediaMarketingPlan.builder()
                             .userId(id)
                             .planName(request.getPlanName())
@@ -95,6 +92,7 @@ public class BusinessGrowthPlanService {
                             .endDate(request.getEndDate())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
+                            .createDateTime(currentDateTimeStr)
                             .method(request.getMethod())
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
@@ -107,13 +105,6 @@ public class BusinessGrowthPlanService {
 
                     //2.2. If Poster and Banner, Create PosterAndBannerMarketingPlan
 
-                    //Ensures that user does not have a plan name by the same planName
-                    if (posterAndBannerMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                        throw new IllegalArgumentException("Duplicate Plan Name");
-
-                    }
-
                     PosterAndBannerMarketingPlan plan  = PosterAndBannerMarketingPlan.builder()
                             .userId(id)
                             .planName(request.getPlanName())
@@ -121,6 +112,7 @@ public class BusinessGrowthPlanService {
                             .endDate(request.getEndDate())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
+                            .createDateTime(currentDateTimeStr)
                             .method(request.getMethod())
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
@@ -132,13 +124,6 @@ public class BusinessGrowthPlanService {
                 } else if ("FD".equals(request.getMethod())) {
                     //2.3. If Flyer Distribution, Create FlyerDistributionMarketingPlan
 
-                    //Ensures that user does not have a plan name by the same planName
-                    if (flyerDistributionMarketingRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                        throw new IllegalArgumentException("Duplicate Plan Name");
-
-                    }
-
                     FlyerDistributionMarketingPlan plan = FlyerDistributionMarketingPlan.builder()
                             .userId(id)
                             .planName(request.getPlanName())
@@ -146,6 +131,7 @@ public class BusinessGrowthPlanService {
                             .endDate(request.getEndDate())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
+                            .createDateTime(currentDateTimeStr)
                             .method(request.getMethod())
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
@@ -159,13 +145,6 @@ public class BusinessGrowthPlanService {
 
                 //3. If Outlet Expansion, Create OutletExpansionPlan
 
-                //Ensures that user does not have a plan name by the same planName
-                if (outletExpansionPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                    throw new IllegalArgumentException("Duplicate Plan Name");
-
-                }
-
                 OutletExpansionPlan plan  = OutletExpansionPlan.builder()
                         .userId(id)
                         .planName(request.getPlanName())
@@ -173,6 +152,7 @@ public class BusinessGrowthPlanService {
                         .endDate(request.getEndDate())
                         .priority(request.getPriority())
                         .planType(request.getPlanType())
+                        .createDateTime(currentDateTimeStr)
                         .address(request.getAddress())
                         .rentalPrice(request.getRentalPrice())
                         .renovation(request.getRenovation())
@@ -545,48 +525,72 @@ public class BusinessGrowthPlanService {
                 .build();
     }
 
-//    public Response findAll(String oldEmail) {
-//
-//        List<BusinessGrowthPlan> businessGrowthPlans = new ArrayList<>();
-//
-//        try {
-//
-//            User origUser = userRepository.findByEmail(oldEmail)
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-//            String id = origUser.getId();
-//
-//            //Debug from here: remove businessGrowthPlan to try out
-//            List<BusinessGrowthPlan> search = businessGrowthPlanRepository.findAllByUserId(id);
-//            for (BusinessGrowthPlan bgp : search) {
-//                businessGrowthPlans.add(bgp);
-//            }
-//
-//            //Ordering of businessGrowthPlans missing (To be worked on)
-//
-//        } catch (IllegalArgumentException e) {
-//
-//            //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-//            return ErrorResponse.builder()
-//                    .error("Bad Request: Invalid Token")
-//                    .message("User not found")
-//                    .build();
-//
-//        } catch (Exception e) {
-//
-//            //Catches any other form of exception as unknown error
-//            return ErrorResponse.builder()
-//                    .error("Internal Server Error: Unknown Error")
-//                    .message(e.getMessage())
-//                    //.message("An unknown error has occurred! Do try again!")
-//                    .build();
-//
-//        }
-//
-//        return MultipleBusinessGrowthPlanResponse.builder()
-//                .businessGrowthPlans(businessGrowthPlans)
-//                .build();
-//
-//    }
+    public Response findAll(String oldEmail, String order, String sortBy) {
+
+        List<BusinessGrowthPlan> businessGrowthPlans = new ArrayList<>();
+
+        try {
+
+            User origUser = userRepository.findByEmail(oldEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            String id = origUser.getId();
+
+            List<FlyerDistributionMarketingPlan> flyerDistributionMarketingList =
+                    flyerDistributionMarketingRepository.findAllByUserId(id);
+            List<FoodDeliveryMarketplacePlan> foodDeliveryMarketplacePlanList =
+                    foodDeliveryMarketplacePlanRepository.findAllByUserId(id);
+            List<OutletExpansionPlan> outletExpansionPlanList =
+                    outletExpansionPlanRepository.findAllByUserId(id);
+            List<PosterAndBannerMarketingPlan> posterAndBannerMarketingPlanList =
+                    posterAndBannerMarketingPlanRepository.findAllByUserId(id);
+            List<SocialMediaMarketingPlan> socialMediaMarketingPlanList =
+                    socialMediaMarketingPlanRepository.findAllByUserId(id);
+
+            //Add all to the main list
+            businessGrowthPlans.addAll(flyerDistributionMarketingList);
+            businessGrowthPlans.addAll(foodDeliveryMarketplacePlanList);
+            businessGrowthPlans.addAll(outletExpansionPlanList);
+            businessGrowthPlans.addAll(posterAndBannerMarketingPlanList);
+            businessGrowthPlans.addAll(socialMediaMarketingPlanList);
+
+            //Sorting based on condition
+            listSorter(businessGrowthPlans, order, sortBy);
+
+        } catch (IllegalArgumentException e) {
+
+            //If user cannot be found in the repository based on token obtained info, return ErrorResponse
+            return ErrorResponse.builder()
+                    .error("Bad Request: Invalid Token")
+                    .message("User not found")
+                    .build();
+
+        } catch (Exception e) {
+
+            //Catches any other form of exception as unknown error
+            return ErrorResponse.builder()
+                    .error("Internal Server Error: Unknown Error")
+                    .message(e.getMessage())
+                    //.message("An unknown error has occurred! Do try again!")
+                    .build();
+
+        }
+
+        return MultipleBusinessGrowthPlanResponse.builder()
+                .businessGrowthPlans(businessGrowthPlans)
+                .build();
+
+    }
+
+    public void listSorter(List<BusinessGrowthPlan> list, String order, String sortBy) {
+        //Uses BubbleSort logic
+
+        //Goes through the list n-1 times
+        for (int i = 0 ; i < list.size() - 1 ; i++) {
+            for (int j = 0 ; j < list.size() - i - 1 ; j++) {
+                //Identify type for each
+            }
+        }
+    }
 
     public BusinessGrowthPlan find(String bgpId, String userId) {
 

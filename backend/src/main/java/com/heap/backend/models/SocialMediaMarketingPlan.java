@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Data
 
-public class SocialMediaMarketingPlan implements BusinessGrowthPlan {
+public class SocialMediaMarketingPlan extends BusinessGrowthPlan {
 
     //Common Fields
     @Id
@@ -31,6 +31,7 @@ public class SocialMediaMarketingPlan implements BusinessGrowthPlan {
     private int priority;
     @NotBlank
     private String planType;
+    private String createDateTime;
 
     //Common to all MarketingPlan
     private String method;

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 @Data
-public class FoodDeliveryMarketplacePlan implements BusinessGrowthPlan {
+public class FoodDeliveryMarketplacePlan extends BusinessGrowthPlan {
 
     //Common Fields
     @Id
@@ -30,6 +30,7 @@ public class FoodDeliveryMarketplacePlan implements BusinessGrowthPlan {
     private int priority;
     @NotBlank
     private String planType;
+    private String createDateTime;
 
     //Unique to FoodDeliveryMarketplacePlan
     private String menuId;

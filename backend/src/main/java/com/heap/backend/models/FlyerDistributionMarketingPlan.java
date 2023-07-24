@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 @Data
-public class FlyerDistributionMarketingPlan implements BusinessGrowthPlan {
+public class FlyerDistributionMarketingPlan extends BusinessGrowthPlan {
 
     //Common Fields
     @Id
@@ -30,6 +30,7 @@ public class FlyerDistributionMarketingPlan implements BusinessGrowthPlan {
     private int priority;
     @NotBlank
     private String planType;
+    private String createDateTime;
 
     //Common to all MarketingPlan
     private String method;
@@ -38,5 +39,6 @@ public class FlyerDistributionMarketingPlan implements BusinessGrowthPlan {
 
     //Unique to this FlyerDistributionMarketingPlan
     private Flyer flyer;
+
 
 }
