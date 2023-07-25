@@ -62,6 +62,7 @@ const CommonRecipeForm = ({ isCreate = false, loaderData }) => {
                         <TextField
                             rules={{ required: true, min: 0 }}
                             name="cost"
+                            type="number"
                             label="Cost to Produce"
                         />
                         <FileInput
