@@ -1,10 +1,13 @@
 package com.heap.backend.service.auth;
 
-import com.heap.backend.data.request.AuthenticationRequest;
+import com.heap.backend.data.request.user.AuthenticationRequest;
 import com.heap.backend.data.response.*;
-import com.heap.backend.data.request.RegisterRequest;
-import com.heap.backend.models.Business;
-import com.heap.backend.models.User;
+import com.heap.backend.data.request.user.RegisterRequest;
+import com.heap.backend.data.response.common.ErrorResponse;
+import com.heap.backend.data.response.common.SuccessResponse;
+import com.heap.backend.data.response.user.AuthenticationResponse;
+import com.heap.backend.models.user.Business;
+import com.heap.backend.models.user.User;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
@@ -13,8 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor

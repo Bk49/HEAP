@@ -1,9 +1,10 @@
 package com.heap.backend.controller;
 
-import com.heap.backend.data.request.*;
-import com.heap.backend.data.response.ErrorResponse;
+import com.heap.backend.data.request.business.CreateBusinessGrowthPlanRequest;
+import com.heap.backend.data.request.business.UpdateBusinessGrowthPlanRequest;
+import com.heap.backend.data.response.common.ErrorResponse;
 import com.heap.backend.data.response.Response;
-import com.heap.backend.service.auth.BusinessGrowthPlanService;
+import com.heap.backend.service.BusinessGrowthPlanService;
 import com.heap.backend.service.auth.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
