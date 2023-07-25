@@ -3,12 +3,12 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
-import ImagePlaceholder from "../../../assets/image-placeholder.png";
 import SmallButton from "../../common/button/SmallButton";
 import { useNavigate } from "react-router-dom";
 import MenuCardDetails from "./MenuCardDetails";
 import { Fragment } from "react";
 import ConfirmDeleteDialog from "../../common/dialog/ConfirmDeleteDialog";
+import MenuIllustration from "../../../assets/illustrations/menu-illustration.jpg";
 
 const MenuCard = ({ menu }) => {
     const { id, name, sections, image = "default" } = menu;
@@ -19,7 +19,9 @@ const MenuCard = ({ menu }) => {
             <Card sx={{ width: "22vw", boxShadow: 4 }}>
                 <CardMedia
                     sx={{ width: "100%", paddingTop: "100%" }}
-                    image={image === "default" ? ImagePlaceholder : image}
+                    image={
+                        image === "default" || !image ? MenuIllustration : image
+                    }
                     title={image}
                 />
                 <CardContent>
