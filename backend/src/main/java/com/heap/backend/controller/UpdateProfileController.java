@@ -1,10 +1,10 @@
 package com.heap.backend.controller;
 
-import com.heap.backend.data.request.UpdateProfileRequest;
+import com.heap.backend.data.request.user.UpdateProfileRequest;
 import com.heap.backend.data.response.Response;
-import com.heap.backend.data.response.ErrorResponse;
+import com.heap.backend.data.response.common.ErrorResponse;
 import com.heap.backend.service.auth.JwtService;
-import com.heap.backend.service.auth.UpdateProfileService;
+import com.heap.backend.service.UpdateProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

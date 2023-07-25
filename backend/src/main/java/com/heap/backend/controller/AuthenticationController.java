@@ -1,10 +1,10 @@
 package com.heap.backend.controller;
 
-import com.heap.backend.data.request.AuthenticationRequest;
-import com.heap.backend.data.response.ErrorResponse;
+import com.heap.backend.data.request.user.AuthenticationRequest;
+import com.heap.backend.data.response.common.ErrorResponse;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.service.auth.AuthenticationService;
-import com.heap.backend.data.request.RegisterRequest;
+import com.heap.backend.data.request.user.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

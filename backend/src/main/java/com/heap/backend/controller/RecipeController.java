@@ -1,11 +1,11 @@
 package com.heap.backend.controller;
 
-import com.heap.backend.data.request.CreateRecipeRequest;
-import com.heap.backend.data.request.UpdateRecipeRequest;
-import com.heap.backend.data.response.ErrorResponse;
+import com.heap.backend.data.request.recipe.CreateRecipeRequest;
+import com.heap.backend.data.request.recipe.UpdateRecipeRequest;
+import com.heap.backend.data.response.common.ErrorResponse;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.service.auth.JwtService;
-import com.heap.backend.service.auth.RecipeService;
+import com.heap.backend.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
