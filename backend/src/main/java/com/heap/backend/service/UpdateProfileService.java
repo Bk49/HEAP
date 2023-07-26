@@ -20,7 +20,6 @@ public class UpdateProfileService {
     private final PasswordEncoder passwordEncoder;
 
     public Response update(UpdateProfileRequest request, String oldEmail) {
-
         //Check if Password and ConfirmPassword are the same
         //If not the same, return UpdateErrorResponse based on bad request
         if (!request.getPassword().equals(request.getConfirmPassword())) {
@@ -36,7 +35,6 @@ public class UpdateProfileService {
 
             origUser = userRepository.findByEmail(oldEmail)
                     .orElseThrow(() -> new IllegalArgumentException("No such user found"));
-            String id = origUser.getId();
 
             //Changes business class based on updateRequest
             Business business = origUser.getBusiness();
@@ -53,9 +51,7 @@ public class UpdateProfileService {
 
             //In the case that user wants to change password
             if (request.getPassword() != null) {
-
                 origUser.setPassword(passwordEncoder.encode(request.getPassword()));
-
             }
 
             //Attempts to save new entity of user using register
@@ -112,7 +108,6 @@ public class UpdateProfileService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
 
         } catch (IllegalArgumentException e) {
-
             //If user cannot be found in the repository based on token obtained info, return ErrorResponse
             return ErrorResponse.builder()
                     .error("Bad Request: Invalid Token")
@@ -121,7 +116,6 @@ public class UpdateProfileService {
 
 
         } catch (Exception e) {
-
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
