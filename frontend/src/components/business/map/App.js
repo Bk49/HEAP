@@ -8,6 +8,8 @@ const MapComponent = () => {
   const [clickedLocation, setClickedLocation] = useState(null);
   const [addressDetails, setAddressDetails] = useState(null);
 
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
   const onLoad = (map) => {
     setMap(map);
   };
@@ -58,7 +60,7 @@ const MapComponent = () => {
   };
 
   return (
-    <LoadScript googleMapsApiKey="AIzaSyChsCzm5-iAjK2cMpj_garxpAQdC4YbqsE">
+    <LoadScript googleMapsApiKey={apiKey}>
       <GoogleMap
         mapContainerStyle={{ width: "652px", height: "342px" }}
         center={center}
