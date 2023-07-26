@@ -11,63 +11,44 @@ import com.heap.backend.models.*;
 import com.heap.backend.models.menu.Item;
 import com.heap.backend.models.menu.Menu;
 import com.heap.backend.models.menu.MenuSection;
-import com.heap.backend.models.user.User;
 import com.heap.backend.repository.MenuRepository;
 import com.heap.backend.repository.RecipeRepository;
-import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class MenuService {
 
-    private final UserRepository userRepository;
+    private final CommonService commonService;
     private final RecipeRepository recipeRepository;
     private final MenuRepository menuRepository;
 
     public Response create(CreateMenuRequest request, String oldEmail) {
 
         try {
-            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
-
+            String id = commonService.getIdByEmail(oldEmail);
             //Generate current DateTime String
             String currentDateTimeStr = new HEAPDate().toString();
 
             //Checks through Items in the Menu to see if these are legit recipe in entries
             MenuSection[] menuSections = request.getSections();
-            MenuSection[] storedMenuSections = new MenuSection[menuSections.length];
-
-            for (int i = 0 ; i < menuSections.length ; i++) {
-
-                MenuSection ms = menuSections[i];
-                MenuSection sms = MenuSection.builder()
-                        .name(ms.getName())
-                        .items(new Item[ms.getItems().length])
-                        .build();
-                storedMenuSections[i] = sms;
-
-                for (int j = 0 ; j < ms.getItems().length ; j++) {
-
-                    Item item = ms.getItems()[j];
-
-                    recipeRepository.findByUserIdAndId(id, item.getItem())
-                            .orElseThrow(() -> new IllegalArgumentException("Missing Recipe"));
-
-                    sms.getItems()[j] = item.duplicate();
-
-                }
-            }
+            MenuSection[] storedMenuSections = Stream.of(menuSections).map((section) ->
+                    MenuSection.builder()
+                            .name(section.getName())
+                            .items(Stream.of(section.getItems()).map((item) -> {
+                                recipeRepository.findByUserIdAndId(id, item.getItem())
+                                        .orElseThrow(() -> new IllegalArgumentException("Missing Recipe"));
+                                return item.duplicate();
+                            }).toArray(Item[]::new))
+                            .build()).toArray(MenuSection[]::new);
 
             //Search through the menu ArrayList of Specific user and checks if a similar menu is present
             if (menuRepository.findByUserIdAndName(id, request.getName()).isPresent()) {
-
                 throw new IllegalArgumentException("Duplicate Menu");
-
             }
 
             //If everything goes well, create StoredMenu and add it into the MenuService
@@ -88,33 +69,29 @@ public class MenuService {
             menuRepository.save(storedMenu);
 
         } catch (IllegalArgumentException e) {
-
             //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-            if ("Invalid Token".equals(e.getMessage())) {
 
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Token")
-                        .message("User not found")
-                        .build();
+            String errorMessage = e.getMessage();
+            String err = "Bad Request: ";
+            String msg = "";
 
-            } else if ("Duplicate Menu".equals(e.getMessage())) {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Duplicate Menu")
-                        .message("Please try another name for the recipe")
-                        .build();
-
+            if ("Invalid Token".equals(errorMessage)) {
+                err = "Invalid Token";
+                msg = "User not found";
+            } else if ("Duplicate Menu".equals(errorMessage)) {
+                err += "Duplicate Menu";
+                msg = "Please try another name for the recipe";
             } else {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Recipe does not exists")
-                        .message("Please ensure that items in menu have a recipe")
-                        .build();
-
+                err += "Recipe does not exists";
+                msg = "Please ensure that items in menu have a recipe";
             }
 
-        } catch (Exception e) {
+            return ErrorResponse.builder()
+                    .error(err)
+                    .message(msg)
+                    .build();
 
+        } catch (Exception e) {
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error")
@@ -130,10 +107,7 @@ public class MenuService {
     public Response delete(String menuId, String oldEmail) {
 
         try {
-
-            User origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
+            String id = commonService.getIdByEmail(oldEmail);
 
             if (menuRepository.findByIdAndUserId(menuId, id).isEmpty()) {
 
@@ -144,24 +118,23 @@ public class MenuService {
             menuRepository.deleteByUserIdAndId(id, menuId);
 
         } catch (IllegalArgumentException e) {
+            String err = "Bad Request: ";
+            String msg = "";
 
             if ("Invalid Token".equals(e.getMessage())) {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Token")
-                        .message("User not found")
-                        .build();
-
+                err = "Invalid Token";
+                msg = "User not found";
             } else {
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Menu")
-                        .message("Menu not found")
-                        .build();
-
+                err += "Invalid Menu";
+                msg = "Menu not found";
             }
 
-        } catch (Exception e) {
+            return ErrorResponse.builder()
+                    .error(err)
+                    .message(msg)
+                    .build();
 
+        } catch (Exception e) {
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error")
@@ -177,10 +150,7 @@ public class MenuService {
     public Response update(String menuId, UpdateMenuRequest request, String oldEmail) {
 
         try {
-
-            User origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
+            String id = commonService.getIdByEmail(oldEmail);
 
             Menu storedMenu = menuRepository.findByIdAndUserId(menuId, id)
                     .orElseThrow(() -> new IllegalArgumentException("No such Menu"));
@@ -192,56 +162,40 @@ public class MenuService {
                 storedMenu.setImage(request.getImage());
             }
 
-
             //Checks through Items in the Menu to see if these are legit recipe in entries
             MenuSection[] menuSections = request.getSections();
-            MenuSection[] storedMenuSections = new MenuSection[menuSections.length];
-
-            for (int i = 0 ; i < menuSections.length ; i++) {
-
-                MenuSection ms = menuSections[i];
-                MenuSection sms = MenuSection.builder()
-                        .name(ms.getName())
-                        .items(new Item[ms.getItems().length])
-                        .build();
-                storedMenuSections[i] = sms;
-
-                for (int j = 0 ; j < ms.getItems().length ; j++) {
-
-                    Item item = ms.getItems()[j];
-
-                    recipeRepository.findByUserIdAndId(id, item.getItem())
-                            .orElseThrow(() -> new IllegalArgumentException("Missing Recipe"));
-
-                    sms.getItems()[j] = item;
-
-                }
-            }
+            MenuSection[] storedMenuSections = Stream.of(menuSections).map((section) ->
+                    MenuSection.builder()
+                            .name(section.getName())
+                            .items(Stream.of(section.getItems()).map((item) -> {
+                                recipeRepository.findByUserIdAndId(id, item.getItem())
+                                        .orElseThrow(() -> new IllegalArgumentException("Missing Recipe"));
+                                return item.duplicate();
+                            }).toArray(Item[]::new))
+                            .build()).toArray(MenuSection[]::new);
 
             storedMenu.setSections(storedMenuSections);
 
             menuRepository.save(storedMenu);
 
         } catch (IllegalArgumentException e) {
+            String err = "Bad Request: ";
+            String msg = "";
 
-            if (e.getMessage().equals("Invalid Token")) {
-
-                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Token")
-                        .message("User not found")
-                        .build();
-
+            if ("Invalid Token".equals(e.getMessage())) {
+                err = "Invalid Token";
+                msg = "User not found";
+            } else {
+                err += "Invalid Recipe";
+                msg = "Recipe not found";
             }
 
-            return  ErrorResponse.builder()
-                    .error("Bad Request: Invalid Recipe")
-                    .message("Recipe not found")
+            return ErrorResponse.builder()
+                    .error(err)
+                    .message(msg)
                     .build();
 
-
         } catch (Exception e) {
-
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
@@ -260,35 +214,29 @@ public class MenuService {
         Menu menu;
 
         try {
-
-            User origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
+            String id = commonService.getIdByEmail(oldEmail);
 
             menu = menuRepository.findByIdAndUserId(menuId, id)
                     .orElseThrow(() -> new IllegalArgumentException("User has no such Menu"));
 
         } catch (IllegalArgumentException e) {
+            String err = "Bad Request: ";
+            String msg = "";
 
-            if (e.getMessage().equals("Invalid Token")) {
-
-                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Token")
-                        .message("User not found")
-                        .build();
-
+            if ("Invalid Token".equals(e.getMessage())) {
+                err = "Invalid Token";
+                msg = "User not found";
             } else {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Menu Name")
-                        .message("Menu Name not found")
-                        .build();
-
+                err += "Invalid Menu Name";
+                msg = "Menu Name not found";
             }
 
-        } catch (Exception e) {
+            return ErrorResponse.builder()
+                    .error(err)
+                    .message(msg)
+                    .build();
 
+        } catch (Exception e) {
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
@@ -309,13 +257,7 @@ public class MenuService {
         List<Menu> menus = new ArrayList<>();
 
         try {
-
-            User origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
-
-//            menus = menuRepository.findAllByUserId(id);
-
+            String id = commonService.getIdByEmail(oldEmail);
             menus = menuRepository.findAllByUserIdOrderByCreateDateTimeDesc(id);
 
         } catch (IllegalArgumentException e) {
@@ -331,8 +273,6 @@ public class MenuService {
             }
 
         } catch (Exception e) {
-
-//            e.printStackTrace();
 
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
