@@ -4,7 +4,6 @@ import com.heap.backend.data.request.recipe.CreateRecipeRequest;
 import com.heap.backend.data.request.recipe.UpdateRecipeRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.service.CommonService;
-import com.heap.backend.service.auth.JwtService;
 import com.heap.backend.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class RecipeController {
     private final CommonService commonService;
     private final RecipeService recipeService;
-    private final JwtService jwtService;
 
     @PostMapping("/createRecipe")
     public ResponseEntity<Response> create (@RequestBody CreateRecipeRequest request, @RequestHeader ("Authorization") String token) {
