@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
 const MapComponent = () => {
+  // eslint-disable-next-line
   const [map, setMap] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  // eslint-disable-next-line
   const [marker, setMarker] = useState(null);
   const [clickedLocation, setClickedLocation] = useState(null);
   const [addressDetails, setAddressDetails] = useState(null);
