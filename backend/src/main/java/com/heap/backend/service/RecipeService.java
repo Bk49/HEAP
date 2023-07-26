@@ -9,7 +9,6 @@ import com.heap.backend.data.response.recipe.MultipleRecipeResponse;
 import com.heap.backend.data.response.recipe.SingleRecipeResponse;
 import com.heap.backend.models.HEAPDate;
 import com.heap.backend.models.recipe.Recipe;
-import com.heap.backend.models.user.User;
 import com.heap.backend.repository.RecipeRepository;
 import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +21,12 @@ import java.util.List;
 public class RecipeService {
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
+    private final CommonService commonService;
 
     public Response create(CreateRecipeRequest request, String oldEmail) {
 
         try {
-            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
+            String id = commonService.getIdByEmail(oldEmail);
 
             //Generate current DateTime String
             String currentDateTimeStr = new HEAPDate().toString();
@@ -47,35 +46,31 @@ public class RecipeService {
 
             //If Recipe of the same name and user exists, throws IllegalArgumentException
             if (recipeRepository.findByNameAndUserId(request.getName(), id).isPresent()) {
-
                 throw new IllegalArgumentException("Duplicate Recipe");
-
             }
 
             //Try saving recipe into repository
             recipeRepository.save(recipe);
 
         } catch (IllegalArgumentException e) {
+            String err = "Bad Request: ";
+            String msg = "";
 
             //If user cannot be found in the repository based on token obtained info, return ErrorResponse
             if ("Invalid Token".equals(e.getMessage())) {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Token")
-                        .message("User not found")
-                        .build();
-
+                err = "Invalid Token";
+                msg = "User not found";
             } else {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Duplicate Recipe")
-                        .message("Please try another name for the recipe")
-                        .build();
-
+                err += "Duplicate Recipe";
+                msg = "Please try another name for the recipe";
             }
 
-        } catch (Exception e) {
+            return ErrorResponse.builder()
+                    .error(err)
+                    .message(msg)
+                    .build();
 
+        } catch (Exception e) {
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error")
@@ -93,8 +88,7 @@ public class RecipeService {
     public Response delete(String recipeId, String oldEmail) {
 
         try {
-            User origUser = userRepository.findByEmail(oldEmail).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
+            String id = commonService.getIdByEmail(oldEmail);
 
             if (recipeRepository.findByUserIdAndId(id, recipeId).isEmpty()) {
 
@@ -133,10 +127,7 @@ public class RecipeService {
     public Response update(String recipeId, UpdateRecipeRequest request, String oldEmail) {
 
         try {
-
-            User origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
+            String id = commonService.getIdByEmail(oldEmail);
 
             Recipe recipe = recipeRepository.findByUserIdAndId(id, recipeId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid Recipe"));
@@ -153,24 +144,23 @@ public class RecipeService {
 
         } catch (IllegalArgumentException e) {
 
-            if (e.getMessage().equals("Invalid Token")) {
+            String err = "Bad Request: ";
+            String msg = "";
 
-                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Token")
-                        .message("User not found")
-                        .build();
-
+            if ("Invalid Token".equals(e.getMessage())) {
+                err = "Invalid Token";
+                msg = "User not found";
+            } else {
+                err += "Invalid Recipe";
+                msg = "Recipe not found";
             }
 
-            return  ErrorResponse.builder()
-                    .error("Bad Request: Invalid Recipe")
-                    .message("Recipe not found")
+            return ErrorResponse.builder()
+                    .error(err)
+                    .message(msg)
                     .build();
 
-
         } catch (Exception e) {
-
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
@@ -189,35 +179,28 @@ public class RecipeService {
         Recipe recipe = null;
 
         try {
-
-            User origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
-
+            String id = commonService.getIdByEmail(oldEmail);
             recipe = recipeRepository.findByUserIdAndId(id, recipeId)
                     .orElseThrow(() -> new IllegalArgumentException("User has no such Recipe"));
 
         } catch (IllegalArgumentException e) {
+            String err = "Bad Request: ";
+            String msg = "";
 
-            if (e.getMessage().equals("Invalid Token")) {
-
-                //If user cannot be found in the repository based on token obtained info, return ErrorResponse
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Token")
-                        .message("User not found")
-                        .build();
-
+            if ("Invalid Token".equals(e.getMessage())) {
+                err = "Invalid Token";
+                msg = "User not found";
             } else {
-
-                return ErrorResponse.builder()
-                        .error("Bad Request: Invalid Recipe Name")
-                        .message("Recipe Name not found")
-                        .build();
-
+                err += "Invalid Recipe Name";
+                msg = "Recipe Name not found";
             }
 
-        } catch (Exception e) {
+            return ErrorResponse.builder()
+                    .error(err)
+                    .message(msg)
+                    .build();
 
+        } catch (Exception e) {
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
@@ -237,29 +220,21 @@ public class RecipeService {
         List<Recipe> recipes = null;
 
         try {
-
-            User origUser = userRepository.findByEmail(oldEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
-            String id = origUser.getId();
-
+            String id = commonService.getIdByEmail(oldEmail);
 //            recipes = recipeRepository.findAllByUserId(id);
-
             recipes = recipeRepository.findAllByUserIdOrderByCreateDateTimeDesc(id);
 
         } catch (IllegalArgumentException e) {
 
             if (e.getMessage().equals("Invalid Token")) {
-
                 //If user cannot be found in the repository based on token obtained info, return ErrorResponse
                 return ErrorResponse.builder()
                         .error("Bad Request: Invalid Token")
                         .message("User not found")
                         .build();
-
             }
 
         } catch (Exception e) {
-
             //Catches any other form of exception as unknown error
             return ErrorResponse.builder()
                     .error("Internal Server Error: Unknown Error")
