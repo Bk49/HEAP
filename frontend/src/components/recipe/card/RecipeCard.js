@@ -3,7 +3,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
-import ImagePlaceholder from "../../../assets/image-placeholder.png";
+import RecipeIllustration from "../../../assets/illustrations/recipe-illustration.jpg";
 import SmallButton from "../../common/button/SmallButton";
 import { useNavigate } from "react-router-dom";
 import RecipeCardDetails from "./RecipeCardDetails";
@@ -19,7 +19,7 @@ const RecipeCard = ({ recipe }) => {
             <Card sx={{ width: "22vw", boxShadow: 4 }}>
                 <CardMedia
                     sx={{ height: "12rem", width: "100%" }}
-                    image={image ? image : ImagePlaceholder}
+                    image={image ? image : RecipeIllustration}
                     title={image ? image : "default"}
                 />
                 <CardContent>
@@ -43,11 +43,7 @@ const RecipeCard = ({ recipe }) => {
                     >
                         Edit
                     </SmallButton>
-                    <ConfirmDeleteDialog
-                        id={id}
-                        name={name}
-                        type="recipe"
-                    />
+                    <ConfirmDeleteDialog id={id} name={name} type="recipe" />
                 </CardActions>
             </Card>
         </Fragment>

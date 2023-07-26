@@ -1,5 +1,4 @@
 import { Buffer as buffer } from "buffer";
-// Load the AWS SDK for Node.js
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const {
@@ -8,7 +7,7 @@ const {
     REACT_APP_BUCKET_REGION,
     REACT_APP_BUCKET_NAME,
 } = process.env;
-// Set the region
+
 const S3 = new S3Client({
     region: REACT_APP_BUCKET_REGION,
     credentials: {
@@ -16,17 +15,6 @@ const S3 = new S3Client({
         secretAccessKey: REACT_APP_AWS_SECRET_ACCESS_KEY,
     },
 });
-
-// Set the credentials
-// AWS.config.update({
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-// });
-// const credentials = new AWS.SharedIniFileCredentials({ profile: "default" });
-// AWS.config.credentials(credentials);
-
-// Create an S3 client
-// const s3 = new AWS.S3();
 
 const fileToBase64 = async (file) => {
     return new Promise((res, rej) => {

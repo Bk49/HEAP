@@ -14,7 +14,10 @@ import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import InfluencerCollaborationRow from "../../datarow/InfluencerCollaborationRow";
 
 const BGPMarketingForm = () => {
-    const { watch } = useFormContext();
+    const {
+        watch,
+        formState: { errors },
+    } = useFormContext();
     const currentMethod = watch("method");
 
     return (
@@ -36,39 +39,44 @@ const BGPMarketingForm = () => {
             <FieldsColumn>
                 <FieldsRow>
                     <TextField
-                        rules={{ required: true }}
-                        name="promotionName"
+                        rules={{ required: false }}
+                        name="promotion.name"
                         label="Promotion Name"
+                        nestedError={errors.promotion?.name}
                     />
                     <DatePicker
-                        rules={{ required: true, disablePast: true }}
-                        name="promoStartDate"
+                        rules={{ required: false, disablePast: true }}
+                        name="promotion.startDate"
                         label="Start Date"
+                        nestedError={errors.promotion?.startDate}
                     />
                     <DatePicker
-                        rules={{ required: true, disablePast: true }}
-                        name="promoEndDate"
+                        rules={{ required: false, disablePast: true }}
+                        name="promotion.endDate"
                         label="End Date"
+                        nestedError={errors.promotion?.endDate}
                     />
                 </FieldsRow>
                 <FieldsRow>
                     <TextArea
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         label="Description"
-                        name="promoDescription"
+                        name="promotion.description"
+                        nestedError={errors.promotion?.description}
                     />
                 </FieldsRow>
                 <FieldsRow>
                     <TextArea
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         label="Terms and Conditions"
-                        name="promoTnC"
+                        name="promotion.tnc"
+                        nestedError={errors.promotion?.tnc}
                     />
                 </FieldsRow>
             </FieldsColumn>
             <CommonFieldArray
                 name="influencer"
-                appendObj={{ name: "", email: "", phone: "", price: 0 }}
+                appendObj={{ name: "", email: "", phone: "", price: "" }}
                 heading="Influencers Collaboration"
                 Component={InfluencerCollaborationRow}
             />

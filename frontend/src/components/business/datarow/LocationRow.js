@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import { useFormContext } from "react-hook-form";
 import FieldsColumn from "../../common/form/FieldsColumn";
 import FieldsRow from "../../common/form/FieldsRow";
-import Map from "../map/App";
+import MapComponent from "../map/App";
 
 const LocationRow = ({ index = -1, removeFn = () => {} }) => {
     const {
@@ -26,7 +26,7 @@ const LocationRow = ({ index = -1, removeFn = () => {} }) => {
         
         <FieldsColumn>
             <FieldsRow>
-                <Map/>
+                <MapComponent/>
 
                 <TextArea
                 rules={{ required: true }}

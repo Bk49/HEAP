@@ -15,9 +15,19 @@ import { businessType, cuisineType } from "../../constants/dropdown-choices";
 import Checkbox from "../../components/common/form/Checkbox";
 import { FormProvider, useForm } from "react-hook-form";
 import MultiItemDropdown from "../../components/common/form/MultiItemDropdown";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import updateUser from "../../axios/user/updateUserAPI";
 
 const Profile = () => {
-    const formMethods = useForm();
+    const { user } = useLoaderData();
+    const {
+        business: { fusion, ...other },
+        email,
+    } = user;
+    const formMethods = useForm({
+        values: { ...other, email: email, isFusion: fusion },
+    });
+    const navigate = useNavigate();
 
     return (
         <Fragment>
@@ -39,7 +49,7 @@ const Profile = () => {
                             />{" "}
                             <FieldsRow>
                                 <TextField
-                                    rules={{ required: true, minLength: 8 }}
+                                    rules={{ required: false, minLength: 8 }}
                                     name="password"
                                     label="Password"
                                     type="password"
@@ -47,7 +57,7 @@ const Profile = () => {
                                 />
                                 <TextField
                                     rules={{
-                                        required: true,
+                                        required: false,
                                         minLength: 8,
                                         customRules: {
                                             validate: (value, { password }) =>
@@ -115,6 +125,15 @@ const Profile = () => {
                 <SubmitFormGroup
                     submitText="Update Profile"
                     submitErrorText="Update of profile is unsuccessful, please check your input"
+                    onSubmit={async (data) => {
+                        const { password, confirmPassword, ...other } = data;
+                        const res = await updateUser(
+                            password && confirmPassword ? data : other
+                        );
+                        navigate("/my-summary", {
+                            state: { success: res },
+                        });
+                    }}
                 />
             </FormProvider>
         </Fragment>

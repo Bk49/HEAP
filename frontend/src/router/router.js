@@ -20,6 +20,11 @@ import MySummary from "../pages/business/MySummary";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import getAllRecipes from "../axios/recipe/getAllRecipesAPI";
 import getRecipe from "../axios/recipe/getRecipeAPI";
+import getMenu from "../axios/menu/getMenuAPI";
+import getAllMenus from "../axios/menu/getAllMenusAPI";
+import getBusiness from "../axios/business/getBusinessAPI";
+import getUser from "../axios/user/getUserAPI";
+import MyBusinessGrowthPlan from "../pages/business/MyBusinessGrowthPlan";
 
 export default createBrowserRouter([
     {
@@ -61,6 +66,10 @@ export default createBrowserRouter([
             <ProtectedRoute>
                 <Profile />
             </ProtectedRoute>
+        ),
+        loader: getUser,
+        errorElement: (
+            <Error400 msg="The requested user is not in the database" />
         ),
     },
     {
@@ -104,11 +113,15 @@ export default createBrowserRouter([
         ),
     },
     {
-        path: "edit-menu",
+        path: "edit-menu/:id",
         element: (
             <ProtectedRoute>
                 <EditMenu />
             </ProtectedRoute>
+        ),
+        loader: getMenu,
+        errorElement: (
+            <Error400 msg="The requested menu is not in the database" />
         ),
     },
     {
@@ -117,6 +130,10 @@ export default createBrowserRouter([
             <ProtectedRoute>
                 <MyMenus />
             </ProtectedRoute>
+        ),
+        loader: getAllMenus,
+        errorElement: (
+            <Error403 msg="There seems to be an error trying to access the page, try to relogin!" />
         ),
     },
     {
@@ -134,12 +151,24 @@ export default createBrowserRouter([
                 <EditBusinessGrowthPlan />
             </ProtectedRoute>
         ),
+        loader: getBusiness,
+        errorElement: (
+            <Error400 msg="The requested business growth plan is not in the database" />
+        ),
     },
     {
         path: "my-summary",
         element: (
             <ProtectedRoute>
                 <MySummary />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "my-business-growth-plan",
+        element: (
+            <ProtectedRoute>
+                <MyBusinessGrowthPlan />
             </ProtectedRoute>
         ),
     },

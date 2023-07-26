@@ -4,6 +4,7 @@ import SmallButton from "../button/SmallButton";
 import { useFormContext } from "react-hook-form";
 import { queueError } from "../../../functions/formHandling";
 import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 const SubmitFormGroup = ({
     onSubmit = (data) => console.log(data),
@@ -13,6 +14,7 @@ const SubmitFormGroup = ({
 }) => {
     const { handleSubmit } = useFormContext();
     const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
 
     return (
         <Fragment>
@@ -26,7 +28,12 @@ const SubmitFormGroup = ({
                     gap: "1rem",
                 }}
             >
-                <SmallButton type="default">Return</SmallButton>
+                <SmallButton
+                    onClick={() => navigate(-1, { state: {} })}
+                    type="default"
+                >
+                    Return
+                </SmallButton>
                 <SmallButton
                     onClick={() => {
                         handleSubmit(onSubmit, () =>

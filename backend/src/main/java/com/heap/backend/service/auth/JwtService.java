@@ -1,6 +1,6 @@
 package com.heap.backend.service.auth;
 
-import com.heap.backend.models.User;
+import com.heap.backend.models.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,7 +9,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +19,7 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${heap.backend.app.jwtSecretKey}")
-    private /* static final */ String SECRET_KEY;
+    private String SECRET_KEY;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);

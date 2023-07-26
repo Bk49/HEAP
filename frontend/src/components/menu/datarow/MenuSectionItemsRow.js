@@ -3,27 +3,8 @@ import SingleItemDropdown from "../../common/form/SingleItemDropdown";
 import TextField from "../../common/form/TextField";
 import IconButton from "@mui/material/IconButton";
 import RemoveIcon from "@mui/icons-material/RemoveCircleOutline";
-
-const items = [
-    { text: "Spaghetti Bolognese", value: "spaghetti bolognese", id: 1 },
-    { text: "Chicken Stir-Fry", value: "chicken stir-fry", id: 2 },
-    { text: "Caprese Salad", value: "caprese salad", id: 3 },
-    { text: "Beef Tacos", value: "beef tacos", id: 4 },
-    { text: "Mushroom Risotto", value: "mushroom risotto", id: 5 },
-    { text: "Teriyaki Salmon", value: "teriyaki salmon", id: 6 },
-    { text: "Caesar Salad", value: "caesar salad", id: 7 },
-    { text: "Hawaiian Pizza", value: "hawaiian pizza", id: 8 },
-    { text: "Chicken Parmesan", value: "chicken parmesan", id: 9 },
-    { text: "Beef Stir-Fry", value: "beef stir-fry", id: 10 },
-    { text: "Chicken Noodle Soup", value: "chicken noodle soup", id: 11 },
-    { text: "Margherita Pizza", value: "margherita pizza", id: 12 },
-    { text: "Shrimp Scampi", value: "shrimp scampi", id: 13 },
-    { text: "Chicken Curry", value: "chicken curry", id: 14 },
-    { text: "Classic Cheeseburger", value: "classic cheeseburger", id: 15 },
-    { text: "Chocolate Chip Cookies", value: "chocolate chip cookies", id: 16 },
-    { text: "Chicken Fajitas", value: "chicken fajitas", id: 17 },
-    { text: "Vegetable Stir-Fry", value: "vegetable stir-fry", id: 18 },
-];
+import { useEffect, useState } from "react";
+import getAllRecipes from "../../../axios/recipe/getAllRecipesAPI";
 
 const MenuSectionItemsRow = ({
     sectionIndex = -1,
@@ -33,6 +14,24 @@ const MenuSectionItemsRow = ({
     const {
         formState: { errors },
     } = useFormContext();
+    const [choices, setChoices] = useState([
+        { text: "Please Select a Recipe", value: "" },
+    ]);
+
+    useEffect(() => {
+        (async () => {
+            const { recipes } = await getAllRecipes();
+            const dropdownChoices = await recipes.map((recipe, index) => ({
+                key: index,
+                text: recipe.name,
+                value: recipe.id,
+            }));
+            setChoices([
+                { text: "Please Select a Recipe", value: "" },
+                ...dropdownChoices,
+            ]);
+        })();
+    }, []);
 
     return (
         <div
@@ -50,7 +49,7 @@ const MenuSectionItemsRow = ({
                 nestedError={
                     errors.sections?.[sectionIndex]?.items?.[itemIndex]?.item
                 }
-                choices={items}
+                choices={choices}
             />
             <TextField
                 rules={{ required: true, min: 0 }}

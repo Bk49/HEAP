@@ -6,7 +6,7 @@ import TextField from "../../../common/form/TextField";
 import TextArea from "../../../common/form/TextArea";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import StaffRow from "../../datarow/StaffRow";
-import Map from "../../map/App";
+import MapComponent from "../../map/App";
 
 const BGPOutletExpansionForm = () => {
     return (
@@ -14,7 +14,7 @@ const BGPOutletExpansionForm = () => {
             <HeadingThree>Outlet Expansion Address and Location</HeadingThree>
             <FieldsColumn>
                 <FieldsRow>
-                    <Map/>
+                    <MapComponent/>
                     <TextArea
                         rules={{ required: true }}
                         label="Outlet Expansion Address and Location"

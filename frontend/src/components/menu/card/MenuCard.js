@@ -3,21 +3,15 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
-import ImagePlaceholder from "../../../assets/image-placeholder.png";
 import SmallButton from "../../common/button/SmallButton";
 import { useNavigate } from "react-router-dom";
 import MenuCardDetails from "./MenuCardDetails";
 import { Fragment } from "react";
 import ConfirmDeleteDialog from "../../common/dialog/ConfirmDeleteDialog";
+import MenuIllustration from "../../../assets/illustrations/menu-illustration.jpg";
 
 const MenuCard = ({ menu }) => {
-    const {
-        id,
-        name,
-        items,
-        sections,
-        image = "default",
-    } = menu;
+    const { id, name, sections, image = "default" } = menu;
     const navigate = useNavigate();
 
     return (
@@ -25,7 +19,9 @@ const MenuCard = ({ menu }) => {
             <Card sx={{ width: "22vw", boxShadow: 4 }}>
                 <CardMedia
                     sx={{ width: "100%", paddingTop: "100%" }}
-                    image={image === "default" ? ImagePlaceholder : image}
+                    image={
+                        image === "default" || !image ? MenuIllustration : image
+                    }
                     title={image}
                 />
                 <CardContent>
@@ -33,10 +29,15 @@ const MenuCard = ({ menu }) => {
                         {name}
                     </Typography>
                     <MenuCardDetails type="sections">
-                        {sections} Sections
+                        {sections.length} Sections
                     </MenuCardDetails>
                     <MenuCardDetails type="preparation">
-                        {items} Food & Beverages
+                        {sections.length === 0
+                            ? 0
+                            : sections
+                                  .map(({ items }) => items.length)
+                                  .reduce((a, b) => a + b)}{" "}
+                        Food & Beverages
                     </MenuCardDetails>
                 </CardContent>
                 <CardActions>
@@ -46,7 +47,7 @@ const MenuCard = ({ menu }) => {
                     >
                         Edit
                     </SmallButton>
-                    <ConfirmDeleteDialog name={name} type="menu" />
+                    <ConfirmDeleteDialog id={id} name={name} type="menu" />
                 </CardActions>
             </Card>
         </Fragment>
