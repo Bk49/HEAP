@@ -92,24 +92,24 @@ const handleBusinessField = async (data) => {
                 },
             };
         } else {
-            throw {
+            throw new Error({
                 response: {
                     data: {
                         error: "Invalid marketing method",
                         message: "The input marketing method is invalid!",
                     },
                 },
-            };
+            });
         }
     } else {
-        throw {
+        throw new Error({
             response: {
                 data: {
                     error: "Invalid plan type",
                     message: "The input plan type is invalid!",
                 },
             },
-        };
+        });
     }
 };
 
