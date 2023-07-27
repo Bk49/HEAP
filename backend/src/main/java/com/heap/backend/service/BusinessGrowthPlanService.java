@@ -76,7 +76,7 @@ public class BusinessGrowthPlanService {
                         .containers(request.getContainers())
                         .build();
 
-                foodDeliveryMarketplacePlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else if ("MK".equals(request.getPlanType())) {
                 //2. If Marketing, Create MarketingStrategy based on type of marketing strategy
@@ -99,7 +99,7 @@ public class BusinessGrowthPlanService {
                             .socialMedia(request.getSocialMedia())
                             .build();
 
-                    socialMediaMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("PB".equals(request.getMethod())) {
 
@@ -119,7 +119,7 @@ public class BusinessGrowthPlanService {
                             .posterBanner(request.getPosterBanner())
                             .build();
 
-                    posterAndBannerMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("FD".equals(request.getMethod())) {
                     //2.3. If Flyer Distribution, Create FlyerDistributionMarketingPlan
@@ -138,7 +138,7 @@ public class BusinessGrowthPlanService {
                             .flyer(request.getFlyer())
                             .build();
 
-                    flyerDistributionMarketingRepository.save(plan);
+                    businessRepository.save(plan);
                 }
 
             } else if ("OE".equals(request.getPlanType())) {
@@ -159,7 +159,7 @@ public class BusinessGrowthPlanService {
                         .staffs(request.getStaffs())
                         .build();
 
-                outletExpansionPlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else {
                 throw new Exception();
@@ -282,7 +282,7 @@ public class BusinessGrowthPlanService {
                         .containers(request.getContainers())
                         .build();
 
-                foodDeliveryMarketplacePlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else if ("MK".equals(request.getPlanType())) {
                 //2. If Marketing, Create MarketingStrategy based on type of marketing strategy
@@ -305,7 +305,7 @@ public class BusinessGrowthPlanService {
                             .socialMedia(request.getSocialMedia())
                             .build();
 
-                    socialMediaMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("PB".equals(request.getMethod())) {
 
@@ -325,7 +325,7 @@ public class BusinessGrowthPlanService {
                             .posterBanner(request.getPosterBanner())
                             .build();
 
-                    posterAndBannerMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("FD".equals(request.getMethod())) {
                     //2.3. If Flyer Distribution, Create FlyerDistributionMarketingPlan
@@ -344,7 +344,7 @@ public class BusinessGrowthPlanService {
                             .flyer(request.getFlyer())
                             .build();
 
-                    flyerDistributionMarketingRepository.save(plan);
+                    businessRepository.save(plan);
                 }
 
             } else if ("OE".equals(request.getPlanType())) {
@@ -365,7 +365,7 @@ public class BusinessGrowthPlanService {
                         .staffs(request.getStaffs())
                         .build();
 
-                outletExpansionPlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else {
 

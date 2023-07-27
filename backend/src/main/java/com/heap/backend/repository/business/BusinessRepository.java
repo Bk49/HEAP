@@ -13,5 +13,7 @@ public interface BusinessRepository<T extends BusinessGrowthPlan> extends MongoR
 
     List<BusinessGrowthPlan> findAllByUserId(String userId);
 
+    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeDesc();
+
     void deleteByUserIdAndId(String id, String bgpId);
 }
