@@ -1,102 +1,125 @@
-import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import React, { useState, useEffect, useRef } from 'react';
+import { GoogleMap, Marker, InfoWindow, Autocomplete, useLoadScript } from '@react-google-maps/api';
+
+const libraries = ['places'];
+
+//Size of map container
+const mapContainerStyle = {
+  width: "652px",
+  height: "342px",
+};
+
+//Set center
+const center = {
+  lat: 1.3521,
+  lng: 103.8198,
+};
 
 const MapComponent = () => {
-  // eslint-disable-next-line
   const [map, setMap] = useState(null);
-  const [center, setCenter] = useState({ lat: 1.3521, lng: 103.8198 });
-  // eslint-disable-next-line
-  const [marker, setMarker] = useState(null);
-  const [clickedLocation, setClickedLocation] = useState(null);
-  const [addressDetails, setAddressDetails] = useState(null);
+  const [markerPosition, setMarkerPosition] = useState(null);
+  const [infoWindowPosition, setInfoWindowPosition] = useState(null);
+  const [searchValue, setSearchValue] = useState('');
+  const autocompleteRef = useRef(null); // Ref to store the Autocomplete instance
 
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-  const onLoad = (map) => {
-    setMap(map);
-  };
+  // Load the google object from the script
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: apiKey,
+    libraries,
+  });
 
   useEffect(() => {
-    // Fetch the user's current location or set a default location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCenter({ lat: position.coords.latitude, lng: position.coords.longitude });
-        },
-        () => {
-          setCenter({ lat: 1.3521, lng: 103.8198 }); // Default to a location if user denies location access
-        }
-      );
+    if (window.google && isLoaded) {
+      // The Google Maps API is loaded and ready to use
+      // You can put any code that depends on the Google Maps API here
     }
-  }, []);
-
-  const handleSearch = (event) => {
-    // Handle search input and update the map's center
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address: event.target.value }, (results, status) => {
-      if (status === window.google.maps.GeocoderStatus.OK) {
-        setCenter({
-          lat: results[0].geometry.location.lat(),
-          lng: results[0].geometry.location.lng(),
-        });
-        setClickedLocation(null);
-        setAddressDetails(null);
-      }
-    });
-  };
+  }, [isLoaded]);
 
   const handleMapClick = (event) => {
-    // Update marker's position on map click
-    setClickedLocation({
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng(),
-    });
+    setMarkerPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+  };
 
-    // Reverse geocode the clicked location to get address details
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ location: { lat: event.latLng.lat(), lng: event.latLng.lng() } }, (results, status) => {
-      if (status === window.google.maps.GeocoderStatus.OK) {
-        setAddressDetails(results[0].formatted_address);
-      }
+  const handleMarkerClick = () => {
+    setInfoWindowPosition(markerPosition);
+  };
+
+  const handleInfoWindowClose = () => {
+    setInfoWindowPosition(null);
+  };
+
+  const handlePlaceSelect = () => {
+    // Get the selected place from the Autocomplete component using the ref
+    const selectedPlace = autocompleteRef.current.getPlace();
+
+    setSearchValue(selectedPlace.formatted_address);
+    setMarkerPosition({
+      lat: selectedPlace.geometry.location.lat(),
+      lng: selectedPlace.geometry.location.lng(),
+    });
+    setInfoWindowPosition({
+      lat: selectedPlace.geometry.location.lat(),
+      lng: selectedPlace.geometry.location.lng(),
+    });
+    map.panTo({
+      lat: selectedPlace.geometry.location.lat(),
+      lng: selectedPlace.geometry.location.lng(),
     });
   };
 
+  //Loading of maps
+  if (!isLoaded) return 'Loading Maps...';
+  if (loadError) return 'Error loading maps';
+
   return (
-    <LoadScript googleMapsApiKey={apiKey}>
+    <div>
       <GoogleMap
-        mapContainerStyle={{ width: "652px", height: "342px" }}
-        center={center}
+        mapContainerStyle={mapContainerStyle}
         zoom={11}
-        onLoad={onLoad}
+        center={center}
         onClick={handleMapClick}
+        onLoad={(map) => setMap(map)}
       >
-        {/* Add search input */}
-        <div>
-          <input
-            type="text"
-            placeholder="Search location"
-            onChange={handleSearch}
-          />
-        </div>
+        {markerPosition && (
+          <Marker position={markerPosition} onClick={handleMarkerClick} />
+        )}
 
-        {/* Add marker */}
-        {clickedLocation && <Marker position={clickedLocation} />}
-
-        {/* Add info window */}
-        {addressDetails && clickedLocation && (
+        {infoWindowPosition && (
           <InfoWindow
-            position={clickedLocation}
-            onCloseClick={() => setClickedLocation(null)}
+            position={infoWindowPosition}
+            onCloseClick={handleInfoWindowClose}
           >
             <div>
-              <p>Address: {addressDetails}</p>
-              <p>Latitude: {clickedLocation.lat}</p>
-              <p>Longitude: {clickedLocation.lng}</p>
+              <h3>Marker Location</h3>
+              <p>Latitude: {infoWindowPosition.lat}</p>
+              <p>Longitude: {infoWindowPosition.lng}</p>
             </div>
           </InfoWindow>
         )}
       </GoogleMap>
-    </LoadScript>
+
+      <Autocomplete
+        onLoad={(autocomplete) => {
+          autocomplete.setFields(['formatted_address', 'geometry']);
+          // Save the Autocomplete instance in the ref
+          autocompleteRef.current = autocomplete;
+        }}
+        onPlaceChanged={handlePlaceSelect}
+      >
+        <input
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          placeholder="Search for a location..."
+
+          style={{
+            width: "652px", // Set the desired width
+            // Add any other styling you want
+          }}
+
+        />
+      </Autocomplete>
+    </div>
   );
 };
 
