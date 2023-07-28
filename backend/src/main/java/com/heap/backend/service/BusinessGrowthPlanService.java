@@ -257,6 +257,12 @@ public class BusinessGrowthPlanService {
                 throw new IllegalArgumentException("Duplicate Plan Name");
 
             }
+
+            //Obtain previous creationDateTime
+            String createDateTime = businessRepository.findByIdAndUserId(bgpId, id)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid PlanId"))
+                    .getCreateDateTime();
+
             //Create Plan based on planType
             if ("FD".equals(request.getPlanType())) {
 
@@ -278,6 +284,7 @@ public class BusinessGrowthPlanService {
                         .planType(request.getPlanType())
                         .menuId(request.getMenuId())
                         .containers(request.getContainers())
+                        .createDateTime(createDateTime)
                         .build();
 
                 businessRepository.save(plan);
@@ -301,6 +308,7 @@ public class BusinessGrowthPlanService {
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
                             .socialMedia(request.getSocialMedia())
+                            .createDateTime(createDateTime)
                             .build();
 
                     businessRepository.save(plan);
@@ -321,6 +329,7 @@ public class BusinessGrowthPlanService {
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
                             .posterBanner(request.getPosterBanner())
+                            .createDateTime(createDateTime)
                             .build();
 
                     businessRepository.save(plan);
@@ -340,6 +349,7 @@ public class BusinessGrowthPlanService {
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
                             .flyer(request.getFlyer())
+                            .createDateTime(createDateTime)
                             .build();
 
                     businessRepository.save(plan);
@@ -361,6 +371,7 @@ public class BusinessGrowthPlanService {
                         .rentalPrice(request.getRentalPrice())
                         .renovation(request.getRenovation())
                         .staffs(request.getStaffs())
+                        .createDateTime(createDateTime)
                         .build();
 
                 businessRepository.save(plan);

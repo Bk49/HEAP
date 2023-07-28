@@ -26,7 +26,7 @@ public class BusinessGrowthPlanController {
         return commonService.checkResponse(businessGrowthPlanService.create(request, oldEmail));
     }
 
-    @PostMapping("/deleteBGP/{bgpId}")
+    @DeleteMapping("/deleteBGP/{bgpId}")
     public ResponseEntity<Response> delete(@PathVariable String bgpId, @RequestHeader("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
@@ -34,12 +34,12 @@ public class BusinessGrowthPlanController {
         return commonService.checkResponse(businessGrowthPlanService.delete(bgpId, oldEmail));
     }
 
-    @PutMapping("/updateBGP/{BGPId}")
-    public ResponseEntity<Response> delete(@PathVariable String BGPId, @RequestBody UpdateBusinessGrowthPlanRequest request, @RequestHeader("Authorization") String token) {
+    @PutMapping("/updateBGP/{bgpId}")
+    public ResponseEntity<Response> delete(@PathVariable String bgpId, @RequestBody UpdateBusinessGrowthPlanRequest request, @RequestHeader("Authorization") String token) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = commonService.returnOldEmail(token);
-        return commonService.checkResponse(businessGrowthPlanService.update(BGPId, request, oldEmail));
+        return commonService.checkResponse(businessGrowthPlanService.update(bgpId, request, oldEmail));
     }
 
     @GetMapping("/findBGP/{bgpId}")
