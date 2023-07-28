@@ -30,7 +30,7 @@ public class BusinessGrowthPlanService {
 
     private final CommonService commonService;
     private final MenuRepository menuRepository;
-//    private final FlyerDistributionMarketingRepository flyerDistributionMarketingRepository;
+    //    private final FlyerDistributionMarketingRepository flyerDistributionMarketingRepository;
 //    private final FoodDeliveryMarketplacePlanRepository foodDeliveryMarketplacePlanRepository;
 //    private final OutletExpansionPlanRepository outletExpansionPlanRepository;
 //    private final PosterAndBannerMarketingPlanRepository posterAndBannerMarketingPlanRepository;
@@ -467,42 +467,28 @@ public class BusinessGrowthPlanService {
 
     public Response findAll(String oldEmail, String order, String sortBy) {
 
-        List<BusinessGrowthPlan> businessGrowthPlans = new ArrayList<>();
-
         try {
             String id = commonService.getIdByEmail(oldEmail);
 
-            if ("priority".equals(sortBy)) {
-                //If criteria stated is by priority
-                if ("descending".equals(order)) {
-                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeDesc(id,
-                            Sort.by("priority").descending());
-                } else {
-                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeAsc(id,
-                            Sort.by("priority").ascending());
-                }
+            // Decides sort by what
+            Sort sort = Sort.by(sortBy.equals("priority") // Is it by priority?
+                    ? "priority"
+                    : sortBy.equals("urgency")  // If not by priority, is it urgency?
+                        ? "urgency"
+                        : "createDateTime"); // Fallback case where it is neither priority nor urgency
 
-            } else if ("urgency".equals(sortBy)) {
+            // What decides sort direction
+            sort = "descending".equals(order) ? sort.descending() : sort.ascending();
 
-                //If criteria stated is by endDate
-                if ("descending".equals(order)) {
-                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeDesc(id,
-                            Sort.by("endDate").descending());
-                } else {
-                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeAsc(id,
-                            Sort.by("endDate").ascending());
-                }
-
-            } else {
-
-                //If no criteria stated for sort by
-                if ("descending".equals(order)) {
-                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeDesc(id);
-                } else {
-                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeAsc(id);
-                }
-
+            // Further sort by createDateTime when the we are sorting by priority or urgency
+            if(sortBy.equals("priority") || sortBy.equals("urgency")){
+                sort = sort.and(Sort.by("createDateTime").descending());
             }
+
+            List<BusinessGrowthPlan> businessGrowthPlans = businessRepository.findAllByUserId(id, sort);
+            return MultipleBusinessGrowthPlanResponse.builder()
+                    .businessGrowthPlans(businessGrowthPlans)
+                    .build();
 
         } catch (IllegalArgumentException e) {
 
@@ -522,11 +508,6 @@ public class BusinessGrowthPlanService {
                     .build();
 
         }
-
-        return MultipleBusinessGrowthPlanResponse.builder()
-                .businessGrowthPlans(businessGrowthPlans)
-                .build();
-
     }
 
     public BusinessGrowthPlan find(String bgpId, String userId) {
