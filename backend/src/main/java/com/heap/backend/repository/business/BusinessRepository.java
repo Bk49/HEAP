@@ -12,15 +12,7 @@ public interface BusinessRepository<T extends BusinessGrowthPlan> extends MongoR
 
     Optional<BusinessGrowthPlan> findByIdAndUserId(String planId, String userId);
 
-    List<BusinessGrowthPlan> findAllByUserId(String userId);
-
-    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeDesc(String userId, Sort sort);
-
-    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeAsc(String userId, Sort sort);
-
-    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeDesc(String userId);
-
-    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeAsc(String userId);
+    List<BusinessGrowthPlan> findAllByUserId(String userId, Sort sort);
 
     void deleteByUserIdAndId(String id, String bgpId);
 }
