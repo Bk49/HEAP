@@ -9,6 +9,25 @@ const mapContainerStyle = {
   height: "342px",
 };
 
+const infoWindowStyles = {
+  backgroundColor: '#fff',
+  padding: '10px',
+  borderRadius: '8px',
+  width: '200px',
+  height: '100px',
+};
+
+const titleStyles = {
+  fontFamily: 'Roboto',
+  fontSize: '16px',
+  fontWeight: 'bold',
+};
+
+const locationStyles = {
+  fontFamily: 'Roboto',
+  fontSize: '13px',
+};
+
 //Set center
 const center = {
   lat: 1.3521,
@@ -21,6 +40,7 @@ const MapComponent = () => {
   const [infoWindowPosition, setInfoWindowPosition] = useState(null);
   const [searchValue, setSearchValue] = useState('');
   const autocompleteRef = useRef(null); // Ref to store the Autocomplete instance
+  const [markerAddress, setMarkerAddress] = useState(''); // Stores address of marker
 
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -37,22 +57,41 @@ const MapComponent = () => {
     }
   }, [isLoaded]);
 
+  // Gets address on marked location
+  const getAddressFromLatLng = async (lat, lng) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+      );
+      const data = await response.json();
+      if (data.status === 'OK') {
+        setMarkerAddress(data.results[0].formatted_address);
+      } else {
+        setMarkerAddress('Address not found');
+      }
+    } catch (error) {
+      console.error('Error fetching address:', error);
+      setMarkerAddress('Error fetching address');
+    }
+  };  
+
   const handleMapClick = (event) => {
     setMarkerPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() });
   };
 
   const handleMarkerClick = () => {
+    getAddressFromLatLng(markerPosition.lat, markerPosition.lng);
     setInfoWindowPosition(markerPosition);
-  };
+  };  
 
   const handleInfoWindowClose = () => {
     setInfoWindowPosition(null);
   };
-
+  
   const handlePlaceSelect = () => {
     // Get the selected place from the Autocomplete component using the ref
     const selectedPlace = autocompleteRef.current.getPlace();
-
+  
     setSearchValue(selectedPlace.formatted_address);
     setMarkerPosition({
       lat: selectedPlace.geometry.location.lat(),
@@ -88,8 +127,7 @@ const MapComponent = () => {
           placeholder="Search for a location..."
 
           style={{
-            width: "652px", // Set the desired width
-            // Add any other styling you want
+            width: "652px",
           }}
 
         />
@@ -108,13 +146,16 @@ const MapComponent = () => {
 
         {infoWindowPosition && (
           <InfoWindow
-            position={infoWindowPosition}
-            onCloseClick={handleInfoWindowClose}
+            position={markerPosition}
+            onCloseClick={() => handleInfoWindowClose()} // Call the function here
           >
-            <div>
-              <h3>Marker Location</h3>
-              <p>Latitude: {infoWindowPosition.lat}</p>
-              <p>Longitude: {infoWindowPosition.lng}</p>
+            <div style={infoWindowStyles}>
+              {/* Address of marker */}
+              <h3 style={titleStyles}>{markerAddress}</h3> 
+              <p style={locationStyles}>
+                Latitude: {infoWindowPosition.lat}<br/>
+                Longitude: {infoWindowPosition.lng}
+              </p>
             </div>
           </InfoWindow>
         )}
