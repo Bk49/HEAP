@@ -5,7 +5,6 @@ import com.heap.backend.data.request.business.UpdateBusinessGrowthPlanRequest;
 import com.heap.backend.data.response.Response;
 import com.heap.backend.service.BusinessGrowthPlanService;
 import com.heap.backend.service.CommonService;
-import com.heap.backend.service.auth.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class BusinessGrowthPlanController {
     private final CommonService commonService;
     private final BusinessGrowthPlanService businessGrowthPlanService;
-    private final JwtService jwtService;
 
     @PostMapping("/createBGP")
     public ResponseEntity<Response> create(@RequestBody CreateBusinessGrowthPlanRequest request, @RequestHeader("Authorization") String token) {
