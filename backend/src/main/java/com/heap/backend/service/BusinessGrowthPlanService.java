@@ -15,7 +15,6 @@ import com.heap.backend.models.business.outletexpansion.OutletExpansionPlan;
 import com.heap.backend.models.business.marketing.posterbanner.PosterAndBannerMarketingPlan;
 import com.heap.backend.models.business.marketing.socialmedia.SocialMediaMarketingPlan;
 import com.heap.backend.repository.*;
-import com.heap.backend.repository.business.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

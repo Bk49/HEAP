@@ -1,4 +1,4 @@
-package com.heap.backend.repository.business;
+package com.heap.backend.repository;
 
 import com.heap.backend.models.business.BusinessGrowthPlan;
 import org.springframework.data.domain.Sort;
