@@ -76,7 +76,7 @@ public class MenuService {
             String msg = "";
 
             if ("Invalid Token".equals(errorMessage)) {
-                err = "Invalid Token";
+                err += "Invalid Token";
                 msg = "User not found";
             } else if ("Duplicate Menu".equals(errorMessage)) {
                 err += "Duplicate Menu";

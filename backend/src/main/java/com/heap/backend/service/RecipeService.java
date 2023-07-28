@@ -58,7 +58,7 @@ public class RecipeService {
 
             //If user cannot be found in the repository based on token obtained info, return ErrorResponse
             if ("Invalid Token".equals(e.getMessage())) {
-                err = "Invalid Token";
+                err += "Invalid Token";
                 msg = "User not found";
             } else {
                 err += "Duplicate Recipe";
