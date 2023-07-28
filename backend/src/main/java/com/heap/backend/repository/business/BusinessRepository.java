@@ -1,6 +1,7 @@
 package com.heap.backend.repository.business;
 
 import com.heap.backend.models.business.BusinessGrowthPlan;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -13,7 +14,13 @@ public interface BusinessRepository<T extends BusinessGrowthPlan> extends MongoR
 
     List<BusinessGrowthPlan> findAllByUserId(String userId);
 
-    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeDesc();
+    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeDesc(String userId, Sort sort);
+
+    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeAsc(String userId, Sort sort);
+
+    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeDesc(String userId);
+
+    List<BusinessGrowthPlan> findAllByUserIdOrderByCreateDateTimeAsc(String userId);
 
     void deleteByUserIdAndId(String id, String bgpId);
 }

@@ -16,10 +16,8 @@ import com.heap.backend.models.business.marketing.posterbanner.PosterAndBannerMa
 import com.heap.backend.models.business.marketing.socialmedia.SocialMediaMarketingPlan;
 import com.heap.backend.repository.*;
 import com.heap.backend.repository.business.*;
-import com.heap.backend.repository.business.marketing.FlyerDistributionMarketingRepository;
-import com.heap.backend.repository.business.marketing.PosterAndBannerMarketingPlanRepository;
-import com.heap.backend.repository.business.marketing.SocialMediaMarketingPlanRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,11 +30,11 @@ public class BusinessGrowthPlanService {
 
     private final CommonService commonService;
     private final MenuRepository menuRepository;
-    private final FlyerDistributionMarketingRepository flyerDistributionMarketingRepository;
-    private final FoodDeliveryMarketplacePlanRepository foodDeliveryMarketplacePlanRepository;
-    private final OutletExpansionPlanRepository outletExpansionPlanRepository;
-    private final PosterAndBannerMarketingPlanRepository posterAndBannerMarketingPlanRepository;
-    private final SocialMediaMarketingPlanRepository socialMediaMarketingPlanRepository;
+//    private final FlyerDistributionMarketingRepository flyerDistributionMarketingRepository;
+//    private final FoodDeliveryMarketplacePlanRepository foodDeliveryMarketplacePlanRepository;
+//    private final OutletExpansionPlanRepository outletExpansionPlanRepository;
+//    private final PosterAndBannerMarketingPlanRepository posterAndBannerMarketingPlanRepository;
+//    private final SocialMediaMarketingPlanRepository socialMediaMarketingPlanRepository;
     private final BusinessRepository<BusinessGrowthPlan> businessRepository;
 
     public Response create(CreateBusinessGrowthPlanRequest request, String oldEmail) {
@@ -463,15 +461,37 @@ public class BusinessGrowthPlanService {
         try {
             String id = commonService.getIdByEmail(oldEmail);
 
-            List<BusinessGrowthPlan> businessGrowthPlanList =
-                    businessRepository.findAllByUserId(id);
+            if ("priority".equals(sortBy)) {
+                //If criteria stated is by priority
+                if ("descending".equals(order)) {
+                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeDesc(id,
+                            Sort.by("priority").descending());
+                } else {
+                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeAsc(id,
+                            Sort.by("priority").ascending());
+                }
 
+            } else if ("urgency".equals(sortBy)) {
 
-            //Add all to the main list
-            businessGrowthPlans.addAll(businessGrowthPlanList);
+                //If criteria stated is by endDate
+                if ("descending".equals(order)) {
+                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeDesc(id,
+                            Sort.by("endDate").descending());
+                } else {
+                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeAsc(id,
+                            Sort.by("endDate").ascending());
+                }
 
-            //Sorting based on condition
-            listSorter(businessGrowthPlans, order, sortBy);
+            } else {
+
+                //If no criteria stated for sort by
+                if ("descending".equals(order)) {
+                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeDesc(id);
+                } else {
+                    businessGrowthPlans = businessRepository.findAllByUserIdOrderByCreateDateTimeAsc(id);
+                }
+
+            }
 
         } catch (IllegalArgumentException e) {
 
@@ -496,17 +516,6 @@ public class BusinessGrowthPlanService {
                 .businessGrowthPlans(businessGrowthPlans)
                 .build();
 
-    }
-
-    public void listSorter(List<BusinessGrowthPlan> list, String order, String sortBy) {
-        //Uses BubbleSort logic
-
-        //Goes through the list n-1 times
-        for (int i = 0; i < list.size() - 1; i++) {
-            for (int j = 0; j < list.size() - i - 1; j++) {
-                //Identify type for each
-            }
-        }
     }
 
     public BusinessGrowthPlan find(String bgpId, String userId) {
