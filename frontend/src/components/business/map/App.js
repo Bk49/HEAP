@@ -74,6 +74,27 @@ const MapComponent = () => {
 
   return (
     <div>
+      <Autocomplete
+        onLoad={(autocomplete) => {
+          autocomplete.setFields(['formatted_address', 'geometry']);
+          // Save the Autocomplete instance in the ref
+          autocompleteRef.current = autocomplete;
+        }}
+        onPlaceChanged={handlePlaceSelect}
+      >
+        <input
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          placeholder="Search for a location..."
+
+          style={{
+            width: "652px", // Set the desired width
+            // Add any other styling you want
+          }}
+
+        />
+      </Autocomplete>
+
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={11}
@@ -98,27 +119,6 @@ const MapComponent = () => {
           </InfoWindow>
         )}
       </GoogleMap>
-
-      <Autocomplete
-        onLoad={(autocomplete) => {
-          autocomplete.setFields(['formatted_address', 'geometry']);
-          // Save the Autocomplete instance in the ref
-          autocompleteRef.current = autocomplete;
-        }}
-        onPlaceChanged={handlePlaceSelect}
-      >
-        <input
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Search for a location..."
-
-          style={{
-            width: "652px", // Set the desired width
-            // Add any other styling you want
-          }}
-
-        />
-      </Autocomplete>
     </div>
   );
 };
