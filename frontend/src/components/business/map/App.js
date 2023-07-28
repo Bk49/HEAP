@@ -13,8 +13,6 @@ const infoWindowStyles = {
   backgroundColor: '#fff',
   padding: '10px',
   borderRadius: '8px',
-  width: '200px',
-  height: '100px',
 };
 
 const titleStyles = {
