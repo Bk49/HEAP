@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -30,11 +29,6 @@ public class BusinessGrowthPlanService {
 
     private final CommonService commonService;
     private final MenuRepository menuRepository;
-    //    private final FlyerDistributionMarketingRepository flyerDistributionMarketingRepository;
-//    private final FoodDeliveryMarketplacePlanRepository foodDeliveryMarketplacePlanRepository;
-//    private final OutletExpansionPlanRepository outletExpansionPlanRepository;
-//    private final PosterAndBannerMarketingPlanRepository posterAndBannerMarketingPlanRepository;
-//    private final SocialMediaMarketingPlanRepository socialMediaMarketingPlanRepository;
     private final BusinessRepository<BusinessGrowthPlan> businessRepository;
 
     public Response create(CreateBusinessGrowthPlanRequest request, String oldEmail) {
@@ -470,18 +464,20 @@ public class BusinessGrowthPlanService {
         try {
             String id = commonService.getIdByEmail(oldEmail);
 
+            System.out.println(order + " : " + sortBy);
+
             // Decides sort by what
-            Sort sort = Sort.by(sortBy.equals("priority") // Is it by priority?
+            Sort sort = Sort.by("priority".equals(sortBy) // Is it by priority?
                     ? "priority"
-                    : sortBy.equals("urgency")  // If not by priority, is it urgency?
-                        ? "urgency"
-                        : "createDateTime"); // Fallback case where it is neither priority nor urgency
+                    : ("urgency".equals(sortBy)  // If not by priority, is it urgency?
+                        ? "endDate"
+                        : "createDateTime")); // Fallback case where it is neither priority nor urgency
 
             // What decides sort direction
             sort = "descending".equals(order) ? sort.descending() : sort.ascending();
 
-            // Further sort by createDateTime when the we are sorting by priority or urgency
-            if(sortBy.equals("priority") || sortBy.equals("urgency")){
+            // Further sort by createDateTime when if we are sorting by priority or urgency
+            if("priority".equals(sortBy) || "urgency".equals(sortBy)){
                 sort = sort.and(Sort.by("createDateTime").descending());
             }
 
@@ -513,7 +509,7 @@ public class BusinessGrowthPlanService {
     public BusinessGrowthPlan find(String bgpId, String userId) {
         Supplier<RuntimeException> expSupplier = () -> new IllegalArgumentException("No such Plan");
 
-        BusinessGrowthPlan businessGrowthPlan = null;
+        BusinessGrowthPlan businessGrowthPlan;
 
         if (businessRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
             businessGrowthPlan = businessRepository
