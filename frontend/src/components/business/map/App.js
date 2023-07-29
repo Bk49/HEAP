@@ -9,6 +9,18 @@ const mapContainerStyle = {
   height: "342px",
 };
 
+const searchBarStyle = {
+  width: "632px",
+  height: "30px",
+  padding: "10px",
+  borderRadius: ["4px", "4px", "0px", "0px"],
+  background: "rgba(0, 0, 0, 0.06)",
+  border: "5px",
+  borderColor: 'black',
+  fontSize: "16px",
+  fontFamily: "Roboto",
+}
+
 const infoWindowStyles = {
   backgroundColor: '#fff',
   padding: '10px',
@@ -122,12 +134,8 @@ const MapComponent = () => {
         <input
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Search for a location..."
-
-          style={{
-            width: "652px",
-          }}
-
+          placeholder="Search Google Maps"
+          style={searchBarStyle}
         />
       </Autocomplete>
 
