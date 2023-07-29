@@ -1,82 +1,53 @@
-import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { smallButtonStyles as style } from "../../../constants/buttonStyles";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const SortingButton = ({
-    sortingOrder,
+    sort,
+    setSort,
+    name = "default",
     children = "Button Text",
-    onClick = () => {
-        console.log("Button pressed");
-    },
 }) => {
-   
-    const [sortState, setSortState] = useState('default');
-    const [isClicked, setIsClicked] = useState(false);
-
-    const handleSorting = () => {
-      if (sortState === 'default') {
-        setSortState('asc');
-      } else if (sortState === 'asc') {
-        setSortState('desc');
-      } else {
-        setSortState('default');
-      }
-        setIsClicked(true);
-        onClick();
-    };
-  
-    const getButtonContent = () => {
-      if (sortState === 'default') {
-        return;
-      } else if (sortState === 'asc') {
-        return (
-            <ExpandMoreIcon />
-        );
-      } else {
-        return (
-             <ExpandLessIcon />
-        );
-      }
-    };
-  
-    const getButtonColor = () => {
-      if (sortState === 'default') {
-        return style["secondary"];
-      } else {
-        return style["primary"];
-      }
-    };
-
-    const getHoverColor = () => {
-        if (sortState === 'default') {
-          return style["secondary"].hoverColor;
-        } else {
-          return style["primary"].hoverColor;
-        }
-      };
-
     return (
         <Button
             sx={{
-                backgroundColor: getButtonColor(),
+                backgroundColor:
+                    style[sort.sortBy === name ? "primary" : "secondary"]
+                        .backgroundColor,
                 color: "white",
                 boxShadow: "2",
                 width: "7rem",
                 "&:hover": {
-                    backgroundColor: getHoverColor(),
+                    backgroundColor:
+                        style[sort.sortBy === name ? "primary" : "secondary"]
+                            .hoverColor,
                 },
             }}
             variant="contained"
-            onClick={handleSorting}
+            onClick={() =>
+                setSort(({ sortBy: prevSortBy, order: prevOrder }) => ({
+                    sortBy:
+                        prevSortBy === name && prevOrder === "ascending"
+                            ? "default"
+                            : name,
+                    order:
+                        prevSortBy === name && prevOrder === "descending"
+                            ? "ascending"
+                            : "descending",
+                }))
+            }
         >
-            {children} {getButtonContent()}
+            {children}
+            {sort.sortBy === name ? (
+                sort.order === "descending" ? (
+                    <ExpandMoreIcon />
+                ) : (
+                    <ExpandLessIcon />
+                )
+            ) : null}
         </Button>
     );
 };
 
 export default SortingButton;
-
-
-

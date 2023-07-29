@@ -165,7 +165,7 @@ export default createBrowserRouter([
         )
     },
     {
-        path: "my-business-growth-plan",
+        path: "my-plans",
         element: (
             <ProtectedRoute>
                 <MyBusinessGrowthPlan />
