@@ -49,6 +49,7 @@ public class AuthenticationService {
                     .isFusion(request.isFusion())
                     .storeAddress(request.getStoreAddress())
                     .postalCode(request.getPostalCode())
+                    .budget(request.getBudget())
                     .build();
 
         User user = User.builder()

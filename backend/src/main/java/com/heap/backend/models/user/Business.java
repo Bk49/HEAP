@@ -36,6 +36,9 @@ public class Business {
     @NotBlank
     private String postalCode;
 
+    @NotBlank
+    private double budget;
+
     public Business duplicate() {
 
         return Business.builder()
@@ -45,6 +48,7 @@ public class Business {
                 .isFusion(this.isFusion())
                 .storeAddress(this.getStoreAddress())
                 .postalCode(this.getPostalCode())
+                .budget(this.getBudget())
                 .build();
     }
 }
