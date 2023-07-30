@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, Marker, InfoWindow, Autocomplete, useLoadScript } from '@react-google-maps/api';
+import { TextField } from '@mui/material';
 
 const libraries = ['places'];
 
@@ -10,30 +11,22 @@ const mapContainerStyle = {
 };
 
 const searchBarStyle = {
-  width: "632px",
-  height: "30px",
-  padding: "10px",
-  borderRadius: ["4px", "4px", "0px", "0px"],
-  background: "rgba(0, 0, 0, 0.06)",
-  border: "5px",
-  borderColor: 'black',
-  fontSize: "16px",
-  fontFamily: "Roboto",
+  width:"652px",
 }
 
-const infoWindowStyles = {
+const infoWindowStyle = {
   backgroundColor: '#fff',
   padding: '10px',
   borderRadius: '8px',
 };
 
-const titleStyles = {
+const titleStyle = {
   fontFamily: 'Roboto',
-  fontSize: '16px',
+  fontSize: '13px',
   fontWeight: 'bold',
 };
 
-const locationStyles = {
+const locationStyle = {
   fontFamily: 'Roboto',
   fontSize: '13px',
 };
@@ -131,10 +124,11 @@ const MapComponent = () => {
         }}
         onPlaceChanged={handlePlaceSelect}
       >
-        <input
+        <TextField
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Search Google Maps"
+          label="Search Google Maps"
+          variant="filled"
           style={searchBarStyle}
         />
       </Autocomplete>
@@ -155,10 +149,10 @@ const MapComponent = () => {
             position={markerPosition}
             onCloseClick={() => handleInfoWindowClose()} // Call the function here
           >
-            <div style={infoWindowStyles}>
+            <div style={infoWindowStyle}>
               {/* Address of marker */}
-              <h3 style={titleStyles}>{markerAddress}</h3> 
-              <p style={locationStyles}>
+              <h3 style={titleStyle}>{markerAddress}</h3> 
+              <p style={locationStyle}>
                 Latitude: {infoWindowPosition.lat}<br/>
                 Longitude: {infoWindowPosition.lng}
               </p>
