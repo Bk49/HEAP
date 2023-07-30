@@ -26,6 +26,8 @@ public class BusinessGrowthPlan {
     @NotBlank
     private String endDate;
     @NotBlank
+    private double budget;
+    @NotBlank
     private int priority;
     @NotBlank
     private String planType;
