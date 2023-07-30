@@ -20,5 +20,4 @@ public class UpdateProfileRequest {
     private boolean isFusion;
     private String postalCode;
     private String storeAddress;
-    private double budget;
 }

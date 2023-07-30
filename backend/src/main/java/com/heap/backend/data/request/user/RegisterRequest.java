@@ -18,5 +18,4 @@ public class RegisterRequest {
     private boolean isFusion;
     private String storeAddress;
     private String postalCode;
-    private double budget;
 }

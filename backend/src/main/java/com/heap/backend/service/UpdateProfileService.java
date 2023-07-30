@@ -44,7 +44,6 @@ public class UpdateProfileService {
             business.setFusion(request.isFusion());
             business.setStoreAddress(request.getStoreAddress());
             business.setPostalCode(request.getPostalCode());
-            business.setBudget(request.getBudget());
             origUser.setBusiness(business);
 
             //Changes user based on updateRequest
