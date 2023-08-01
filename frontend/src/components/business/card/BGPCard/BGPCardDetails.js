@@ -8,8 +8,8 @@ import Typography from "@mui/material/Typography";
 
 const { formatDate, formatPrice, formatPriority } = bgpCardFormat;
 
-const BGPCardDetails = ({ card }) => {
-    const { planName, startDate, endDate, budget, priority } = card;
+const BGPCardDetails = ({ card, planName }) => {
+    const { startDate, endDate, budget, priority } = card;
 
     return (
         <Grid item>
