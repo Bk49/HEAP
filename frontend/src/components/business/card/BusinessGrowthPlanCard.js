@@ -1,5 +1,4 @@
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import OutletExpansionIllustration from "../../../assets/illustrations/business/outlet-expansion-illustration.jpg";
 import MarketingIllustration from "../../../assets/illustrations/business/marketing-illustration.jpg";
 import FoodDeliveryIllustration from "../../../assets/illustrations/business/food-delivery-illustration.jpg";
@@ -7,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Paper } from "@mui/material";
 import BusinessCardIconButton from "../button/BusinessCardIconButton";
 import BGPCardDetails from "./BGPCard/BGPCardDetails";
+import ConfirmDeleteBGP from "../../common/alert/ConfirmDeleteBGP";
 
 const BusinessGrowthPlanCard = ({ card, onDelete }) => {
-    const { id, planType, ...other } = card;
+    const { id, planType, planName, ...other } = card;
     const navigate = useNavigate();
 
     return (
@@ -45,7 +45,7 @@ const BusinessGrowthPlanCard = ({ card, onDelete }) => {
                                 />
                             </div>
                         </Grid>
-                        <BGPCardDetails card={other} />
+                        <BGPCardDetails card={other} planName={planName} />
                     </Grid>
                 </Grid>
 
@@ -62,10 +62,9 @@ const BusinessGrowthPlanCard = ({ card, onDelete }) => {
                         >
                             <EditIcon fontSize="1.4rem" />
                         </BusinessCardIconButton>
+                            <ConfirmDeleteBGP type={planType} name={planName} onDelete={onDelete}>
+                        </ConfirmDeleteBGP>
 
-                        <BusinessCardIconButton onClick={onDelete}>
-                            <DeleteIcon fontSize="1.4rem" />
-                        </BusinessCardIconButton>
                     </Grid>
                 </Grid>
             </Grid>
