@@ -35,7 +35,7 @@ const ConfirmDeleteDialog = ({
     return (
         <Fragment>
             {type === "business" ? (
-                <IconButton>
+                <IconButton onClick={() => setOpen(true)}>
                     <DeleteIcon />
                 </IconButton>
             ) : (
