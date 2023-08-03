@@ -105,7 +105,6 @@ const CommonMenuForm = ({ isCreate = false, loaderData }) => {
                     } of menu is unsuccessful, please check your input`}
                     onSubmit={async (data) => {
                         try {
-                            console.log(data)
                             const res = isCreate
                                 ? await createMenu(data)
                                 : await updateMenu(data, data.id);

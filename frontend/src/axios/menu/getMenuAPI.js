@@ -12,7 +12,6 @@ const getMenu = async ({ params: { id } }) => {
         return result.data;
     } catch (e) {
         let msg = "";
-        console.log(e);
         if (!e.response) {
             msg =
                 "Get menu unsuccessful due to network error!\nPlease check your internet connection!";
