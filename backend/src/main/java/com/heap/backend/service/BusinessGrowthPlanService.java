@@ -10,6 +10,7 @@ import com.heap.backend.data.response.common.SuccessResponse;
 import com.heap.backend.models.*;
 import com.heap.backend.models.business.*;
 import com.heap.backend.models.business.fooddelivery.FoodDeliveryMarketplacePlan;
+import com.heap.backend.models.business.marketing.common.MarketingPlan;
 import com.heap.backend.models.business.marketing.flyerdistribution.FlyerDistributionMarketingPlan;
 import com.heap.backend.models.business.outletexpansion.OutletExpansionPlan;
 import com.heap.backend.models.business.marketing.posterbanner.PosterAndBannerMarketingPlan;
@@ -249,13 +250,7 @@ public class BusinessGrowthPlanService {
 
         try {
             String id = commonService.getIdByEmail(oldEmail);
-
-            if (businessRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                throw new IllegalArgumentException("Duplicate Plan Name");
-
-            }
-
+            
             //Obtain previous creationDateTime
             String createDateTime = businessRepository.findByIdAndUserId(bgpId, id)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid PlanId"))
@@ -404,7 +399,7 @@ public class BusinessGrowthPlanService {
                         .build();
 
             } else {
-
+                System.out.println(e.getMessage());
                 return ErrorResponse.builder()
                         .error("Bad Request: Invalid Business Growth Plan")
                         .message("Business Growth Plan not found")
@@ -427,12 +422,13 @@ public class BusinessGrowthPlanService {
     }
 
     public Response findOne(String bgpId, String oldEmail) {
-
-        BusinessGrowthPlan businessGrowthPlan;
-
         try {
             String id = commonService.getIdByEmail(oldEmail);
-            businessGrowthPlan = find(bgpId, id);
+            BusinessGrowthPlan businessGrowthPlan = businessRepository.findByIdAndUserId(bgpId, id).orElseThrow(() -> new IllegalArgumentException("BGP Not found"));
+
+            return SingleBusinessGrowthPlanResponse.builder()
+                    .businessGrowthPlan(businessGrowthPlan)
+                    .build();
 
         } catch (IllegalArgumentException e) {
 
@@ -462,10 +458,6 @@ public class BusinessGrowthPlanService {
                     .build();
 
         }
-
-        return SingleBusinessGrowthPlanResponse.builder()
-                .businessGrowthPlan(businessGrowthPlan)
-                .build();
     }
 
     public Response findAll(String oldEmail, String order, String sortBy) {
@@ -479,14 +471,14 @@ public class BusinessGrowthPlanService {
             Sort sort = Sort.by("priority".equals(sortBy) // Is it by priority?
                     ? "priority"
                     : ("urgency".equals(sortBy)  // If not by priority, is it urgency?
-                        ? "endDate"
-                        : "createDateTime")); // Fallback case where it is neither priority nor urgency
+                    ? "endDate"
+                    : "createDateTime")); // Fallback case where it is neither priority nor urgency
 
             // What decides sort direction
             sort = "descending".equals(order) ? sort.descending() : sort.ascending();
 
             // Further sort by createDateTime when if we are sorting by priority or urgency
-            if("priority".equals(sortBy) || "urgency".equals(sortBy)){
+            if ("priority".equals(sortBy) || "urgency".equals(sortBy)) {
                 sort = sort.and(Sort.by("createDateTime").descending());
             }
 
