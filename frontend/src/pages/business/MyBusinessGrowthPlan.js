@@ -90,7 +90,6 @@ const MyBusinessGrowthPlan = () => {
                     <Grid key={index} item xs={11}>
                         <BusinessGrowthPlanCard
                             card={card}
-                            onDelete={() => handleDelete(card.id)}
                         />
                     </Grid>
                 ))}
