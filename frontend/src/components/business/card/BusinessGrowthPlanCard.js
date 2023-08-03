@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Paper } from "@mui/material";
 import BusinessCardIconButton from "../button/BusinessCardIconButton";
 import BGPCardDetails from "./BGPCard/BGPCardDetails";
-import ConfirmDeleteBGP from "../../common/alert/ConfirmDeleteBGP";
+import ConfirmDeleteDialog from "../../common/dialog/ConfirmDeleteDialog";
 
-const BusinessGrowthPlanCard = ({ card, onDelete }) => {
+const BusinessGrowthPlanCard = ({ card }) => {
     const { id, planType, planName, ...other } = card;
     const navigate = useNavigate();
 
@@ -62,9 +62,11 @@ const BusinessGrowthPlanCard = ({ card, onDelete }) => {
                         >
                             <EditIcon fontSize="1.4rem" />
                         </BusinessCardIconButton>
-                            <ConfirmDeleteBGP type={planType} name={planName} onDelete={onDelete}>
-                        </ConfirmDeleteBGP>
-
+                        <ConfirmDeleteDialog
+                            id={id}
+                            type="business"
+                            name={planName}
+                        />
                     </Grid>
                 </Grid>
             </Grid>
