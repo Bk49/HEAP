@@ -4,12 +4,12 @@ import CommonBusinessGrowthPlanForm from "../../components/business/CommonBusine
 import { useLoaderData } from "react-router-dom";
 
 const EditBusinessGrowthPlan = () => {
-    const { business } = useLoaderData();
+    const business = useLoaderData();
 
     return (
         <Fragment>
             <HeadingOne>Edit Business Growth Plan</HeadingOne>
-            <CommonBusinessGrowthPlanForm loaderData={business} />
+            <CommonBusinessGrowthPlanForm isCreate={false} loaderData={business} />
         </Fragment>
     );
 };
