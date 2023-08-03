@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import HeadingOne from "../../components/common/heading/HeadingOne";
 import SortingButton from "../../components/common/button/SortingButton";
 import { useNavigate } from "react-router-dom";
 import TextIconButton from "../../components/common/button/TextIconButton";
 import BusinessGrowthPlanCard from "../../components/business/card/BusinessGrowthPlanCard";
+import getAllBusiness from "../../axios/business/getAllBusinessAPI";
 
 const MyBusinessGrowthPlan = () => {
     const navigate = useNavigate();
@@ -12,50 +13,14 @@ const MyBusinessGrowthPlan = () => {
         sortBy: "default",
         order: "descending",
     });
-    const [cards, setCards] = useState([
-        {
-            id: "64bdef6b6b5d992c941e82ca",
-            planName: "MK 2",
-            startDate: "25/07/2023",
-            endDate: "27/07/2023",
-            budget: 20000,
-            priority: 5,
-            planType: "MK",
-        },
-        {
-            id: "64bdefaa6b5d992c941e82cb",
-            planName: "Flyer Dist 1",
-            startDate: "24/07/2023",
-            endDate: "25/07/2023",
-            budget: 10020,
-            priority: 1,
-            planType: "FD",
-        },
+    const [cards, setCards] = useState([]);
 
-        {
-            id: "64bdefaa6b5d992c941e82cc",
-            planName: "Flyer Dist 2",
-            startDate: "01/12/2023",
-            endDate: "16/12/2023",
-            budget: 3003.43,
-            priority: 3,
-            planType: "OE",
-        },
-        {
-            id: "64bdefaa6b5d992c941e82cd",
-            planName: "Flyer Dist 1",
-            startDate: "24/07/2023",
-            endDate: "25/07/2023",
-            budget: 10020,
-            priority: 1,
-            planType: "FD",
-        },
-    ]);
-
-    const handleDelete = (id) => {
-        const updatedCards = cards.filter((card) => card.id !== id);
-        setCards(updatedCards);
-    };
+    useEffect(() => {
+        (async () => {
+            const { businessGrowthPlans } = await getAllBusiness(sort);
+            setCards(businessGrowthPlans);
+        })();
+    }, [sort]);
 
     return (
         <div>
@@ -88,9 +53,7 @@ const MyBusinessGrowthPlan = () => {
             >
                 {cards.map((card, index) => (
                     <Grid key={index} item xs={11}>
-                        <BusinessGrowthPlanCard
-                            card={card}
-                        />
+                        <BusinessGrowthPlanCard card={card} />
                     </Grid>
                 ))}
             </Grid>
