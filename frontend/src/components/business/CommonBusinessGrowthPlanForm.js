@@ -42,12 +42,11 @@ const CommonBusinessGrowthPlanForm = ({ isCreate = true, loaderData }) => {
                     } of business growth plan is unsuccessful, please check your input`}
                     onSubmit={async (data) => {
                         try {
-                            console.log(data)
                             const res = isCreate
                                 ? await createBusiness(data)
                                 : await updateBusiness(data, data.id);
                             // To be changed to /my-plans
-                            navigate("/my-summary", {
+                            navigate("/my-plans", {
                                 state: { success: res },
                             });
                         } catch (e) {
