@@ -145,7 +145,7 @@ export default createBrowserRouter([
         ),
     },
     {
-        path: "edit-plan",
+        path: "edit-plan/:id",
         element: (
             <ProtectedRoute>
                 <EditBusinessGrowthPlan />
@@ -162,7 +162,7 @@ export default createBrowserRouter([
             <ProtectedRoute>
                 <MySummary />
             </ProtectedRoute>
-        )
+        ),
     },
     {
         path: "my-plans",
