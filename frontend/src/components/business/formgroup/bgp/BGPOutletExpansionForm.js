@@ -34,13 +34,13 @@ const BGPOutletExpansionForm = () => {
             <FieldsColumn>
                 <FieldsRow>
                     <TextField
-                        rules={{ required: true }}
+                        rules={{ required: true, min:0 }}
                         label="Rental Price"
                         name="rentalPrice"
                         type="number"
                     />
                     <TextField
-                        rules={{ required: true }}
+                        rules={{ required: true, min:0 }}
                         label="Renovation Est. Cost"
                         name="renovation"
                         type="number"

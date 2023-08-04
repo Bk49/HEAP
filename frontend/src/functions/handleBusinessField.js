@@ -10,7 +10,6 @@ const handleBusinessField = async (data) => {
         endDate,
         priority,
         planName,
-        createDateTime,
         ...other
     } = data;
 
@@ -23,14 +22,6 @@ const handleBusinessField = async (data) => {
         priority: priority,
         planType: planType,
     };
-
-    // Inject createDateTime for update cases
-    if (createDateTime) {
-        payload = {
-            ...payload,
-            createDateTime: createDateTime,
-        };
-    }
 
     // Inject additional fields to payload based on planType (Filtering unnecessary data from other forms)
     if (planType === "FD") {
