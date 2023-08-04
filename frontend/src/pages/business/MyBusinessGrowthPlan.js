@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import HeadingOne from "../../components/common/heading/HeadingOne";
 import SortingButton from "../../components/common/button/SortingButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TextIconButton from "../../components/common/button/TextIconButton";
 import BusinessGrowthPlanCard from "../../components/business/card/BusinessGrowthPlanCard";
 import getAllBusiness from "../../axios/business/getAllBusinessAPI";
@@ -14,13 +14,14 @@ const MyBusinessGrowthPlan = () => {
         order: "descending",
     });
     const [cards, setCards] = useState([]);
+    const location = useLocation();
 
     useEffect(() => {
         (async () => {
             const { businessGrowthPlans } = await getAllBusiness(sort);
             setCards(businessGrowthPlans);
         })();
-    }, [sort]);
+    }, [sort, location.state]);
 
     return (
         <div>
