@@ -18,8 +18,8 @@ const handleBusinessField = async (data) => {
         planName: planName,
         startDate: convertDateToString(startDate),
         endDate: convertDateToString(endDate),
-        budget: budget,
-        priority: priority,
+        budget: typeof budget === "number" ? budget : parseFloat(budget),
+        priority: typeof priority === "number" ? priority : parseInt(priority),
         planType: planType,
     };
 
@@ -37,8 +37,14 @@ const handleBusinessField = async (data) => {
         return {
             ...payload,
             address: address,
-            renovation: renovation,
-            rentalPrice: rentalPrice,
+            renovation:
+                typeof renovation === "number"
+                    ? renovation
+                    : parseFloat(renovation),
+            rentalPrice:
+                typeof rentalPrice === "number"
+                    ? rentalPrice
+                    : parseFloat(rentalPrice),
             staffs: staffs,
         };
     } else if (planType === "MK") {
@@ -67,7 +73,10 @@ const handleBusinessField = async (data) => {
                     contents: await socialMedia.contents.map(
                         async (content) => ({
                             name: content.name,
-                            file: await handleImageUpload(content.file),
+                            file: await handleImageUpload(
+                                content.file,
+                                `bgp/${content.name}/content_image${Date.now()}`
+                            ),
                             date: convertDateToString(content.date),
                         })
                     ),
@@ -79,7 +88,10 @@ const handleBusinessField = async (data) => {
                 ...payload,
                 posterBanner: {
                     ...posterBanner,
-                    design: await handleImageUpload(posterBanner.design),
+                    design: await handleImageUpload(
+                        posterBanner.design,
+                        `bgp/poster/${planName}/poster_image${Date.now()}`
+                    ),
                 },
             };
         } else if (method === "FD") {
@@ -88,7 +100,10 @@ const handleBusinessField = async (data) => {
                 ...payload,
                 flyer: {
                     ...flyer,
-                    design: await handleImageUpload(flyer.design),
+                    design: await handleImageUpload(
+                        flyer.design,
+                        `bgp/flyer/${planName}/flyer_image${Date.now()}`
+                    ),
                 },
             };
         } else {
