@@ -10,4 +10,9 @@ const convertDateToObject = (str) => {
     return dayjs(str, "DD/MM/YYYY");
 };
 
-export { convertDateToObject, convertDateToString };
+const convertCalendarDate = (str) => {
+    const [day, month, year] = str.split("/");
+    return `${year}-${month}-${day}`;
+};
+
+export { convertDateToObject, convertDateToString, convertCalendarDate };

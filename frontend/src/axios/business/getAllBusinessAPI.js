@@ -1,7 +1,10 @@
 import Cookies from "js-cookie";
 import { protectedInstance as instance } from "../instance";
 
-const getAllBusiness = async ({ sortBy, direction = "descending" }) => {
+const getAllBusiness = async ({
+    sortBy = "default",
+    order: direction = "descending",
+}) => {
     try {
         const result = await instance.get(
             `/user/findAllBGP?sortBy=${sortBy}&direction=${direction}`,
