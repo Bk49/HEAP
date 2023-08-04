@@ -49,7 +49,7 @@ public class BusinessGrowthPlanController {
     }
 
     @GetMapping("/findAllBGP")
-    public ResponseEntity<Response> findAll(@RequestHeader("Authorization") String token, @RequestParam(required = false) String order, @RequestParam(required = false) String sortby) {
+    public ResponseEntity<Response> findAll(@RequestHeader("Authorization") String token, @RequestParam(name="direction", required = false) String order, @RequestParam(name = "sortBy", required = false) String sortby) {
 
         //Obtaining jwt token and email from jwt token
         String oldEmail = commonService.returnOldEmail(token);
