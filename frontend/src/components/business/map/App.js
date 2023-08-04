@@ -152,10 +152,6 @@ const MapComponent = () => {
             <div style={infoWindowStyle}>
               {/* Address of marker */}
               <h3 style={titleStyle}>{markerAddress}</h3> 
-              <p style={locationStyle}>
-                Latitude: {infoWindowPosition.lat}<br/>
-                Longitude: {infoWindowPosition.lng}
-              </p>
             </div>
           </InfoWindow>
         )}
