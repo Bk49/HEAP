@@ -25,6 +25,7 @@ import getAllMenus from "../axios/menu/getAllMenusAPI";
 import getBusiness from "../axios/business/getBusinessAPI";
 import getUser from "../axios/user/getUserAPI";
 import MyBusinessGrowthPlan from "../pages/business/MyBusinessGrowthPlan";
+import getAllBusiness from "../axios/business/getAllBusinessAPI";
 
 export default createBrowserRouter([
     {
@@ -163,6 +164,11 @@ export default createBrowserRouter([
                 <MySummary />
             </ProtectedRoute>
         ),
+        loader: getAllBusiness,
+        errorElement: (
+            <Error403 msg="There seems to be an error trying to access the page, try to relogin!" />
+        )
+
     },
     {
         path: "my-plans",
