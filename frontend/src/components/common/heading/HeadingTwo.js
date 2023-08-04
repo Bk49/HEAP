@@ -13,8 +13,6 @@ const HeadingTwo = ({ children = "Heading Two", addButton = false }) => {
             >
                 {children}
             </span>
-            {/* The button here has yet been created as a TextIconButton */}
-            {addButton && <Button>Add</Button>} 
         </Fragment>
     );
 };
