@@ -6,8 +6,8 @@ import FileInput from "../../../common/form/FileInput";
 import TextField from "../../../common/form/TextField";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
-import LocationRow from "../../datarow/LocationRow";
 import { useFormContext } from "react-hook-form";
+import FlyerDistributionLocationRow from "../../datarow/flyer/FlyerDistributionLocationRow";
 
 const FlyerDistributionMkForm = () => {
     const {
@@ -18,8 +18,9 @@ const FlyerDistributionMkForm = () => {
         <Fragment>
             <CommonFieldArray
                 name="flyer.location"
+                appendObj={""}
                 heading="Location to Distribute"
-                Component={LocationRow}
+                Component={FlyerDistributionLocationRow}
             />
             <HeadingThree>Other Flyer Distribution Details</HeadingThree>
             <FieldsColumn>

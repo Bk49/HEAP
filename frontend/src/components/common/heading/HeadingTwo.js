@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import { Fragment } from "react";
 
 const HeadingTwo = ({ children = "Heading Two", addButton = false }) => {
@@ -13,8 +12,6 @@ const HeadingTwo = ({ children = "Heading Two", addButton = false }) => {
             >
                 {children}
             </span>
-            {/* The button here has yet been created as a TextIconButton */}
-            {addButton && <Button>Add</Button>} 
         </Fragment>
     );
 };

@@ -6,8 +6,8 @@ import FileInput from "../../../common/form/FileInput";
 import TextField from "../../../common/form/TextField";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
-import LocationRow from "../../datarow/LocationRow";
 import { useFormContext } from "react-hook-form";
+import PosterNBannerLocationRow from "../../datarow/posterNbanner/PosterNBannerLocationRow";
 
 const PosterNBannerMkForm = () => {
     const {
@@ -18,8 +18,9 @@ const PosterNBannerMkForm = () => {
         <Fragment>
             <CommonFieldArray
                 name="posterBanner.location"
+                appendObj={""}
                 heading="Location to Place"
-                Component={LocationRow}
+                Component={PosterNBannerLocationRow}
             />
             <HeadingThree>Other Posts and Banner Details</HeadingThree>
             <FieldsColumn>

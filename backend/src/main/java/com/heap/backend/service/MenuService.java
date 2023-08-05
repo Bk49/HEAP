@@ -73,10 +73,10 @@ public class MenuService {
 
             String errorMessage = e.getMessage();
             String err = "Bad Request: ";
-            String msg = "";
+            String msg;
 
             if ("Invalid Token".equals(errorMessage)) {
-                err = "Invalid Token";
+                err += "Invalid Token";
                 msg = "User not found";
             } else if ("Duplicate Menu".equals(errorMessage)) {
                 err += "Duplicate Menu";
@@ -119,7 +119,7 @@ public class MenuService {
 
         } catch (IllegalArgumentException e) {
             String err = "Bad Request: ";
-            String msg = "";
+            String msg;
 
             if ("Invalid Token".equals(e.getMessage())) {
                 err = "Invalid Token";
@@ -180,7 +180,7 @@ public class MenuService {
 
         } catch (IllegalArgumentException e) {
             String err = "Bad Request: ";
-            String msg = "";
+            String msg;
 
             if ("Invalid Token".equals(e.getMessage())) {
                 err = "Invalid Token";
@@ -221,7 +221,7 @@ public class MenuService {
 
         } catch (IllegalArgumentException e) {
             String err = "Bad Request: ";
-            String msg = "";
+            String msg;
 
             if ("Invalid Token".equals(e.getMessage())) {
                 err = "Invalid Token";

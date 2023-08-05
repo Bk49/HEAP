@@ -1,16 +1,67 @@
 import Cookies from "js-cookie";
 import { protectedInstance as instance } from "../instance";
+import { convertDateToObject } from "../../functions/convertDate";
 
-const getRecipe = async ({ params: { businessId } }) => {
+const getBusiness = async ({ params: { id } }) => {
     try {
-        const result = await instance.get(`/user/findBGP/${businessId}`, {
+        const result = await instance.get(`/user/findBGP/${id}`, {
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
             // headers: {
-            //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpQGdtYWlsLmNvbSIsImlhdCI6MTY4OTA0MDQyMSwiZXhwIjoxNjg5MTI2ODIxfQ.dq4Xgx8AColJm86n4vJPOvzhVQs221XxoaHvbW74q1w"}`,
+            //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpMkBnbWFpbC5jb20iLCJpYXQiOjE2OTEwNzM0ODYsImV4cCI6MTY5MTE1OTg4Nn0.0tmCdpMy52dK1MtaQ0QjYbubKzhpBBFC_MTluZVrGtQ"}`,
             // },
         });
+        const business = result.data.businessGrowthPlan;
+        const { planType, startDate, endDate, ...other } = business;
+        let toReturn = {
+            ...other,
+            planType: planType,
+            startDate: convertDateToObject(startDate),
+            endDate: convertDateToObject(endDate),
+        };
 
-        return result.data;
+        if (planType !== "MK") {
+            return toReturn;
+        } else {
+            const { method, promotion } = toReturn;
+
+            if (promotion) {
+                const {
+                    startDate: promoStartDate,
+                    endDate: promoEndDate,
+                    ...otherPromoFields
+                } = promotion;
+                toReturn = {
+                    ...toReturn,
+                    promotion: {
+                        ...otherPromoFields,
+                        startDate: convertDateToObject(promoStartDate),
+                        endDate: convertDateToObject(promoEndDate),
+                    },
+                };
+            }
+
+            if (method === "SM") {
+                const { socialMedia, ...otherToReturnFields } = toReturn;
+                const { contents, ...otherSocialMediaFields } = socialMedia;
+                if (contents.length > 0) {
+                    const newContents = contents.map(
+                        ({ date, ...otherContentFields }) => ({
+                            ...otherContentFields,
+                            date: convertDateToObject(date),
+                        })
+                    );
+                    toReturn = {
+                        ...otherToReturnFields,
+                        socialMedia: {
+                            ...otherSocialMediaFields,
+                            contents: newContents,
+                        },
+                    };
+                }
+            }
+
+            return toReturn;
+        }
     } catch (e) {
         let msg = "";
         if (!e.response) {
@@ -25,4 +76,4 @@ const getRecipe = async ({ params: { businessId } }) => {
     }
 };
 
-export default getRecipe;
+export default getBusiness;

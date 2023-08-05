@@ -11,8 +11,6 @@ public interface RecipeRepository extends MongoRepository<Recipe, String> {
 
   Optional<Recipe> findByUserIdAndId(String userId, String Id);
 
-  List<Recipe> findAllByUserId(String userId);
-
   List<Recipe> findAllByUserIdOrderByCreateDateTimeDesc(String userId);
 
   void deleteByUserIdAndId(String userId, String id);

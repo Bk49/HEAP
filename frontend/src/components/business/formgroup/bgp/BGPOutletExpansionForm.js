@@ -3,10 +3,9 @@ import HeadingThree from "../../../common/heading/HeadingThree";
 import FieldsColumn from "../../../common/form/FieldsColumn";
 import FieldsRow from "../../../common/form/FieldsRow";
 import TextField from "../../../common/form/TextField";
-import TextArea from "../../../common/form/TextArea";
 import CommonFieldArray from "../../../common/datarow/CommonFieldArray";
 import StaffRow from "../../datarow/StaffRow";
-import MapComponent from "../../map/App";
+import Map from "../../map/Map";
 
 const BGPOutletExpansionForm = () => {
     return (
@@ -14,8 +13,7 @@ const BGPOutletExpansionForm = () => {
             <HeadingThree>Outlet Expansion Address and Location</HeadingThree>
             <FieldsColumn>
                 <FieldsRow>
-                    <MapComponent/>
-                    <TextArea
+                    <Map
                         rules={{ required: true }}
                         label="Outlet Expansion Address and Location"
                         name="address"
@@ -34,13 +32,13 @@ const BGPOutletExpansionForm = () => {
             <FieldsColumn>
                 <FieldsRow>
                     <TextField
-                        rules={{ required: true }}
+                        rules={{ required: true, min: 0 }}
                         label="Rental Price"
                         name="rentalPrice"
                         type="number"
                     />
                     <TextField
-                        rules={{ required: true }}
+                        rules={{ required: true, min: 0 }}
                         label="Renovation Est. Cost"
                         name="renovation"
                         type="number"

@@ -10,34 +10,26 @@ import com.heap.backend.data.response.common.SuccessResponse;
 import com.heap.backend.models.*;
 import com.heap.backend.models.business.*;
 import com.heap.backend.models.business.fooddelivery.FoodDeliveryMarketplacePlan;
+import com.heap.backend.models.business.marketing.common.MarketingPlan;
 import com.heap.backend.models.business.marketing.flyerdistribution.FlyerDistributionMarketingPlan;
 import com.heap.backend.models.business.outletexpansion.OutletExpansionPlan;
 import com.heap.backend.models.business.marketing.posterbanner.PosterAndBannerMarketingPlan;
 import com.heap.backend.models.business.marketing.socialmedia.SocialMediaMarketingPlan;
 import com.heap.backend.repository.*;
-import com.heap.backend.repository.business.*;
-import com.heap.backend.repository.business.marketing.FlyerDistributionMarketingRepository;
-import com.heap.backend.repository.business.marketing.PosterAndBannerMarketingPlanRepository;
-import com.heap.backend.repository.business.marketing.SocialMediaMarketingPlanRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.function.Supplier;
-
 
 @Service
 @RequiredArgsConstructor
 public class BusinessGrowthPlanService {
 
     private final CommonService commonService;
-    private final UserRepository userRepository;
     private final MenuRepository menuRepository;
-    private final FlyerDistributionMarketingRepository flyerDistributionMarketingRepository;
-    private final FoodDeliveryMarketplacePlanRepository foodDeliveryMarketplacePlanRepository;
-    private final OutletExpansionPlanRepository outletExpansionPlanRepository;
-    private final PosterAndBannerMarketingPlanRepository posterAndBannerMarketingPlanRepository;
-    private final SocialMediaMarketingPlanRepository socialMediaMarketingPlanRepository;
+    private final BusinessRepository<BusinessGrowthPlan> businessRepository;
 
     public Response create(CreateBusinessGrowthPlanRequest request, String oldEmail) {
 
@@ -50,11 +42,7 @@ public class BusinessGrowthPlanService {
             }
 
             //Ensures that user does not have a plan name by the same planName
-            if (foodDeliveryMarketplacePlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
-                    flyerDistributionMarketingRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
-                    posterAndBannerMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
-                    socialMediaMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent() ||
-                    outletExpansionPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
+            if (businessRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
                 throw new IllegalArgumentException("Duplicate Plan Name");
             }
 
@@ -73,6 +61,7 @@ public class BusinessGrowthPlanService {
                         .planName(request.getPlanName())
                         .startDate(request.getStartDate())
                         .endDate(request.getEndDate())
+                        .budget(request.getBudget())
                         .priority(request.getPriority())
                         .planType(request.getPlanType())
                         .createDateTime(new HEAPDate().toString())
@@ -80,7 +69,7 @@ public class BusinessGrowthPlanService {
                         .containers(request.getContainers())
                         .build();
 
-                foodDeliveryMarketplacePlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else if ("MK".equals(request.getPlanType())) {
                 //2. If Marketing, Create MarketingStrategy based on type of marketing strategy
@@ -94,6 +83,7 @@ public class BusinessGrowthPlanService {
                             .planName(request.getPlanName())
                             .startDate(request.getStartDate())
                             .endDate(request.getEndDate())
+                            .budget(request.getBudget())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
                             .createDateTime(new HEAPDate().toString())
@@ -103,7 +93,7 @@ public class BusinessGrowthPlanService {
                             .socialMedia(request.getSocialMedia())
                             .build();
 
-                    socialMediaMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("PB".equals(request.getMethod())) {
 
@@ -114,6 +104,7 @@ public class BusinessGrowthPlanService {
                             .planName(request.getPlanName())
                             .startDate(request.getStartDate())
                             .endDate(request.getEndDate())
+                            .budget(request.getBudget())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
                             .createDateTime(new HEAPDate().toString())
@@ -123,7 +114,7 @@ public class BusinessGrowthPlanService {
                             .posterBanner(request.getPosterBanner())
                             .build();
 
-                    posterAndBannerMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("FD".equals(request.getMethod())) {
                     //2.3. If Flyer Distribution, Create FlyerDistributionMarketingPlan
@@ -133,6 +124,7 @@ public class BusinessGrowthPlanService {
                             .planName(request.getPlanName())
                             .startDate(request.getStartDate())
                             .endDate(request.getEndDate())
+                            .budget(request.getBudget())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
                             .createDateTime(new HEAPDate().toString())
@@ -142,7 +134,7 @@ public class BusinessGrowthPlanService {
                             .flyer(request.getFlyer())
                             .build();
 
-                    flyerDistributionMarketingRepository.save(plan);
+                    businessRepository.save(plan);
                 }
 
             } else if ("OE".equals(request.getPlanType())) {
@@ -154,6 +146,7 @@ public class BusinessGrowthPlanService {
                         .planName(request.getPlanName())
                         .startDate(request.getStartDate())
                         .endDate(request.getEndDate())
+                        .budget(request.getBudget())
                         .priority(request.getPriority())
                         .planType(request.getPlanType())
                         .createDateTime(new HEAPDate().toString())
@@ -163,7 +156,7 @@ public class BusinessGrowthPlanService {
                         .staffs(request.getStaffs())
                         .build();
 
-                outletExpansionPlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else {
                 throw new Exception();
@@ -216,32 +209,10 @@ public class BusinessGrowthPlanService {
         try {
             String id = commonService.getIdByEmail(oldEmail);
 
-            //Check each repository whether id can be found
-
-            if (flyerDistributionMarketingRepository.findByIdAndUserId(bgpId, id).isPresent()) {
-
-                flyerDistributionMarketingRepository.deleteByUserIdAndId(id, bgpId);
-
-            } else if (foodDeliveryMarketplacePlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
-
-                foodDeliveryMarketplacePlanRepository.deleteByUserIdAndId(id, bgpId);
-
-            } else if (outletExpansionPlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
-
-                outletExpansionPlanRepository.deleteByUserIdAndId(id, bgpId);
-
-            } else if (posterAndBannerMarketingPlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
-
-                posterAndBannerMarketingPlanRepository.deleteByUserIdAndId(id, bgpId);
-
-            } else if (socialMediaMarketingPlanRepository.findByIdAndUserId(bgpId, id).isPresent()) {
-
-                socialMediaMarketingPlanRepository.deleteByUserIdAndId(id, bgpId);
-
+            if (businessRepository.findByIdAndUserId(bgpId, id).isPresent()) {
+                businessRepository.deleteByUserIdAndId(id, bgpId);
             } else {
-
                 throw new IllegalArgumentException("Invalid Business Growth Plan");
-
             }
 
         } catch (IllegalArgumentException e) {
@@ -279,7 +250,11 @@ public class BusinessGrowthPlanService {
 
         try {
             String id = commonService.getIdByEmail(oldEmail);
-            BusinessGrowthPlan businessGrowthPlan = find(bgpId, id);
+            
+            //Obtain previous creationDateTime
+            String createDateTime = businessRepository.findByIdAndUserId(bgpId, id)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid PlanId"))
+                    .getCreateDateTime();
 
             //Create Plan based on planType
             if ("FD".equals(request.getPlanType())) {
@@ -298,13 +273,15 @@ public class BusinessGrowthPlanService {
                         .planName(request.getPlanName())
                         .startDate(request.getStartDate())
                         .endDate(request.getEndDate())
+                        .budget(request.getBudget())
                         .priority(request.getPriority())
                         .planType(request.getPlanType())
                         .menuId(request.getMenuId())
                         .containers(request.getContainers())
+                        .createDateTime(createDateTime)
                         .build();
 
-                foodDeliveryMarketplacePlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else if ("MK".equals(request.getPlanType())) {
                 //2. If Marketing, Create MarketingStrategy based on type of marketing strategy
@@ -313,39 +290,27 @@ public class BusinessGrowthPlanService {
                 if ("SM".equals(request.getMethod())) {
                     //2.1. If Social Media, Create SocialMediaMarketingPlan
 
-                    //Ensures that user does not have a plan name by the same planName
-                    if (socialMediaMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                        throw new IllegalArgumentException("Duplicate Plan Name");
-
-                    }
-
                     SocialMediaMarketingPlan plan = SocialMediaMarketingPlan.builder()
                             .id(bgpId)
                             .userId(id)
                             .planName(request.getPlanName())
                             .startDate(request.getStartDate())
                             .endDate(request.getEndDate())
+                            .budget(request.getBudget())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
                             .method(request.getMethod())
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
                             .socialMedia(request.getSocialMedia())
+                            .createDateTime(createDateTime)
                             .build();
 
-                    socialMediaMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("PB".equals(request.getMethod())) {
 
                     //2.2. If Poster and Banner, Create PosterAndBannerMarketingPlan
-
-                    //Ensures that user does not have a plan name by the same planName
-                    if (posterAndBannerMarketingPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                        throw new IllegalArgumentException("Duplicate Plan Name");
-
-                    }
 
                     PosterAndBannerMarketingPlan plan = PosterAndBannerMarketingPlan.builder()
                             .id(bgpId)
@@ -353,25 +318,20 @@ public class BusinessGrowthPlanService {
                             .planName(request.getPlanName())
                             .startDate(request.getStartDate())
                             .endDate(request.getEndDate())
+                            .budget(request.getBudget())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
                             .method(request.getMethod())
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
                             .posterBanner(request.getPosterBanner())
+                            .createDateTime(createDateTime)
                             .build();
 
-                    posterAndBannerMarketingPlanRepository.save(plan);
+                    businessRepository.save(plan);
 
                 } else if ("FD".equals(request.getMethod())) {
                     //2.3. If Flyer Distribution, Create FlyerDistributionMarketingPlan
-
-                    //Ensures that user does not have a plan name by the same planName
-                    if (flyerDistributionMarketingRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                        throw new IllegalArgumentException("Duplicate Plan Name");
-
-                    }
 
                     FlyerDistributionMarketingPlan plan = FlyerDistributionMarketingPlan.builder()
                             .id(bgpId)
@@ -379,27 +339,22 @@ public class BusinessGrowthPlanService {
                             .planName(request.getPlanName())
                             .startDate(request.getStartDate())
                             .endDate(request.getEndDate())
+                            .budget(request.getBudget())
                             .priority(request.getPriority())
                             .planType(request.getPlanType())
                             .method(request.getMethod())
                             .promotion(request.getPromotion())
                             .influencer(request.getInfluencer())
                             .flyer(request.getFlyer())
+                            .createDateTime(createDateTime)
                             .build();
 
-                    flyerDistributionMarketingRepository.save(plan);
+                    businessRepository.save(plan);
                 }
 
             } else if ("OE".equals(request.getPlanType())) {
 
                 //3. If Outlet Expansion, Create OutletExpansionPlan
-
-                //Ensures that user does not have a plan name by the same planName
-                if (outletExpansionPlanRepository.findByUserIdAndPlanName(id, request.getPlanName()).isPresent()) {
-
-                    throw new IllegalArgumentException("Duplicate Plan Name");
-
-                }
 
                 OutletExpansionPlan plan = OutletExpansionPlan.builder()
                         .id(bgpId)
@@ -407,15 +362,17 @@ public class BusinessGrowthPlanService {
                         .planName(request.getPlanName())
                         .startDate(request.getStartDate())
                         .endDate(request.getEndDate())
+                        .budget(request.getBudget())
                         .priority(request.getPriority())
                         .planType(request.getPlanType())
                         .address(request.getAddress())
                         .rentalPrice(request.getRentalPrice())
                         .renovation(request.getRenovation())
                         .staffs(request.getStaffs())
+                        .createDateTime(createDateTime)
                         .build();
 
-                outletExpansionPlanRepository.save(plan);
+                businessRepository.save(plan);
 
             } else {
 
@@ -442,7 +399,7 @@ public class BusinessGrowthPlanService {
                         .build();
 
             } else {
-
+                System.out.println(e.getMessage());
                 return ErrorResponse.builder()
                         .error("Bad Request: Invalid Business Growth Plan")
                         .message("Business Growth Plan not found")
@@ -465,12 +422,13 @@ public class BusinessGrowthPlanService {
     }
 
     public Response findOne(String bgpId, String oldEmail) {
-
-        BusinessGrowthPlan businessGrowthPlan;
-
         try {
             String id = commonService.getIdByEmail(oldEmail);
-            businessGrowthPlan = find(bgpId, id);
+            BusinessGrowthPlan businessGrowthPlan = businessRepository.findByIdAndUserId(bgpId, id).orElseThrow(() -> new IllegalArgumentException("BGP Not found"));
+
+            return SingleBusinessGrowthPlanResponse.builder()
+                    .businessGrowthPlan(businessGrowthPlan)
+                    .build();
 
         } catch (IllegalArgumentException e) {
 
@@ -500,39 +458,34 @@ public class BusinessGrowthPlanService {
                     .build();
 
         }
-
-        return SingleBusinessGrowthPlanResponse.builder()
-                .businessGrowthPlan(businessGrowthPlan)
-                .build();
     }
 
     public Response findAll(String oldEmail, String order, String sortBy) {
 
-        List<BusinessGrowthPlan> businessGrowthPlans = new ArrayList<>();
-
         try {
             String id = commonService.getIdByEmail(oldEmail);
 
-            List<FlyerDistributionMarketingPlan> flyerDistributionMarketingList =
-                    flyerDistributionMarketingRepository.findAllByUserId(id);
-            List<FoodDeliveryMarketplacePlan> foodDeliveryMarketplacePlanList =
-                    foodDeliveryMarketplacePlanRepository.findAllByUserId(id);
-            List<OutletExpansionPlan> outletExpansionPlanList =
-                    outletExpansionPlanRepository.findAllByUserId(id);
-            List<PosterAndBannerMarketingPlan> posterAndBannerMarketingPlanList =
-                    posterAndBannerMarketingPlanRepository.findAllByUserId(id);
-            List<SocialMediaMarketingPlan> socialMediaMarketingPlanList =
-                    socialMediaMarketingPlanRepository.findAllByUserId(id);
+            System.out.println(order + " : " + sortBy);
 
-            //Add all to the main list
-            businessGrowthPlans.addAll(flyerDistributionMarketingList);
-            businessGrowthPlans.addAll(foodDeliveryMarketplacePlanList);
-            businessGrowthPlans.addAll(outletExpansionPlanList);
-            businessGrowthPlans.addAll(posterAndBannerMarketingPlanList);
-            businessGrowthPlans.addAll(socialMediaMarketingPlanList);
+            // Decides sort by what
+            Sort sort = Sort.by("priority".equals(sortBy) // Is it by priority?
+                    ? "priority"
+                    : ("urgency".equals(sortBy)  // If not by priority, is it urgency?
+                    ? "endDate"
+                    : "createDateTime")); // Fallback case where it is neither priority nor urgency
 
-            //Sorting based on condition
-            listSorter(businessGrowthPlans, order, sortBy);
+            // What decides sort direction
+            sort = "descending".equals(order) ? sort.descending() : sort.ascending();
+
+            // Further sort by createDateTime when if we are sorting by priority or urgency
+            if ("priority".equals(sortBy) || "urgency".equals(sortBy)) {
+                sort = sort.and(Sort.by("createDateTime").descending());
+            }
+
+            List<BusinessGrowthPlan> businessGrowthPlans = businessRepository.findAllByUserId(id, sort);
+            return MultipleBusinessGrowthPlanResponse.builder()
+                    .businessGrowthPlans(businessGrowthPlans)
+                    .build();
 
         } catch (IllegalArgumentException e) {
 
@@ -552,54 +505,17 @@ public class BusinessGrowthPlanService {
                     .build();
 
         }
-
-        return MultipleBusinessGrowthPlanResponse.builder()
-                .businessGrowthPlans(businessGrowthPlans)
-                .build();
-
-    }
-
-    public void listSorter(List<BusinessGrowthPlan> list, String order, String sortBy) {
-        //Uses BubbleSort logic
-
-        //Goes through the list n-1 times
-        for (int i = 0; i < list.size() - 1; i++) {
-            for (int j = 0; j < list.size() - i - 1; j++) {
-                //Identify type for each
-            }
-        }
     }
 
     public BusinessGrowthPlan find(String bgpId, String userId) {
         Supplier<RuntimeException> expSupplier = () -> new IllegalArgumentException("No such Plan");
 
-        BusinessGrowthPlan businessGrowthPlan = null;
+        BusinessGrowthPlan businessGrowthPlan;
 
-        if (flyerDistributionMarketingRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
-            businessGrowthPlan = flyerDistributionMarketingRepository
+        if (businessRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
+            businessGrowthPlan = businessRepository
                     .findByIdAndUserId(bgpId, userId)
                     .orElseThrow(expSupplier);
-
-        } else if (foodDeliveryMarketplacePlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
-            businessGrowthPlan = foodDeliveryMarketplacePlanRepository
-                    .findByIdAndUserId(bgpId, userId)
-                    .orElseThrow(expSupplier);
-
-        } else if (outletExpansionPlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
-            businessGrowthPlan = outletExpansionPlanRepository
-                    .findByIdAndUserId(bgpId, userId)
-                    .orElseThrow(expSupplier);
-
-        } else if (posterAndBannerMarketingPlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
-            businessGrowthPlan = posterAndBannerMarketingPlanRepository
-                    .findByIdAndUserId(bgpId, userId)
-                    .orElseThrow(expSupplier);
-
-        } else if (socialMediaMarketingPlanRepository.findByIdAndUserId(bgpId, userId).isPresent()) {
-            businessGrowthPlan = socialMediaMarketingPlanRepository
-                    .findByIdAndUserId(bgpId, userId)
-                    .orElseThrow(expSupplier);
-
         } else {
             throw new IllegalArgumentException("Invalid Business Growth Plan");
         }

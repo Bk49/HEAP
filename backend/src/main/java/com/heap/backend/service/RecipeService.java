@@ -10,7 +10,6 @@ import com.heap.backend.data.response.recipe.SingleRecipeResponse;
 import com.heap.backend.models.HEAPDate;
 import com.heap.backend.models.recipe.Recipe;
 import com.heap.backend.repository.RecipeRepository;
-import com.heap.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
-    private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
     private final CommonService commonService;
 
@@ -54,11 +52,11 @@ public class RecipeService {
 
         } catch (IllegalArgumentException e) {
             String err = "Bad Request: ";
-            String msg = "";
+            String msg;
 
             //If user cannot be found in the repository based on token obtained info, return ErrorResponse
             if ("Invalid Token".equals(e.getMessage())) {
-                err = "Invalid Token";
+                err += "Invalid Token";
                 msg = "User not found";
             } else {
                 err += "Duplicate Recipe";
@@ -145,7 +143,7 @@ public class RecipeService {
         } catch (IllegalArgumentException e) {
 
             String err = "Bad Request: ";
-            String msg = "";
+            String msg;
 
             if ("Invalid Token".equals(e.getMessage())) {
                 err = "Invalid Token";
@@ -185,7 +183,7 @@ public class RecipeService {
 
         } catch (IllegalArgumentException e) {
             String err = "Bad Request: ";
-            String msg = "";
+            String msg;
 
             if ("Invalid Token".equals(e.getMessage())) {
                 err = "Invalid Token";

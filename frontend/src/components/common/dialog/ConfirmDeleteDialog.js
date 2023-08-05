@@ -35,7 +35,7 @@ const ConfirmDeleteDialog = ({
     return (
         <Fragment>
             {type === "business" ? (
-                <IconButton>
+                <IconButton onClick={() => setOpen(true)}>
                     <DeleteIcon />
                 </IconButton>
             ) : (
@@ -61,11 +61,7 @@ const ConfirmDeleteDialog = ({
                         Date Created:{" "}
                         {`${`0${dateCreated.getDay()}`.slice(-2)}/${`0${
                             dateCreated.getMonth() + 1
-                        }`.slice(
-                            -2
-                        )}/${dateCreated.getFullYear()} ${`0${dateCreated.getHours()}`.slice(
-                            -2
-                        )}:${dateCreated.getMinutes()}`}
+                        }`.slice(-2)}/${dateCreated.getFullYear()}`}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -91,7 +87,10 @@ const ConfirmDeleteDialog = ({
                                 } else {
                                     const result = await deleteBusiness(id);
                                     navigate("/my-plans", {
-                                        state: { success: result },
+                                        state: {
+                                            success: result,
+                                            update: true,
+                                        },
                                     });
                                 }
                             } catch (e) {
