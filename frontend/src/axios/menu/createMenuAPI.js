@@ -15,9 +15,6 @@ const createMenu = async (data) => {
             { ...other, image: imgUrl },
             {
                 headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-                // headers: {
-                //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3ZXNseS5jaGF1LjIwMjJAc2Npcy5zbXUuZWR1LnNnIiwiaWF0IjoxNjg5Njk4MDkzLCJleHAiOjE2ODk3ODQ0OTN9.u0fM6KsZQ9tJbYSe1BWw3mgRndBIBBORM_TLrzviGb4"}`,
-                // },
             }
         );
         return result.data.response;
