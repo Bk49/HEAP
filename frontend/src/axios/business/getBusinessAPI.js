@@ -6,6 +6,9 @@ const getBusiness = async ({ params: { id } }) => {
     try {
         const result = await instance.get(`/user/findBGP/${id}`, {
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+            // headers: {
+            //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpMkBnbWFpbC5jb20iLCJpYXQiOjE2OTEwNzM0ODYsImV4cCI6MTY5MTE1OTg4Nn0.0tmCdpMy52dK1MtaQ0QjYbubKzhpBBFC_MTluZVrGtQ"}`,
+            // },
         });
         const business = result.data.businessGrowthPlan;
         const { planType, startDate, endDate, ...other } = business;

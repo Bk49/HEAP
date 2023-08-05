@@ -5,6 +5,9 @@ const getMenu = async ({ params: { id } }) => {
     try {
         const result = await instance.get(`/user/findMenu/${id}`, {
             headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+            // headers: {
+            //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpMkBnbWFpbC5jb20iLCJpYXQiOjE2ODk5Mjg2NjAsImV4cCI6MTY5MDAxNTA2MH0.LKRKFJgf10iAWp4kdqO_VI-_xunsID94DQuTUn_AggU"}`,
+            // },
         });
         return result.data;
     } catch (e) {

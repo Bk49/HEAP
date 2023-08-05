@@ -14,6 +14,9 @@ const updateRecipe = async (data, id) => {
             { ...other, image: imgUrl },
             {
                 headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+                // headers: {
+                //     Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljbmd5b25nd2VpQGdtYWlsLmNvbSIsImlhdCI6MTY4OTA0MDQyMSwiZXhwIjoxNjg5MTI2ODIxfQ.dq4Xgx8AColJm86n4vJPOvzhVQs221XxoaHvbW74q1w"}`,
+                // },
             }
         );
         return result.data.response;
