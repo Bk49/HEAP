@@ -7,8 +7,8 @@
 2. Navigate to frontend/ directory (cd frontend)
 3. `npm install` (For first time only)
 4. Add .env file to the folder with the following contents
-    - `REACT_APP_AWS_ACCESS_KEY_ID="AKIA2VI2VRVWQE5QCDMC"`
-    - `REACT_APP_AWS_SECRET_ACCESS_KEY="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"`
+    - `REACT_APP_AWS_ACCESS_KEY_ID="AKIA2VI2VRVWWO4A2NNO"`
+    - `REACT_APP_AWS_SECRET_ACCESS_KEY="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"`
     - `REACT_APP_BUCKET_REGION="ap-southeast-1"`
     - `REACT_APP_BUCKET_NAME="heap-g26-image-bucket"`
     - `REACT_APP_GOOGLE_MAPS_API_KEY="AIzaSyChsCzm5-iAjK2cMpj_garxpAQdC4YbqsE"`
