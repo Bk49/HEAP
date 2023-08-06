@@ -14,6 +14,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import MultiItemDropdown from "../../components/common/form/MultiItemDropdown";
 import register from "../../axios/auth/registerAPI";
+import login from "../../axios/auth/loginAPI";
 import { queueError } from "../../functions/formHandling";
 import { enqueueSnackbar } from "notistack";
 import Cookies from "js-cookie";
@@ -35,7 +36,11 @@ const RegistrationTwo = () => {
                 setValue("password", password);
             }
         } else if (watchEmail === "" && watchPassword === "") {
-            return navigate("/register", { state: { info: "You have yet to fill your email and password for registration!" } });
+            return navigate("/register", {
+                state: {
+                    info: "You have yet to fill your email and password for registration!",
+                },
+            });
         }
     }, [location.state, setValue, navigate, watchPassword, watchEmail]);
 
@@ -97,8 +102,9 @@ const RegistrationTwo = () => {
                     submitErrorText="Registration unsuccessful, please check your input"
                     onSubmit={async (data) => {
                         try {
-                            const token = await register(data);
-                            Cookies.set("token", token);
+                            await register(data);
+                            const token = await login(data);
+                            await Cookies.set("token", token);
                             navigate("/my-summary");
                         } catch (e) {
                             queueError(e, enqueueSnackbar);

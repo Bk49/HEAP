@@ -27,6 +27,8 @@ public class UpdateProfileService {
             origUser = userRepository.findByEmail(oldEmail)
                     .orElseThrow(() -> new IllegalArgumentException("No such user found"));
 
+            System.out.println(request.toString());
+
             //Changes business class based on updateRequest
             Business business = origUser.getBusiness();
             business.setBusinessName(request.getBusinessName());

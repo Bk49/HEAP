@@ -21,13 +21,14 @@ import updateUser from "../../axios/user/updateUserAPI";
 const Profile = () => {
     const { user } = useLoaderData();
     const {
-        business: { fusion, ...other },
+        business,
         email,
     } = user;
     const formMethods = useForm({
-        values: { ...other, email: email, isFusion: fusion },
+        values: { ...business, email: email },
     });
     const navigate = useNavigate();
+    console.log("Business isFusion = " + business.isFusion)
 
     return (
         <Fragment>

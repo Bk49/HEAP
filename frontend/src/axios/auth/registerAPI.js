@@ -3,7 +3,7 @@ import { authInstance as instance } from "../instance";
 const register = async (data) => {
     try {
         const result = await instance.post(`/register`, data);
-        return result.data.token;
+        return result.data;
     } catch (e) {
         let msg = "";
         if (!e.response) {

@@ -1,5 +1,6 @@
 package com.heap.backend.data.request.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class UpdateProfileRequest {
     private String businessName;
     private String businessType;
     private String[] cuisineType;
+    @JsonProperty("isFusion")
     private boolean isFusion;
     private String postalCode;
     private String storeAddress;
