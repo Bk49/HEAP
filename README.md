@@ -1,23 +1,41 @@
-# Project F-Xcel
+# Front End Setup
+###### Pre-requisites: Installed NodeJS (Recommended Version => v18.12.1) and NPM (Node Package Manager, Recommended Version => v9.6.5)
 
-## Motivation/Problem
+## Development Build
 
-While the Covid-19 pandemic is now endemic in Singapore, the pandemic has taken a toll on Singapore’s economy. According to Accounting and Corporate Regulatory Authority (ACRA), a national regulator of all businesses in Singapore, calculations from statistics provided have shown that many companies within the F&B industry are struggling to stay afloat, and that there is an increasing trend of the cessation of these F&B companies from 2020 to 2022. As of the end of 2021, an average of around 3,840 firms were deregistered each month during the COVID-19 pandemic.
+1. Open Command Terminal
+2. Navigate to frontend/ directory (cd frontend)
+3. `npm install` (For first time only)
+4. Add .env file to the folder with the following contents
+    - `REACT_APP_AWS_ACCESS_KEY_ID="AKIA2VI2VRVWQE5QCDMC"`
+    - `REACT_APP_AWS_SECRET_ACCESS_KEY="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"`
+    - `REACT_APP_BUCKET_REGION="ap-southeast-1"`
+    - `REACT_APP_BUCKET_NAME="heap-g26-image-bucket"`
+    - `REACT_APP_GOOGLE_MAPS_API_KEY="AIzaSyChsCzm5-iAjK2cMpj_garxpAQdC4YbqsE"`
+5. `npm start` to start a development server
+6. Wait for the development server to start, a new page will be opened in your default browser
 
-Bigger F&B companies tend to be more stable and have much more capability to withstand economic downturns due to their possession of large savings and economic power. However, smaller F&B establishments are more likely to fall victim to economic downturn, resulting in cessation.
+## Production Build
+Go to https://f-xcel.netlify.app/
 
-In response to the crisis, companies attempted to apply for government grants and financial aid in hope that it will allow them to tide through the crisis. However, the lack of or incomplete understanding about the government grants and financial aids, many startups face difficulties in the application, and result in rejection due to their ineligibility. Small business owners frantically diversify business offerings to find new sources of revenue, while others take on odd jobs to make ends meet. 
+NOTE: The production server is SLOW at winding up after idling, you might encounter errors when you try to login, it will take a few tries until the server is ready.
 
-## What does your project set out to accomplish?
+# Back End Setup
+Pre-requisites: IntelliJ, Java JDK 17
 
-F&B startups in Singapore still lack a clear strategy to expand and grow their businesses beyond their ideal, or even initial scale. This causes them to be unable to capitalise on potential opportunities for growth and lose out to larger and well-established F&B companies. If they continue to maintain such small scales in the long run, the limits of their financial resources and assets available will be their downfall in the event of an economic downturn in the future. 
+## Development Build
 
-Therefore, our team is committed to help F&B startups to secure their golden opportunity during this period to grow their businesses to the next level to secure and safeguard their businesses in the long run. 
+1. Open IntelliJ
+2. Open `/backend` folder as a Maven Project
+3. Add `.env` file to the folder `/backend/src/main/java/resources` with the following contents
+    - `MONGO_DATABASE="main"`
+    - `MONGO_USER="bk49"`
+    - `MONGO_PASSWORD="xGycUcDT4LT5aSFp"`
+    - `MONGO_CLUSTER="heap.lha7ael.mongodb.net"`
+    - `JWT_SECRET_KEY="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"`
+4. Run ‘Backend Application’ (Shift F10/ Run button at the top bar of IntelliJ)
 
-We will develop a comprehensive website that empowers FnB business owners to create customised business plans that foster expansion and growth. With a range of growth plan options, including food delivery marketplace strategies, outlet expansion, brand curation, and customer relationship management, our platform provides valuable insights and recommendations to help users achieve their business goals. 
+Production Build
+Will be kept running at https://heap-springboot-app.onrender.com
 
-By using our website, F&B business owners will have a clear roadmap for their business growth and be better equipped to weather economic downturns. Moreover, they can learn to invest in technology and innovation, as well as take advantage of government grants. All of these are necessary to cope with the problems stated in the previous section.
-
-## Who are your target audience?
-
-Small businesses in the F&B industry.
+NOTE: The production server might be shut down on purpose to save bandwidth! (Limitations of free tier)
