@@ -20,15 +20,6 @@ public class UpdateProfileService {
     private final PasswordEncoder passwordEncoder;
 
     public Response update(UpdateProfileRequest request, String oldEmail) {
-        //Check if Password and ConfirmPassword are the same
-        //If not the same, return UpdateErrorResponse based on bad request
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            return ErrorResponse.builder()
-                    .error("Bad Request: Password is not the same as Confirm Password")
-                    .message("Please check your Password Fields")
-                    .build();
-        }
-
         //Obtain old email to be used to access old user details
         User origUser = null;
         try {
