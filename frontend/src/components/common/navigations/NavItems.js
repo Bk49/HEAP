@@ -8,7 +8,7 @@ const publicPages = [
 ];
 const authenticatedPages = [
     { text: "Summary", path: "/my-summary" },
-    { text: "My Business Growth Plan", path: "/my-plans" },
+    { text: "My Business Growth Plans", path: "/my-plans" },
     { text: "My Menus", path: "/my-menus" },
     { text: "My Recipes", path: "/my-recipes" },
 ];
